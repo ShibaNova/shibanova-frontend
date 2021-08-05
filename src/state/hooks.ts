@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js'
 import { useEffect, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import useRefresh from 'hooks/useRefresh'
-import { fetchFarmsPublicDataAsync, fetchPoolsPublicDataAsync, fetchPoolsUserDataAsync } from './actions'
+import { fetchFarmsPublicDataAsync } from './actions'
 import { State, Farm, Pool } from './types'
 import { QuoteToken } from '../config/constants/types'
 
@@ -13,7 +13,6 @@ export const useFetchPublicData = () => {
   const { slowRefresh } = useRefresh()
   useEffect(() => {
     dispatch(fetchFarmsPublicDataAsync())
-    dispatch(fetchPoolsPublicDataAsync())
   }, [dispatch, slowRefresh])
 }
 
@@ -47,23 +46,20 @@ export const useFarmUser = (pid) => {
 
 // Pools
 
-export const usePools = (account): Pool[] => {
-  const { fastRefresh } = useRefresh()
-  const dispatch = useDispatch()
-  useEffect(() => {
-    if (account) {
-      dispatch(fetchPoolsUserDataAsync(account))
-    }
-  }, [account, dispatch, fastRefresh])
-
-  const pools = useSelector((state: State) => state.pools.data)
-  return pools
-}
-
-export const usePoolFromPid = (sousId): Pool => {
-  const pool = useSelector((state: State) => state.pools.data.find((p) => p.sousId === sousId))
-  return pool
-}
+// export const usePools = (account): Pool[] => {
+//   const { fastRefresh } = useRefresh()
+//   const dispatch = useDispatch()
+//   useEffect(() => {
+//   }, [account, dispatch, fastRefresh])
+// 
+//   const pools = useSelector((state: State) => state.pools.data)
+//   return pools
+// }
+// 
+// export const usePoolFromPid = (sousId): Pool => {
+//   const pool = useSelector((state: State) => state.pools.data.find((p) => p.sousId === sousId))
+//   return pool
+// }
 
 // Prices
 

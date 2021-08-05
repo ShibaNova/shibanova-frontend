@@ -40,8 +40,10 @@ const StatsCard = ({
   actions?: JSX.Element
 }) => {
   return (
+    // @ts-ignore: Unreachable code error
     <StyledCard gradientBorder>
       <StyledCardHeader>
+        {/* @ts-ignore: Unreachable code error */}
         <StyledHeading glowing>{title}</StyledHeading>
       </StyledCardHeader>
       <StyledCardBody>{children}</StyledCardBody>

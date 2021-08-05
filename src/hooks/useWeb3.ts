@@ -15,11 +15,12 @@ const httpProvider = new Web3.providers.HttpProvider(RPC_URL, { timeout: 10000 }
  */
 const useWeb3 = () => {
   const { ethereum }: { ethereum: ProviderType } = useWallet()
-  const refEth = useRef(ethereum)
+  const refEth = useRef(ethereum) // @ts-ignore: Unreachable code error
   const [web3, setweb3] = useState(new Web3(ethereum || httpProvider))
 
   useEffect(() => {
     if (ethereum !== refEth.current) {
+      // @ts-ignore: Unreachable code error
       setweb3(new Web3(ethereum || httpProvider))
       refEth.current = ethereum
     }

@@ -128,12 +128,6 @@
     },
     {
       "data": {
-        "stringId": 322,
-        "text": "Stake Egg, get SYRUP."
-      }
-    },
-    {
-      "data": {
         "stringId": 328,
         "text": "You can swap back anytime"
       }
@@ -158,26 +152,8 @@
     },
     {
       "data": {
-        "stringId": 338,
-        "text": "The Sous Chef is cooking up a treat for all SYRUP holders"
-      }
-    },
-    {
-      "data": {
-        "stringId": 340,
-        "text": "SYRUP Tokens Staked"
-      }
-    },
-    {
-      "data": {
         "stringId": 342,
         "text": "XVS Tokens Earned"
-      }
-    },
-    {
-      "data": {
-        "stringId": 344,
-        "text": "Stake your SYRUP to earn tokens of new projects."
       }
     },
     {
@@ -236,18 +212,6 @@
     },
     {
       "data": {
-        "stringId": 364,
-        "text": "Total Syrup Staked"
-      }
-    },
-    {
-      "data": {
-        "stringId": 380,
-        "text": "1 EGG = 1 SYRUP"
-      }
-    },
-    {
-      "data": {
         "stringId": 382,
         "text": "Coming soon..."
       }
@@ -280,24 +244,6 @@
       "data": {
         "stringId": 392,
         "text": "Project Site"
-      }
-    },
-    {
-      "data": {
-        "stringId": 394,
-        "text": "Unstake SYRUP"
-      }
-    },
-    {
-      "data": {
-        "stringId": 400,
-        "text": "SYRUP holders proportionally split 25% of EGG block emissions each day (10 EGG per block), Rewards are distributed each block."
-      }
-    },
-    {
-      "data": {
-        "stringId": 402,
-        "text": "Stake SYRUP to earn new tokens."
       }
     },
     {
@@ -548,12 +494,6 @@
     },
     {
       "data": {
-        "stringId": 496,
-        "text": "SYRUP holders proportionally split 40% of EGG block emissions each day (10 EGG per block), Rewards are distributed each block."
-      }
-    },
-    {
-      "data": {
         "stringId": 500,
         "text": "IFO: Initial Farm Offerings"
       }
@@ -663,7 +603,7 @@
     {
       "data": {
         "stringId": 540,
-        "text": "New EGG\/block"
+        "text": "New EGG/block"
       }
     },
     {

@@ -1,5 +1,4 @@
 import poolsConfig from 'config/constants/pools'
-import sousChefABI from 'config/abi/sousChef.json'
 import novaABI from 'config/abi/nova.json'
 import wbnbABI from 'config/abi/weth.json'
 import { QuoteToken } from 'config/constants/types'
@@ -9,36 +8,7 @@ import BigNumber from 'bignumber.js'
 
 const CHAIN_ID = process.env.REACT_APP_CHAIN_ID
 
-export const fetchPoolsBlockLimits = async () => {
-  const poolsWithEnd = poolsConfig.filter((p) => p.sousId !== 0)
-  const callsStartBlock = poolsWithEnd.map((poolConfig) => {
-    return {
-      address: poolConfig.contractAddress[CHAIN_ID],
-      name: 'startBlock',
-    }
-  })
-  const callsEndBlock = poolsWithEnd.map((poolConfig) => {
-    return {
-      address: poolConfig.contractAddress[CHAIN_ID],
-      name: 'bonusEndBlock',
-    }
-  })
-
-  const starts = await multicall(sousChefABI, callsStartBlock)
-  const ends = await multicall(sousChefABI, callsEndBlock)
-
-  return poolsWithEnd.map((novaPoolConfig, index) => {
-    const startBlock = starts[index]
-    const endBlock = ends[index]
-    return {
-      sousId: novaPoolConfig.sousId,
-      startBlock: new BigNumber(startBlock).toJSON(),
-      endBlock: new BigNumber(endBlock).toJSON(),
-    }
-  })
-}
-
-export const fetchPoolsTotalStatking = async () => {
+const fetchPoolsTotalStatking = async () => {
   const nonBnbPools = poolsConfig.filter((p) => p.stakingTokenName !== QuoteToken.BNB)
   const bnbPool = poolsConfig.filter((p) => p.stakingTokenName === QuoteToken.BNB)
 
@@ -72,3 +42,5 @@ export const fetchPoolsTotalStatking = async () => {
     })),
   ]
 }
+
+export default fetchPoolsTotalStatking

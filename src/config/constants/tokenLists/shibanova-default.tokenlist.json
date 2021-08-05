@@ -1,0 +1,62 @@
+{
+  "name": "Shibanova Default List",
+  "timestamp": "2021-05-06T00:00:00Z",
+  "version": {
+    "major": 3,
+    "minor": 0,
+    "patch": 0
+  },
+  "tags": {},
+  "logoURI": "/images/coins/WBNB.png",
+  "keywords": ["shibanova", "default"],
+  "tokens": [
+    {
+      "name": "Shibanova Token",
+      "symbol": "NOVA",
+      "address": "0xDb2B70a73C587513089DaAB4d38Ff6f35dA5eD63",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "images/coins/NOVA.png"
+    },
+    {
+      "name": "WBNB Token",
+      "symbol": "WBNB",
+      "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "/images/coins/WBNB.png"
+    },
+    {
+      "name": "BUSD Token",
+      "symbol": "BUSD",
+      "address": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "/images/coins/BUSD.png"
+    },
+    {
+      "name": "BTCB Token",
+      "symbol": "BTCB",
+      "address": "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "/images/coins/BTCB.png"
+    },
+    {
+      "name": "Ethereum Token",
+      "symbol": "ETH",
+      "address": "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "/images/coins/ETH.png"
+    },
+    {
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "address": "0x55d398326f99059fF775485246999027B3197955",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "/images/coins/USDT.png"
+    }
+  ]
+}

@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import { Flex, Text, Skeleton, Card } from '@pancakeswap-libs/uikit'
-import { communityFarms } from 'config/constants'
 import { Farm } from 'state/types'
 import { provider } from 'web3-core'
 import useI18n from 'hooks/useI18n'
@@ -127,6 +126,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, novaPrice, bnbPrice,
   const { quoteTokenAdresses, quoteTokenSymbol, tokenAddresses, risk } = farm
 
   return (
+    // @ts-ignore: Unreachable code error
     <FCard gradientBorder>
       {farm.tokenSymbol === 'NOVA' && <StyledCardAccent />}
       <CardHeading
@@ -164,6 +164,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, novaPrice, bnbPrice,
         <Text bold>{earnLabel}</Text>
       </Flex>
       <Flex justifyContent="space-between">
+        {/* @ts-ignore: Unreachable code error */}
         <Text glowing style={{ fontSize: '24px' }}>
           {TranslateString(10001, 'Deposit Fee')}:
         </Text>

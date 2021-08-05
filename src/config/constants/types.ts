@@ -22,10 +22,7 @@ export interface Ifo {
 export enum QuoteToken {
   'BNB' = 'BNB',
   'NOVA' = 'NOVA',
-  'SYRUP' = 'SYRUP',
   'BUSD' = 'BUSD',
-  'TWT' = 'TWT',
-  'UST' = 'UST',
 }
 
 export enum PoolCategory {

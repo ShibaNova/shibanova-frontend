@@ -128,18 +128,6 @@
     },
     {
       "data": {
-        "stringId": 322,
-        "text": "\u8cea\u62bc Egg\uff0c\u4ee5\u53d6\u5f97 Syrup\u3002"
-      }
-    },
-    {
-      "data": {
-        "stringId": 328,
-        "text": "\u60a8\u96a8\u6642\u90fd\u80fd\u4ea4\u63db\u56de\u4f86"
-      }
-    },
-    {
-      "data": {
         "stringId": 330,
         "text": "\u5df2\u8cfa\u53d6\u7684 %asset%"
       }
@@ -158,26 +146,8 @@
     },
     {
       "data": {
-        "stringId": 338,
-        "text": "\u526f\u4e3b\u5eda\u6b63\u5728\u70ba\u6240\u6709\u7684 SYRUP \u6301\u6709\u8005\u70f9\u716e\u795e\u79d8\u6599\u7406"
-      }
-    },
-    {
-      "data": {
-        "stringId": 340,
-        "text": "\u5df2\u8cea\u62bc\u7684 SYRUP \u4ee3\u5e63"
-      }
-    },
-    {
-      "data": {
         "stringId": 342,
         "text": "\u5df2\u8cfa\u53d6\u7684 XVS \u4ee3\u5e63"
-      }
-    },
-    {
-      "data": {
-        "stringId": 344,
-        "text": "\u8cea\u62bc\u60a8\u7684 SYRUP \u4ee5\u8cfa\u53d6\u65b0\u5c08\u6848\u7684\u4ee3\u5e63\u3002"
       }
     },
     {
@@ -236,18 +206,6 @@
     },
     {
       "data": {
-        "stringId": 364,
-        "text": "\u7e3d\u8cea\u62bc SYRUP"
-      }
-    },
-    {
-      "data": {
-        "stringId": 380,
-        "text": "1 EGG = 1 SYRUP"
-      }
-    },
-    {
-      "data": {
         "stringId": 382,
         "text": "\u5373\u5c07\u5230\u4f86\u2026"
       }
@@ -280,24 +238,6 @@
       "data": {
         "stringId": 392,
         "text": "\u5c08\u6848\u7db2\u7ad9"
-      }
-    },
-    {
-      "data": {
-        "stringId": 394,
-        "text": "\u53d6\u56de SYRUP"
-      }
-    },
-    {
-      "data": {
-        "stringId": 400,
-        "text": "SYRUP \u6301\u6709\u8005\u5c07\u6309\u6bd4\u4f8b\u5206\u5f97\u6bcf\u5929 25% \u7684 EGG \u5340\u584a\u734e\u52f5 (\u6bcf\u5340\u584a 10 EGG)\uff0c\u734e\u52f5\u5c07\u65bc\u5404\u5340\u584a\u5206\u767c\u3002"
-      }
-    },
-    {
-      "data": {
-        "stringId": 402,
-        "text": "\u8cea\u62bc SYRUP \u4ee5\u8cfa\u53d6\u65b0\u4ee3\u5e63\u3002"
       }
     },
     {
@@ -560,12 +500,6 @@
     },
     {
       "data": {
-        "stringId": 496,
-        "text": "SYRUP \u6301\u6709\u8005\u5c07\u6309\u6bd4\u4f8b\u5206\u5f97\u6bcf\u5929 40% \u7684 EGG \u5340\u584a\u734e\u52f5 (\u6bcf\u5340\u584a 10 EGG)\uff0c\u734e\u52f5\u5c07\u65bc\u5404\u5340\u584a\u5206\u767c\u3002"
-      }
-    },
-    {
-      "data": {
         "stringId": 500,
         "text": "IFO\uff1a\u9996\u6b21\u6316\u7926\u767c\u884c"
       }
@@ -675,7 +609,7 @@
     {
       "data": {
         "stringId": 540,
-        "text": "\u65b0 EGG\/\u5340\u584a"
+        "text": "\u65b0 EGG/\u5340\u584a"
       }
     },
     {

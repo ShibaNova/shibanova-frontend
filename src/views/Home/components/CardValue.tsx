@@ -27,6 +27,7 @@ const CardValue: React.FC<CardValueProps> = ({ value, decimals, fontSize = '40px
   }, [value, updateValue])
 
   return (
+    // @ts-ignore: Unreachable code error
     <Text bold glowing fontSize={fontSize}>
       {prefix}
       {countUp}

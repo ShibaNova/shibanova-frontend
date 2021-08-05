@@ -48,6 +48,7 @@ const TotalValueLockedCard = () => {
 
   return (
     <Container>
+      {/* @ts-ignore: Unreachable code error */}
       <StyledTag glowing bold>
         TOTAL DEPOSITED
       </StyledTag>

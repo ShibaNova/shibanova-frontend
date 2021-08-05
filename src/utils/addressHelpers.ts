@@ -14,12 +14,6 @@ export const getMulticallAddress = () => {
 export const getWbnbAddress = () => {
   return addresses.wbnb[chainId]
 }
-export const getLotteryAddress = () => {
-  return addresses.lottery[chainId]
-}
-export const getLotteryTicketAddress = () => {
-  return addresses.lotteryNFT[chainId]
-}
 export const getSNovaAddress = () => {
   return addresses.snova[chainId]
 }
