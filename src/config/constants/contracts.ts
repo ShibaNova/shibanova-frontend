@@ -23,7 +23,7 @@ export default {
     56: '',
     97: '',
   },
-  mulltiCall: {
+  multiCall: {
     56: '0x1ee38d535d541c55c9dae27b12edf090c608e6fb',
     97: '0x310185c34DeD9AF094af0Ce3aA4854e6C3880345',
   },
