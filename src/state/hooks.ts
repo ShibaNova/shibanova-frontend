@@ -51,11 +51,11 @@ export const useFarmUser = (pid) => {
 //   const dispatch = useDispatch()
 //   useEffect(() => {
 //   }, [account, dispatch, fastRefresh])
-// 
+//
 //   const pools = useSelector((state: State) => state.pools.data)
 //   return pools
 // }
-// 
+//
 // export const usePoolFromPid = (sousId): Pool => {
 //   const pool = useSelector((state: State) => state.pools.data.find((p) => p.sousId === sousId))
 //   return pool
