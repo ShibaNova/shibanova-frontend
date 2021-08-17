@@ -9,14 +9,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
-    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'"
+    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,scss}'"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn format",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
+ 
   "browserslist": {
     "production": [
       ">0.2%",
@@ -45,6 +40,7 @@
     "chart.js": "^2.9.4",
     "iframe-resizer-react": "^1.1.0",
     "lodash": "^4.17.20",
+    "node-sass": "^6.0.1",
     "polished": "^3.3.2",
     "react": "^17.0.1",
     "react-chartjs-2": "^2.11.1",
