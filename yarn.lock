@@ -1971,9 +1971,9 @@
     eslint-plugin-react "^7.21.5"
     eslint-plugin-react-hooks "^4.0.0"
 
-"@pancakeswap-libs/uikit@ShibaNova/shibanova-uikit#7df0b3289ba7f50d49a98efff9aa0a5dd3817f9e":
+"@pancakeswap-libs/uikit@ShibaNova/shibanova-uikit#5f2dc879e4edfe409f85616aa4eec08ea90b5753":
   version "0.10.2"
-  resolved "https://codeload.github.com/ShibaNova/shibanova-uikit/tar.gz/7df0b3289ba7f50d49a98efff9aa0a5dd3817f9e"
+  resolved "https://codeload.github.com/ShibaNova/shibanova-uikit/tar.gz/5f2dc879e4edfe409f85616aa4eec08ea90b5753"
   dependencies:
     "@types/lodash" "^4.14.162"
     "@types/styled-system" "^5.1.10"
