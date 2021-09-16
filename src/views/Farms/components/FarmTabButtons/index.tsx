@@ -1,27 +1,45 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { useRouteMatch, Link } from 'react-router-dom'
-import { ButtonMenu, ButtonMenuItem, Text, Toggle } from '@pancakeswap-libs/uikit'
-import useI18n from 'hooks/useI18n'
+import { useLocation, Link, useRouteMatch } from 'react-router-dom'
+import { ButtonMenu, ButtonMenuItem, NotificationDot } from '@pancakeswap-libs/uikit'
+import { useTranslation } from 'contexts/Localization'
 
-const FarmTabButtons = ({ stakedOnly, setStakedOnly, setShowInactive }) => {
-  const [index, setIndex] = useState(0)
-  const TranslateString = useI18n()
+interface FarmTabButtonsProps {
+  hasStakeInFinishedFarms: boolean
+}
 
-  const handleClick = (newIndex) => {
-    setIndex(newIndex)
-    setShowInactive(newIndex !== 0)
+const FarmTabButtons: React.FC<FarmTabButtonsProps> = ({ hasStakeInFinishedFarms }) => {
+  const { url } = useRouteMatch()
+  const location = useLocation()
+  const { t } = useTranslation()
+
+  let activeIndex
+  switch (location.pathname) {
+    case '/farms':
+      activeIndex = 0
+      break
+    case '/farms/history':
+      activeIndex = 1
+      break
+    case '/farms/archived':
+      activeIndex = 2
+      break
+    default:
+      activeIndex = 0
+      break
   }
 
   return (
     <Wrapper>
-      <ToggleWrapper>
-        <Toggle checked={stakedOnly} onChange={() => setStakedOnly(!stakedOnly)} />
-        <Text bold>Staked</Text>
-      </ToggleWrapper>
-      <ButtonMenu onClick={handleClick} activeIndex={index} size="sm" variant="primary">
-        <ButtonMenuItem>{TranslateString(698, 'Active')}</ButtonMenuItem>
-        <ButtonMenuItem>{TranslateString(700, 'Inactive')}</ButtonMenuItem>
+      <ButtonMenu activeIndex={activeIndex} size="sm" variant="subtle">
+        <ButtonMenuItem as={Link} to={`${url}`}>
+          {t('Live')}
+        </ButtonMenuItem>
+        <NotificationDot show={hasStakeInFinishedFarms}>
+          <ButtonMenuItem as={Link} to={`${url}/history`}>
+            {t('Finished')}
+          </ButtonMenuItem>
+        </NotificationDot>
       </ButtonMenu>
     </Wrapper>
   )
@@ -33,16 +51,13 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 32px;
-`
 
-const ToggleWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 20px;
+  a {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 
-  ${Text} {
-    margin-left: 8px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    margin-left: 16px;
   }
 `

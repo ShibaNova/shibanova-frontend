@@ -1,27 +1,44 @@
 import BigNumber from 'bignumber.js'
 import { useEffect, useMemo } from 'react'
+import { getWeb3NoAccount } from 'utils/web3'
 import { useSelector, useDispatch } from 'react-redux'
+import { useAppDispatch } from 'state'
 import useRefresh from 'hooks/useRefresh'
-import { fetchFarmsPublicDataAsync, fetchPoolsPublicDataAsync, fetchPoolsUserDataAsync } from './actions'
-import { State, Farm, Pool } from './types'
+import { setBlock, fetchFarmsPublicDataAsync, fetchPoolsPublicDataAsync, fetchPoolsUserDataAsync } from './actions'
+import { State, Farm, Pool, PriceState, Farm2, FarmsState } from './types'
 import { QuoteToken } from '../config/constants/types'
 import { getBalanceNumber } from '../utils/formatBalance'
+import { fetchPrices } from './prices'
 
 const ZERO = new BigNumber(0)
 
 export const useFetchPublicData = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const { slowRefresh } = useRefresh()
   useEffect(() => {
     dispatch(fetchFarmsPublicDataAsync())
     dispatch(fetchPoolsPublicDataAsync())
   }, [dispatch, slowRefresh])
-}
 
+  useEffect(() => {
+    const web3 = getWeb3NoAccount()
+    const interval = setInterval(async () => {
+      const blockNumber = await web3.eth.getBlockNumber()
+      dispatch(setBlock(blockNumber))
+    }, 6000)
+
+    return () => clearInterval(interval)
+  }, [dispatch])
+}
 // Farms
 
-export const useFarms = (): Farm[] => {
+export const useFarm = (): Farm[] => {
   const farms = useSelector((state: State) => state.farms.data)
+  return farms
+}
+
+export const useFarms = (): FarmsState => {
+  const farms = useSelector((state: State) => state.farms)
   return farms
 }
 
@@ -93,7 +110,7 @@ export const usePriceEthBusd = (): BigNumber => {
 }
 
 export const useTotalValue = (): BigNumber => {
-  const farms = useFarms()
+  const farms = useFarm()
   const bnbPrice = usePriceBnbBusd()
   const novaPrice = usePriceNovaBusd()
   let value = new BigNumber(0)
@@ -113,3 +130,30 @@ export const useTotalValue = (): BigNumber => {
   }
   return value
 }
+
+// Prices
+export const useFetchPriceList = () => {
+  const { slowRefresh } = useRefresh()
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(fetchPrices())
+  }, [dispatch, slowRefresh])
+}
+
+export const useGetApiPrices = () => {
+  const prices: PriceState['data'] = useSelector((state: State) => state.prices.data)
+  return prices
+}
+
+export const useGetApiPrice = (address: string) => {
+  const prices = useGetApiPrices()
+
+  if (!prices) {
+    return null
+  }
+
+  return prices[address.toLowerCase()]
+}
+
+

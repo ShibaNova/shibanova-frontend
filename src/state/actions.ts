@@ -7,3 +7,4 @@ export {
   updateUserPendingReward,
   updateUserStakedBalance,
 } from './pools'
+export { setBlock } from './block'

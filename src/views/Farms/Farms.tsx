@@ -1,60 +1,110 @@
-import React, { useEffect, useCallback, useState } from 'react'
-import { Route, useRouteMatch } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import styled from 'styled-components'
+import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
+import { Route, useRouteMatch, useLocation } from 'react-router-dom'
+import { useAppDispatch } from 'state'
 import BigNumber from 'bignumber.js'
-import { useWallet } from '@binance-chain/bsc-use-wallet'
-import { provider } from 'web3-core'
-import { Image, Heading } from '@pancakeswap-libs/uikit'
-import { BLOCKS_PER_YEAR, NOVA_PER_BLOCK, NOVA_POOL_PID } from 'config'
+import { useWeb3React } from '@web3-react/core'
+import { Heading, RowType, Toggle, Text } from '@pancakeswap-libs/uikit'
+import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
-import { useFarms, usePriceBnbBusd, usePriceNovaBusd, usePriceUsdtBusd, usePriceEthBusd } from 'state/hooks'
+import { useFarms, usePriceNovaBusd, useGetApiPrices } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
 import { fetchFarmUserDataAsync } from 'state/actions'
-import { QuoteToken } from 'config/constants/types'
-import useI18n from 'hooks/useI18n'
-import Header from 'components/Header'
+import usePersistState from 'hooks/usePersistState'
+import { Farm } from 'state/types'
+import { useTranslation } from 'contexts/Localization'
+import { getBalanceNumber } from 'utils/formatBalance'
+import { getFarmApr } from 'utils/apr'
+import { orderBy } from 'lodash'
+import { getAddress } from 'utils/addressHelpers'
+import isArchivedPid from 'utils/farmHelpers'
+import { latinise } from 'utils/latinise'
+import PageHeader from 'components/PageHeader'
+import { fetchFarmsPublicDataAsync, setLoadArchivedFarmsData } from 'state/farms'
+import Select, { OptionProps } from 'components/Select/Select'
 import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
+import Table from './components/FarmTable/FarmTable'
 import FarmTabButtons from './components/FarmTabButtons'
-import Divider from './components/Divider'
-import TotalValueLockedCard from './components/TotalValueLockedCard'
+import SearchInput from './components/SearchInput'
+import { RowProps } from './components/FarmTable/Row'
+import ToggleView from './components/ToggleView/ToggleView'
+import { DesktopColumnSchema, ViewMode } from './components/types'
 
-export interface FarmsProps {
-  tokenMode?: boolean
-}
-
-const Hero = styled.div`
-  background-repeat: no-repeat;
-  background-position: center;
+const ControlContainer = styled.div`
   display: flex;
-  justify-content: center;
-  flex-direction: grid;
-  margin: auto;
-  margin-bottom: 0px;
-  padding-top: 15px;
-  text-align: left;
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    text-align: left;
-    image-size: 100px;
-    height: 150px;
-    padding-top: 5px;
-    padding-right: 1px;
+  width: 100%;
+  align-items: center;
+  position: relative;
+  justify-content: space-between;
+  flex-direction: column;
+  margin-bottom: 32px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 16px 32px;
+    margin-bottom: 0;
   }
 `
-const Farms: React.FC<FarmsProps> = (farmsProps) => {
-  const { path } = useRouteMatch()
-  // const TranslateString = useI18n()
-  const farmsLP = useFarms()
-  const novaPrice = usePriceNovaBusd()
-  const bnbPrice = usePriceBnbBusd()
-  const usdtPrice = usePriceUsdtBusd()
-  const ethPrice = usePriceEthBusd()
-  const { account, ethereum }: { account: string; ethereum: provider } = useWallet()
-  const { tokenMode } = farmsProps
 
-  const dispatch = useDispatch()
+const ToggleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  ${Text} {
+    margin-left: 8px;
+  }
+`
+
+const LabelWrapper = styled.div`
+  > ${Text} {
+    font-size: 12px;
+  }
+`
+
+const FilterContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px 0px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: auto;
+    padding: 0;
+  }
+`
+
+const ViewControls = styled.div`
+  flex-wrap: wrap;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  > div {
+    padding: 8px 0px;
+  }
+  ${({ theme }) => theme.mediaQueries.sm} {
+    justify-content: flex-start;
+    width: auto;
+    > div {
+      padding: 0;
+    }
+  }
+`
+
+const NUMBER_OF_FARMS_VISIBLE = 12
+
+const Farms: React.FC = () => {
+  const { path } = useRouteMatch()
+  const { pathname } = useLocation()
+  const { t } = useTranslation()
+  const { data: farmsLP, userDataLoaded } = useFarms()
+  const cakePrice = usePriceNovaBusd()
+  const [query, setQuery] = useState('')
+  const [viewMode, setViewMode] = usePersistState(ViewMode.TABLE, 'pancake_farm_view')
+  const { account } = useWeb3React()
+  const [sortOption, setSortOption] = useState('hot')
+  const prices = useGetApiPrices()
+
+  const dispatch = useAppDispatch()
   const { fastRefresh } = useRefresh()
   useEffect(() => {
     if (account) {
@@ -62,109 +112,308 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
     }
   }, [account, dispatch, fastRefresh])
 
-  const [showInactive, setShowInactive] = useState(false)
-  const [stakedOnly, setStakedOnly] = useState(false)
+  const isArchived = pathname.includes('archived')
+  const isInactive = pathname.includes('history')
+  const isActive = !isInactive && !isArchived
+  // Users with no wallet connected should see 0 as Earned amount
+  // Connected users should see loading indicator until first userData has loaded
+  const userDataReady = !account || (!!account && userDataLoaded)
 
-  const activeFarms = farmsLP.filter((farm) => !!farm.isTokenOnly === !!tokenMode && farm.multiplier !== '0X')
-  const inactiveFarms = farmsLP.filter((farm) => !!farm.isTokenOnly === !!tokenMode && farm.multiplier === '0X')
+  const [stakedOnly, setStakedOnly] = useState(!isActive)
+  useEffect(() => {
+    setStakedOnly(!isActive)
+  }, [isActive])
+
+  useEffect(() => {
+    // Makes the main scheduled fetching to request archived farms data
+    dispatch(setLoadArchivedFarmsData(isArchived))
+    // Immediately request data for archived farms so users don't have to wait
+    // 60 seconds for public data and 10 seconds for user data
+    if (isArchived) {
+      dispatch(fetchFarmsPublicDataAsync())
+      if (account) {
+        dispatch(fetchFarmUserDataAsync(account))
+      }
+    }
+  }, [isArchived, dispatch, account])
+
+  const activeFarms = farmsLP.filter((farm) => farm.pid !== 0 && farm.multiplier !== '0X' && !isArchivedPid(farm.pid))
+  const inactiveFarms = farmsLP.filter((farm) => farm.pid !== 0 && farm.multiplier === '0X' && !isArchivedPid(farm.pid))
+  const archivedFarms = farmsLP.filter((farm) => isArchivedPid(farm.pid))
 
   const stakedOnlyFarms = activeFarms.filter(
     (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
   )
 
-  // /!\ This function will be removed soon
-  // This function compute the APY for each farm and will be replaced when we have a reliable API
-  // to retrieve assets prices against USD
-  const farmsList = useCallback(
-    (farmsToDisplay, removed: boolean) => {
-      // const novaPriceVsBNB = new BigNumber(farmsLP.find((farm) => farm.pid === NOVA_POOL_PID)?.tokenPriceVsQuote || 0)
-      const farmsToDisplayWithAPY: FarmWithStakedValue[] = farmsToDisplay.map((farm) => {
-        // if (!farm.tokenAmount || !farm.lpTotalInQuoteToken || !farm.lpTotalInQuoteToken) {
-        //   return farm
-        // }
-        const novaRewardPerBlock = new BigNumber(farm.NovaPerBlock || 1)
-          .times(new BigNumber(farm.poolWeight))
-          .div(new BigNumber(10).pow(18))
-        const novaRewardPerYear = novaRewardPerBlock.times(BLOCKS_PER_YEAR)
-
-        let apy = novaPrice.times(novaRewardPerYear)
-        let totalValue = new BigNumber(farm.isTokenOnly ? farm.tokenAmount : farm.lpTotalInQuoteToken || 0)
-
-        if (farm.quoteTokenSymbol === QuoteToken.BNB) {
-          totalValue = totalValue.times(bnbPrice)
-        }
-
-        if (farm.quoteTokenSymbol === QuoteToken.NOVA) {
-          totalValue = totalValue.times(novaPrice)
-        }
-        if (farm.quoteTokenSymbol === QuoteToken.ETH) {
-          totalValue = totalValue.times(ethPrice)
-        }
-        if (farm.quoteTokenSymbol === QuoteToken.USDT) {
-          totalValue = totalValue.times(usdtPrice)
-        }
-
-        if (totalValue.comparedTo(0) > 0) {
-          apy = apy.div(totalValue)
-        }
-
-        return { ...farm, apy }
-      })
-      return farmsToDisplayWithAPY.map((farm) => (
-        <FarmCard
-          key={farm.pid}
-          farm={farm}
-          removed={removed}
-          bnbPrice={bnbPrice}
-          novaPrice={novaPrice}
-          usdtPrice={usdtPrice}
-          ethPrice={ethPrice}
-          ethereum={ethereum}
-          account={account}
-        />
-      ))
-    },
-    [bnbPrice, account, novaPrice, usdtPrice, ethPrice, ethereum],
+  const stakedInactiveFarms = inactiveFarms.filter(
+    (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
   )
 
-  return (
-    <Page>
-      <Header>{tokenMode ? 'POOLS' : 'FARMS'}</Header>
-      <Divider />
-      <div>
-        <Heading
-          as="h4"
-          size="lg"
-          color="white"
-          mb="10px"
-          style={{
-            textShadow: '2px 2px 12px #00aaff95, -2px -2px 12px #00aaff95 ',
-            // textShadow: '2px 2px 12px #FF0000, -2px -2px 12px #FF0000 ',
-            textAlign: 'center',
-            paddingTop: 20,
-            fontSize: 22,
-          }}
-        >
-          {tokenMode ? 'Stake Tokens to Earn NOVA' : 'Stake LP Tokens to Earn NOVA and sNOVA'}
-        </Heading>
-        <Heading as="h6" color="#00aaff" mb="1.5rem" style={{ textAlign: 'center', fontSize: 16 }}>
-          Deposit Fees are distributed to sNOVA holders
-        </Heading>
-        <FarmTabButtons setShowInactive={setShowInactive} stakedOnly={stakedOnly} setStakedOnly={setStakedOnly} />
-      </div>
+  const stakedArchivedFarms = archivedFarms.filter(
+    (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
+  )
+
+  const farmsList = useCallback(
+    (farmsToDisplay: Farm[]): FarmWithStakedValue[] => {
+      let farmsToDisplayWithAPR: FarmWithStakedValue[] = farmsToDisplay.map((farm) => {
+        if (!farm.lpTotalInQuoteToken || !prices) {
+          return farm
+        }
+
+        const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
+        const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+        const apr = isActive ? getFarmApr(farm.poolWeight, cakePrice, totalLiquidity) : 0
+
+        return { ...farm, apr, liquidity: totalLiquidity }
+      })
+
+      if (query) {
+        const lowercaseQuery = latinise(query.toLowerCase())
+        farmsToDisplayWithAPR = farmsToDisplayWithAPR.filter((farm: FarmWithStakedValue) => {
+          return latinise(farm.lpSymbol.toLowerCase()).includes(lowercaseQuery)
+        })
+      }
+      return farmsToDisplayWithAPR
+    },
+    [cakePrice, prices, query, isActive],
+  )
+
+  const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value)
+  }
+
+  const loadMoreRef = useRef<HTMLDivElement>(null)
+
+  const [numberOfFarmsVisible, setNumberOfFarmsVisible] = useState(NUMBER_OF_FARMS_VISIBLE)
+  const [observerIsSet, setObserverIsSet] = useState(false)
+
+  const farmsStakedMemoized = useMemo(() => {
+    let farmsStaked = []
+
+    const sortFarms = (farms: FarmWithStakedValue[]): FarmWithStakedValue[] => {
+      switch (sortOption) {
+        case 'apr':
+          return orderBy(farms, (farm: FarmWithStakedValue) => farm.apr, 'desc')
+        case 'multiplier':
+          return orderBy(
+            farms,
+            (farm: FarmWithStakedValue) => (farm.multiplier ? Number(farm.multiplier.slice(0, -1)) : 0),
+            'desc',
+          )
+        case 'earned':
+          return orderBy(
+            farms,
+            (farm: FarmWithStakedValue) => (farm.userData ? Number(farm.userData.earnings) : 0),
+            'desc',
+          )
+        case 'liquidity':
+          return orderBy(farms, (farm: FarmWithStakedValue) => Number(farm.liquidity), 'desc')
+        default:
+          return farms
+      }
+    }
+
+    if (isActive) {
+      farmsStaked = stakedOnly ? farmsList(stakedOnlyFarms) : farmsList(activeFarms)
+    }
+    if (isInactive) {
+      farmsStaked = stakedOnly ? farmsList(stakedInactiveFarms) : farmsList(inactiveFarms)
+    }
+    if (isArchived) {
+      farmsStaked = stakedOnly ? farmsList(stakedArchivedFarms) : farmsList(archivedFarms)
+    }
+
+    return sortFarms(farmsStaked).slice(0, numberOfFarmsVisible)
+  }, [
+    sortOption,
+    activeFarms,
+    farmsList,
+    inactiveFarms,
+    archivedFarms,
+    isActive,
+    isInactive,
+    isArchived,
+    stakedArchivedFarms,
+    stakedInactiveFarms,
+    stakedOnly,
+    stakedOnlyFarms,
+    numberOfFarmsVisible,
+  ])
+
+  useEffect(() => {
+    const showMoreFarms = (entries) => {
+      const [entry] = entries
+      if (entry.isIntersecting) {
+        setNumberOfFarmsVisible((farmsCurrentlyVisible) => farmsCurrentlyVisible + NUMBER_OF_FARMS_VISIBLE)
+      }
+    }
+
+    if (!observerIsSet) {
+      const loadMoreObserver = new IntersectionObserver(showMoreFarms, {
+        rootMargin: '0px',
+        threshold: 1,
+      })
+      loadMoreObserver.observe(loadMoreRef.current)
+      setObserverIsSet(true)
+    }
+  }, [farmsStakedMemoized, observerIsSet])
+
+  const rowData = farmsStakedMemoized.map((farm) => {
+    const { token, quoteToken } = farm
+    const tokenAddress = token.address
+    const quoteTokenAddress = quoteToken.address
+    const lpLabel = farm.lpSymbol && farm.lpSymbol.split(' ')[0].toUpperCase().replace('BECOSWAP', '')
+
+    const row: RowProps = {
+      apr: {
+        value: farm.apr && farm.apr.toLocaleString('en-US', { maximumFractionDigits: 2 }),
+        multiplier: farm.multiplier,
+        lpLabel,
+        tokenAddress,
+        quoteTokenAddress,
+        cakePrice,
+        originalValue: farm.apr,
+      },
+      farm: {
+        image: farm.lpSymbol.split(' ')[0].toLocaleLowerCase(),
+        label: lpLabel,
+        pid: farm.pid,
+      },
+      earned: {
+        earnings: getBalanceNumber(new BigNumber(farm.userData.earnings)),
+        pid: farm.pid,
+      },
+      liquidity: {
+        liquidity: farm.liquidity,
+      },
+      multiplier: {
+        multiplier: farm.multiplier,
+      },
+      details: farm,
+    }
+
+    return row
+  })
+
+  const renderContent = (): JSX.Element => {
+    if (viewMode === ViewMode.TABLE && rowData.length) {
+      const columnSchema = DesktopColumnSchema
+
+      const columns = columnSchema.map((column) => ({
+        id: column.id,
+        name: column.name,
+        label: column.label,
+        sort: (a: RowType<RowProps>, b: RowType<RowProps>) => {
+          switch (column.name) {
+            case 'farm':
+              return b.id - a.id
+            case 'apr':
+              if (a.original.apr.value && b.original.apr.value) {
+                return Number(a.original.apr.value) - Number(b.original.apr.value)
+              }
+
+              return 0
+            case 'earned':
+              return a.original.earned.earnings - b.original.earned.earnings
+            default:
+              return 1
+          }
+        },
+        sortable: column.sortable,
+      }))
+
+      return <Table data={rowData} columns={columns} userDataReady={userDataReady} />
+    }
+
+    return (
       <div>
         <FlexLayout>
-          {
-            /* eslint-disable */
-            !showInactive
-              ? stakedOnly
-                ? farmsList(stakedOnlyFarms, false)
-                : farmsList(activeFarms, false)
-              : farmsList(inactiveFarms, true)
-          }
+          <Route exact path={`${path}`}>
+            {farmsStakedMemoized.map((farm) => (
+              <FarmCard key={farm.pid} farm={farm} novaPrice={cakePrice} account={account} removed={false} />
+            ))}
+          </Route>
+          <Route exact path={`${path}/history`}>
+            {farmsStakedMemoized.map((farm) => (
+              <FarmCard key={farm.pid} farm={farm} novaPrice={cakePrice} account={account} removed />
+            ))}
+          </Route>
+          <Route exact path={`${path}/archived`}>
+            {farmsStakedMemoized.map((farm) => (
+              <FarmCard key={farm.pid} farm={farm} novaPrice={cakePrice} account={account} removed />
+            ))}
+          </Route>
         </FlexLayout>
       </div>
-    </Page>
+    )
+  }
+
+  const handleSortOptionChange = (option: OptionProps): void => {
+    setSortOption(option.value)
+  }
+
+  return (
+    <>
+      <PageHeader>
+        <Heading as="h1" size="xxl" color="secondary" mb="24px">
+          {t('Farms')}
+        </Heading>
+        <Heading size="lg" color="text">
+          {t('Stake Liquidity Pool (LP) tokens to earn.')}
+        </Heading>
+      </PageHeader>
+      <Page>
+        <ControlContainer>
+          <ViewControls>
+            <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
+            <ToggleWrapper>
+              <Toggle checked={stakedOnly} onChange={() => setStakedOnly(!stakedOnly)} 
+              // scale="sm" 
+              />
+              <Text> {t('Staked only')}</Text>
+            </ToggleWrapper>
+            <FarmTabButtons hasStakeInFinishedFarms={stakedInactiveFarms.length > 0} />
+          </ViewControls>
+          <FilterContainer>
+            <LabelWrapper>
+              <Text>SORT BY</Text>
+              <Select
+                options={[
+                  {
+                    label: 'Hot',
+                    value: 'hot',
+                  },
+                  {
+                    label: 'APR',
+                    value: 'apr',
+                  },
+                  {
+                    label: 'Multiplier',
+                    value: 'multiplier',
+                  },
+                  {
+                    label: 'Earned',
+                    value: 'earned',
+                  },
+                  {
+                    label: 'Liquidity',
+                    value: 'liquidity',
+                  },
+                ]}
+                onChange={handleSortOptionChange}
+              />
+            </LabelWrapper>
+            <LabelWrapper style={{ marginLeft: 16 }}>
+              <Text>SEARCH</Text>
+              <SearchInput onChange={handleChangeQuery} />
+            </LabelWrapper>
+          </FilterContainer>
+        </ControlContainer>
+        {renderContent()}
+        <div ref={loadMoreRef} />
+        {/* <StyledImage src="/images/3dpan.png" alt="Pancake illustration" width={120} height={103} /> */}
+      </Page>
+    </>
   )
 }
 

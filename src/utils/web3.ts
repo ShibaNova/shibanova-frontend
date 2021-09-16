@@ -6,7 +6,10 @@ import getRpcUrl from 'utils/getRpcUrl'
 
 const RPC_URL = getRpcUrl()
 const httpProvider = new Web3.providers.HttpProvider(RPC_URL, { timeout: 10000 } as HttpProviderOptions)
-
+const web3NoAccount = new Web3(httpProvider)
+const getWeb3NoAccount = () => {
+  return web3NoAccount
+}
 /**
  * Provides a web3 instance using our own private provider httpProver
  */
@@ -19,4 +22,5 @@ const getContract = (abi: any, address: string, contractOptions?: ContractOption
   return new web3.eth.Contract(abi as unknown as AbiItem, address, contractOptions)
 }
 
-export { getWeb3, getContract, httpProvider }
+export { getWeb3NoAccount, getWeb3, getContract, httpProvider }
+export default web3NoAccount

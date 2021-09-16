@@ -13,6 +13,12 @@ const RiskTag = ({ risk }) => (
   </Tag>
 )
 
+const DualTag = (props) => (
+  <Tag variant="textSubtle" outline {...props}>
+    Dual
+  </Tag>
+)
+
 const CoreTag = () => (
   <Tag variant="secondary" outline startIcon={<VerifiedIcon />}>
     Core
@@ -31,4 +37,4 @@ const BinanceTag = () => (
   </Tag>
 )
 
-export { CoreTag, CommunityTag, BinanceTag, RiskTag, NoFeeTag }
+export { CoreTag, CommunityTag, BinanceTag, RiskTag, NoFeeTag, DualTag }

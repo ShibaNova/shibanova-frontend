@@ -1,14 +1,16 @@
-import React, { useMemo, useState, useCallback } from 'react'
-import BigNumber from 'bignumber.js'
+import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
-import { provider } from 'web3-core'
-import { getContract } from 'utils/erc20'
+import { provider as ProviderType } from 'web3-core'
+import BigNumber from 'bignumber.js'
+import { useLocation } from 'react-router-dom'
+import { getAddress } from 'utils/addressHelpers'
+import { getBep20Contract } from 'utils/contractHelpers'
 import { Button, Flex, Text } from '@pancakeswap-libs/uikit'
 import { Farm } from 'state/types'
-import { useFarmFromPid, useFarmFromSymbol, useFarmUser } from 'state/hooks'
-import useI18n from 'hooks/useI18n'
-import UnlockButton from 'components/UnlockButton'
+import { useTranslation } from 'contexts/Localization'
+import useWeb3 from 'hooks/useWeb3'
 import { useApprove } from 'hooks/useApprove'
+import UnlockButton from 'components/UnlockButton'
 import StakeAction from './StakeAction'
 import HarvestAction from './HarvestAction'
 
@@ -16,31 +18,38 @@ const Action = styled.div`
   padding-top: 16px;
 `
 export interface FarmWithStakedValue extends Farm {
-  apy?: BigNumber
+  apr?: number
 }
 
 interface FarmCardActionsProps {
   farm: FarmWithStakedValue
-  ethereum?: provider
+  provider?: ProviderType
   account?: string
+  addLiquidityUrl?: string
 }
 
-const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account }) => {
-  const TranslateString = useI18n()
+const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidityUrl }) => {
+  const { t } = useTranslation()
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const { pid, lpAddresses, tokenAddresses, isTokenOnly, depositFeeBP } = useFarmFromPid(farm.pid)
-  const { allowance, tokenBalance, stakedBalance, earnings } = useFarmUser(pid)
-  const lpAddress = lpAddresses[process.env.REACT_APP_CHAIN_ID]
-  const tokenAddress = tokenAddresses[process.env.REACT_APP_CHAIN_ID]
+  const { pid, lpAddresses } = farm
+  const {
+    allowance: allowanceAsString = 0,
+    tokenBalance: tokenBalanceAsString = 0,
+    stakedBalance: stakedBalanceAsString = 0,
+    earnings: earningsAsString = 0,
+    canHarvest,
+  } = farm.userData || {}
+  const allowance = new BigNumber(allowanceAsString)
+  const tokenBalance = new BigNumber(tokenBalanceAsString)
+  const stakedBalance = new BigNumber(stakedBalanceAsString)
+  const earnings = new BigNumber(earningsAsString)
+  const lpAddress = getAddress(lpAddresses)
   const lpName = farm.lpSymbol.toUpperCase()
   const isApproved = account && allowance && allowance.isGreaterThan(0)
+  const web3 = useWeb3()
+  const location = useLocation()
 
-  const lpContract = useMemo(() => {
-    if (isTokenOnly) {
-      return getContract(ethereum as provider, tokenAddress)
-    }
-    return getContract(ethereum as provider, lpAddress)
-  }, [ethereum, lpAddress, tokenAddress, isTokenOnly])
+  const lpContract = getBep20Contract(lpAddress, web3)
 
   const { onApprove } = useApprove(lpContract)
 
@@ -61,11 +70,16 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account }
         tokenBalance={tokenBalance}
         tokenName={lpName}
         pid={pid}
-        depositFeeBP={depositFeeBP}
+        addLiquidityUrl={addLiquidityUrl}
       />
     ) : (
-      <Button style={{ fontSize: 14 }} mt="8px" fullWidth disabled={requestedApproval} onClick={handleApprove}>
-        {TranslateString(999, 'APPROVE CONTRACT')}
+      <Button
+        mt="8px"
+        fullWidth
+        disabled={requestedApproval || location.pathname.includes('archived')}
+        onClick={handleApprove}
+      >
+        {t('Approve Contract')}
       </Button>
     )
   }
@@ -75,25 +89,22 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account }
       <Flex>
         <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="3px">
           {/* TODO: Is there a way to get a dynamic value here from useFarmFromSymbol? */}
-          {/* {(farm.pid < 2) && 0716 */}
-          {(farm.pid === 2 || farm.pid === 1) && <>sNOVA</>}
-          {/* // {(farm.pid >= 2) && 0716 */}
-          {farm.pid !== 2 && farm.pid !== 1 && <>NOVA</>}
+          BECO
         </Text>
         <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-          {TranslateString(999, 'Earned')}
+          {t('Earned')}
         </Text>
       </Flex>
-      <HarvestAction earnings={earnings} pid={pid} />
+      <HarvestAction earnings={earnings} pid={pid} canHarvest={canHarvest} />
       <Flex>
         <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="3px">
           {lpName}
         </Text>
         <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-          {TranslateString(999, 'Staked')}
+          {t('Staked')}
         </Text>
       </Flex>
-      {!account ? <UnlockButton mt="8px" fullWidth /> : renderApprovalOrStakeButton()}
+      {!account ? <UnlockButton mt="8px" width="100%" /> : renderApprovalOrStakeButton()}
     </Action>
   )
 }

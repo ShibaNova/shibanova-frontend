@@ -39,8 +39,37 @@ export interface Address {
   97?: string
   56: string
 }
+export interface Token {
+  symbol: string
+  address?: Address
+  decimals?: number
+  projectLink?: string
+}
 
 export interface FarmConfig {
+  pid: number
+  lpSymbol: string
+  lpAddresses: Address
+  token: Token
+  quoteToken: Token
+  tokenSymbol: string
+  tokenAddresses: Address
+  quoteTokenSymbol: QuoteToken
+  quoteTokenAdresses: Address
+  multiplier?: string
+  isCommunity?: boolean
+  depositFeeBP?: number
+  harvestInterval?: number
+  isTokenOnly?: boolean
+  risk: number
+  dual?: {
+    rewardPerBlock: number
+    earnLabel: string
+    endBlock: number
+  }
+}
+
+export interface FarmConfig2 {
   pid: number
   lpSymbol: string
   lpAddresses: Address
