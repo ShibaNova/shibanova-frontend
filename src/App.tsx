@@ -51,9 +51,9 @@ const App: React.FC = () => {
             <Route path="/farms">
               <Farms />
             </Route>
-            <Route path="/pools">
+            {/* <Route path="/pools">
               <Farms tokenMode />
-            </Route>
+            </Route> */}
             <Route component={NotFound} />
             
           </Switch>
