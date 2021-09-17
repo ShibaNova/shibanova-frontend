@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Box, Button, Flex, Input, Text } from '@becoswap-libs/uikit'
-import { useUserSlippageTolerance } from 'state/user/hooks'
+import { useUserSlippageTolerance } from 'swapstate/user/hooks'
 import QuestionHelper from '../QuestionHelper'
 
 const MAX_SLIPPAGE = 5000
@@ -80,7 +80,7 @@ const SlippageToleranceSettings = ({ translateString }: SlippageToleranceSetting
         <QuestionHelper
           text={translateString(
             186,
-            'Your transaction will revert if the price changes unfavorably by more than this percentage.'
+            'Your transaction will revert if the price changes unfavorably by more than this percentage.',
           )}
         />
       </Flex>

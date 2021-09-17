@@ -2,7 +2,7 @@ import { Token, TokenAmount } from '@becoswap-libs/sdk'
 import { useMemo } from 'react'
 
 import { useTokenContract } from '../hooks/useContract'
-import { useSingleCallResult } from '../state/multicall/hooks'
+import { useSingleCallResult } from '../swapstate/multicall/hooks'
 
 export function useTokenAllowance(token?: Token, owner?: string, spender?: string): TokenAmount | undefined {
   const contract = useTokenContract(token?.address, false)
@@ -10,10 +10,10 @@ export function useTokenAllowance(token?: Token, owner?: string, spender?: strin
   const inputs = useMemo(() => [owner, spender], [owner, spender])
   const allowance = useSingleCallResult(contract, 'allowance', inputs).result
 
-  return useMemo(() => (token && allowance ? new TokenAmount(token, allowance.toString()) : undefined), [
-    token,
-    allowance,
-  ])
+  return useMemo(
+    () => (token && allowance ? new TokenAmount(token, allowance.toString()) : undefined),
+    [token, allowance],
+  )
 }
 
 export default useTokenAllowance

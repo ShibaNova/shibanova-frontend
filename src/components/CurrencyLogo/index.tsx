@@ -2,7 +2,7 @@ import { Currency, ETHER, Token } from '@becoswap-libs/sdk'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import useHttpLocations from '../../hooks/useHttpLocations'
-import { WrappedTokenInfo } from '../../state/lists/hooks'
+import { WrappedTokenInfo } from '../../swapstate/lists/hooks'
 import Logo from '../Logo'
 import CoinLogo from '../pancake/CoinLogo'
 

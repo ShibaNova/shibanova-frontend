@@ -8,9 +8,9 @@ import useI18n from 'hooks/useI18n'
 import { useFetchListCallback } from '../../hooks/useFetchListCallback'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import useToggle from '../../hooks/useToggle'
-import { AppDispatch, AppState } from '../../state'
-import { acceptListUpdate, removeList, selectList } from '../../state/lists/actions'
-import { useSelectedListUrl } from '../../state/lists/hooks'
+import { AppDispatch, AppState } from '../../swapstate'
+import { acceptListUpdate, removeList, selectList } from '../../swapstate/lists/actions'
+import { useSelectedListUrl } from '../../swapstate/lists/hooks'
 import { ExternalLink, LinkStyledButton } from '../Shared'
 import listVersionLabel from '../../utils/listVersionLabel'
 import { parseENSAddress } from '../../utils/parseENSAddress'
@@ -243,7 +243,7 @@ export function ListSelect({ onDismiss, onBack }: { onDismiss: () => void; onBac
         handleAddList()
       }
     },
-    [handleAddList, validUrl]
+    [handleAddList, validUrl],
   )
 
   const sortedLists = useMemo(() => {
@@ -288,7 +288,7 @@ export function ListSelect({ onDismiss, onBack }: { onDismiss: () => void; onBac
           <QuestionHelper
             text={TranslateString(
               999,
-              'Token lists are an open specification for lists of BEP20 tokens. You can use any token list by entering its URL below. Beware that third party token lists can contain fake or malicious BEP20 tokens.'
+              'Token lists are an open specification for lists of BEP20 tokens. You can use any token list by entering its URL below. Beware that third party token lists can contain fake or malicious BEP20 tokens.',
             )}
           />
         </Text>

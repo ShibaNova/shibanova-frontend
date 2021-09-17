@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Flex, Text, useMatchBreakpoints } from '@becoswap-libs/uikit'
-import { useAudioModeManager } from 'state/user/hooks'
+import { useAudioModeManager } from 'swapstate/user/hooks'
 
 type AudioSettingModalProps = {
   translateString: (translationId: number, fallback: string) => string

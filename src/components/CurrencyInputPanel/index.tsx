@@ -4,7 +4,7 @@ import { Button, ChevronDownIcon, Text } from '@becoswap-libs/uikit'
 import styled from 'styled-components'
 import { darken } from 'polished'
 import useI18n from 'hooks/useI18n'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
+import { useCurrencyBalance } from '../../swapstate/wallet/hooks'
 import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
 import CurrencyLogo from '../CurrencyLogo'
 import DoubleCurrencyLogo from '../DoubleLogo'
@@ -165,7 +165,7 @@ export default function CurrencyInputPanel({
                   {(currency && currency.symbol && currency.symbol.length > 20
                     ? `${currency.symbol.slice(0, 4)}...${currency.symbol.slice(
                         currency.symbol.length - 5,
-                        currency.symbol.length
+                        currency.symbol.length,
                       )}`
                     : currency?.symbol) || TranslateString(1196, 'Select a currency')}
                 </Text>

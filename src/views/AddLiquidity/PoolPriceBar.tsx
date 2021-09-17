@@ -4,7 +4,7 @@ import { Text } from '@becoswap-libs/uikit'
 import { AutoColumn } from '../../components/Column'
 import { AutoRow } from '../../components/Row'
 import { ONE_BIPS } from '../../constants'
-import { Field } from '../../state/mint/actions'
+import { Field } from '../../swapstate/mint/actions'
 
 export function PoolPriceBar({
   currencies,

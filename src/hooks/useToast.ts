@@ -3,11 +3,7 @@ import { kebabCase } from 'lodash'
 import { Toast, toastTypes } from '@becoswap-libs/uikit'
 import { useDispatch } from 'react-redux'
 
-import {
-  push as pushToast,
-  remove as removeToast,
-  clear as clearToast
-} from 'state/actions'
+import { push as pushToast, remove as removeToast, clear as clearToast } from 'swapstate/actions'
 
 // Toasts
 const useToast = () => {

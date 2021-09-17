@@ -4,9 +4,9 @@ import { FixedSizeList } from 'react-window'
 import styled from 'styled-components'
 import { Text } from '@becoswap-libs/uikit'
 import { useActiveWeb3React } from '../../hooks'
-import { useSelectedTokenList, WrappedTokenInfo } from '../../state/lists/hooks'
-import { useAddUserToken, useRemoveUserAddedToken } from '../../state/user/hooks'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
+import { useSelectedTokenList, WrappedTokenInfo } from '../../swapstate/lists/hooks'
+import { useAddUserToken, useRemoveUserAddedToken } from '../../swapstate/user/hooks'
+import { useCurrencyBalance } from '../../swapstate/wallet/hooks'
 import { LinkStyledButton } from '../Shared'
 import { useIsUserAddedToken } from '../../hooks/Tokens'
 import Column from '../Column'
@@ -187,7 +187,7 @@ export default function CurrencyList({
         />
       )
     },
-    [onCurrencySelect, otherCurrency, selectedCurrency]
+    [onCurrencySelect, otherCurrency, selectedCurrency],
   )
 
   const itemKey = useCallback((index: number, data: any) => currencyKey(data[index]), [])

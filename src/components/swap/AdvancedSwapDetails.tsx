@@ -2,8 +2,8 @@ import React from 'react'
 import { Trade, TradeType } from '@becoswap-libs/sdk'
 import { Card, CardBody, Text } from '@becoswap-libs/uikit'
 import useI18n from 'hooks/useI18n'
-import { Field } from '../../state/swap/actions'
-import { useUserSlippageTolerance } from '../../state/user/hooks'
+import { Field } from '../../swapstate/swap/actions'
+import { useUserSlippageTolerance } from '../../swapstate/user/hooks'
 import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown } from '../../utils/prices'
 import { AutoColumn } from '../Column'
 import QuestionHelper from '../QuestionHelper'
@@ -29,7 +29,7 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippag
             <QuestionHelper
               text={TranslateString(
                 202,
-                'Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.'
+                'Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.',
               )}
             />
           </RowFixed>
@@ -45,11 +45,11 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippag
         </RowBetween>
         <RowBetween>
           <RowFixed>
-            <Text fontSize='14px'>{TranslateString(226, 'Price Impact')}</Text>
+            <Text fontSize="14px">{TranslateString(226, 'Price Impact')}</Text>
             <QuestionHelper
               text={TranslateString(
                 224,
-                'The difference between the market price and estimated price due to trade size.'
+                'The difference between the market price and estimated price due to trade size.',
               )}
             />
           </RowFixed>
@@ -59,12 +59,7 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippag
         <RowBetween>
           <RowFixed>
             <Text fontSize="14px">{TranslateString(228, 'Liquidity Provider Fee')}</Text>
-            <QuestionHelper
-              text={TranslateString(
-                230,
-                'For each trade a 0.2% fee is paid. 0.15% goes to rewards.'
-              )}
-            />
+            <QuestionHelper text={TranslateString(230, 'For each trade a 0.2% fee is paid. 0.15% goes to rewards.')} />
           </RowFixed>
           <Text fontSize="14px">
             {realizedLPFee ? `${realizedLPFee.toSignificant(4)} ${trade.inputAmount.currency.symbol}` : '-'}
@@ -98,7 +93,7 @@ export function AdvancedSwapDetails({ trade }: AdvancedSwapDetailsProps) {
                   <QuestionHelper
                     text={TranslateString(
                       999,
-                      'Routing through these tokens resulted in the best price for your trade.'
+                      'Routing through these tokens resulted in the best price for your trade.',
                     )}
                   />
                 </RowFixed>

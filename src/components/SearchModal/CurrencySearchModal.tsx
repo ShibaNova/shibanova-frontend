@@ -1,7 +1,7 @@
 import { Currency } from '@becoswap-libs/sdk'
 import React, { useCallback, useEffect, useState } from 'react'
 import useLast from '../../hooks/useLast'
-import { useSelectedListUrl } from '../../state/lists/hooks'
+import { useSelectedListUrl } from '../../swapstate/lists/hooks'
 import Modal from '../Modal'
 import { CurrencySearch } from './CurrencySearch'
 import { ListSelect } from './ListSelect'
@@ -37,7 +37,7 @@ export default function CurrencySearchModal({
       onCurrencySelect(currency)
       onDismiss()
     },
-    [onDismiss, onCurrencySelect]
+    [onDismiss, onCurrencySelect],
   )
 
   const handleClickChangeList = useCallback(() => {

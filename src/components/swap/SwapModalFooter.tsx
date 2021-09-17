@@ -4,7 +4,7 @@ import { Text, Button } from '@becoswap-libs/uikit'
 import { Repeat } from 'react-feather'
 
 import useI18n from 'hooks/useI18n'
-import { Field } from '../../state/swap/actions'
+import { Field } from '../../swapstate/swap/actions'
 import {
   computeSlippageAdjustedAmounts,
   computeTradePriceBreakdown,
@@ -31,10 +31,10 @@ export default function SwapModalFooter({
   disabledConfirm: boolean
 }) {
   const [showInverted, setShowInverted] = useState<boolean>(false)
-  const slippageAdjustedAmounts = useMemo(() => computeSlippageAdjustedAmounts(trade, allowedSlippage), [
-    allowedSlippage,
-    trade,
-  ])
+  const slippageAdjustedAmounts = useMemo(
+    () => computeSlippageAdjustedAmounts(trade, allowedSlippage),
+    [allowedSlippage, trade],
+  )
   const { priceImpactWithoutFee, realizedLPFee } = useMemo(() => computeTradePriceBreakdown(trade), [trade])
   const severity = warningSeverity(priceImpactWithoutFee)
   const TranslateString = useI18n()
@@ -72,7 +72,7 @@ export default function SwapModalFooter({
             <QuestionHelper
               text={TranslateString(
                 202,
-                'Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.'
+                'Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.',
               )}
             />
           </RowFixed>
@@ -101,12 +101,7 @@ export default function SwapModalFooter({
         <RowBetween>
           <RowFixed>
             <Text fontSize="14px">{TranslateString(999, 'Rewards Fee')}</Text>
-            <QuestionHelper
-              text={TranslateString(
-                999,
-                'For each trade a 0.2% fee is paid. 0.15% goes to Rewards'
-              )}
-            />
+            <QuestionHelper text={TranslateString(999, 'For each trade a 0.2% fee is paid. 0.15% goes to Rewards')} />
           </RowFixed>
           <Text fontSize="14px">
             {realizedLPFee ? `${realizedLPFee?.toSignificant(6)} ${trade.inputAmount.currency.symbol}` : '-'}
@@ -121,7 +116,6 @@ export default function SwapModalFooter({
           variant={severity > 2 ? 'danger' : 'primary'}
           mt="10px"
           id="confirm-swap-or-send"
-          
         >
           {severity > 2 ? 'Swap Anyway' : 'Confirm Swap'}
         </Button>

@@ -4,7 +4,7 @@ import { Button, Text } from '@becoswap-libs/uikit'
 import { TranslateString } from 'utils/translateTextHelpers'
 import { RowBetween, RowFixed } from '../../components/Row'
 import CurrencyLogo from '../../components/CurrencyLogo'
-import { Field } from '../../state/mint/actions'
+import { Field } from '../../swapstate/mint/actions'
 
 export function ConfirmAddModalBottom({
   noLiquidity,
@@ -56,7 +56,7 @@ export function ConfirmAddModalBottom({
         <Text>Share of Pool:</Text>
         <Text>{noLiquidity ? '100' : poolTokenPercentage?.toSignificant(4)}%</Text>
       </RowBetween>
-      <Button mt="20px" onClick={onAdd} style={{width:"100%"}}>
+      <Button mt="20px" onClick={onAdd} style={{ width: '100%' }}>
         {noLiquidity ? 'Create Pool & Supply' : 'Confirm Supply'}
       </Button>
     </>

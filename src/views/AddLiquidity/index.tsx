@@ -18,11 +18,11 @@ import { PairState } from 'data/Reserves'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrency } from 'hooks/Tokens'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import { Field } from 'state/mint/actions'
-import { useDerivedMintInfo, useMintActionHandlers, useMintState } from 'state/mint/hooks'
+import { Field } from 'swapstate/mint/actions'
+import { useDerivedMintInfo, useMintActionHandlers, useMintState } from 'swapstate/mint/hooks'
 
-import { useTransactionAdder } from 'state/transactions/hooks'
-import { useIsExpertMode, useUserDeadline, useUserSlippageTolerance } from 'state/user/hooks'
+import { useTransactionAdder } from 'swapstate/transactions/hooks'
+import { useIsExpertMode, useUserDeadline, useUserSlippageTolerance } from 'swapstate/user/hooks'
 import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from 'utils'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
@@ -50,7 +50,7 @@ export default function AddLiquidity({
   const oneCurrencyIsWBNB = Boolean(
     chainId &&
       ((currencyA && currencyEquals(currencyA, WETH[chainId])) ||
-        (currencyB && currencyEquals(currencyB, WETH[chainId])))
+        (currencyB && currencyEquals(currencyB, WETH[chainId]))),
   )
   const expertMode = useIsExpertMode()
 
@@ -96,7 +96,7 @@ export default function AddLiquidity({
         [field]: maxAmountSpend(currencyBalances[field]),
       }
     },
-    {}
+    {},
   )
 
   const atMaxAmounts: { [field in Field]?: TokenAmount } = [Field.CURRENCY_A, Field.CURRENCY_B].reduce(
@@ -106,7 +106,7 @@ export default function AddLiquidity({
         [field]: maxAmounts[field]?.equalTo(parsedAmounts[field] ?? '0'),
       }
     },
-    {}
+    {},
   )
 
   // check whether the user has approved the router on the tokens
@@ -156,8 +156,8 @@ export default function AddLiquidity({
         wrappedCurrency(currencyB, chainId)?.address ?? '',
         parsedAmountA.raw.toString(),
         parsedAmountB.raw.toString(),
-        "0",
-        "0",
+        '0',
+        '0',
         account,
         deadlineFromNow,
       ]
@@ -180,7 +180,7 @@ export default function AddLiquidity({
           })
 
           setTxHash(response.hash)
-        })
+        }),
       )
       .catch((e) => {
         setAttemptingTxn(false)
@@ -259,7 +259,7 @@ export default function AddLiquidity({
         history.push(`/add/${newCurrencyIdA}/${currencyIdB}`)
       }
     },
-    [currencyIdB, history, currencyIdA]
+    [currencyIdB, history, currencyIdA],
   )
   const handleCurrencyBSelect = useCallback(
     (currB: Currency) => {
@@ -274,7 +274,7 @@ export default function AddLiquidity({
         history.push(`/add/${currencyIdA || 'BNB'}/${newCurrencyIdB}`)
       }
     },
-    [currencyIdA, history, currencyIdB]
+    [currencyIdA, history, currencyIdB],
   )
 
   const handleDismissConfirmation = useCallback(() => {
@@ -379,7 +379,7 @@ export default function AddLiquidity({
               )}
 
               {!account ? (
-                <ConnectWalletButton  />
+                <ConnectWalletButton />
               ) : (
                 <AutoColumn gap="md">
                   {(approvalA === ApprovalState.NOT_APPROVED ||
@@ -430,7 +430,7 @@ export default function AddLiquidity({
                         ? 'danger'
                         : 'primary'
                     }
-                    style={{width:"100%"}}
+                    style={{ width: '100%' }}
                   >
                     {error ?? 'Supply'}
                   </Button>

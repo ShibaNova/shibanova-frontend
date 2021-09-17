@@ -2,8 +2,8 @@ import React, { useMemo } from 'react'
 import { CheckmarkCircleIcon, ErrorIcon, Flex, LinkExternal, Text, Modal, Button } from '@becoswap-libs/uikit'
 import { useActiveWeb3React } from 'hooks'
 import { getBscScanLink } from 'utils'
-import { isTransactionRecent, useAllTransactions } from 'state/transactions/hooks'
-import { TransactionDetails } from 'state/transactions/reducer'
+import { isTransactionRecent, useAllTransactions } from 'swapstate/transactions/hooks'
+import { TransactionDetails } from 'swapstate/transactions/reducer'
 import Loader from 'components/Loader'
 
 type RecentTransactionsModalProps = {

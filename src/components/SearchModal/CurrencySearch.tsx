@@ -10,7 +10,7 @@ import useI18n from 'hooks/useI18n'
 import { useActiveWeb3React } from '../../hooks'
 import { AppState } from '../../state'
 import { useAllTokens, useToken } from '../../hooks/Tokens'
-import { useSelectedListInfo } from '../../state/lists/hooks'
+import { useSelectedListInfo } from '../../swapstate/lists/hooks'
 import { LinkStyledButton } from '../Shared'
 import { isAddress } from '../../utils'
 import Card from '../Card'
@@ -99,7 +99,7 @@ export function CurrencySearch({
         }
       }
     },
-    [onDismiss, onCurrencySelect, audioPlay]
+    [onDismiss, onCurrencySelect, audioPlay],
   )
 
   // clear the input on open
@@ -132,7 +132,7 @@ export function CurrencySearch({
         }
       }
     },
-    [filteredSortedTokens, handleCurrencySelect, searchQuery]
+    [filteredSortedTokens, handleCurrencySelect, searchQuery],
   )
 
   const selectedListInfo = useSelectedListInfo()
@@ -146,7 +146,7 @@ export function CurrencySearch({
             <QuestionHelper
               text={TranslateString(
                 128,
-                'Find a token by searching for its name or symbol or by pasting its address below.'
+                'Find a token by searching for its name or symbol or by pasting its address below.',
               )}
             />
           </Text>

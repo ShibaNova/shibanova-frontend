@@ -3,7 +3,7 @@ import styled, { ThemeContext } from 'styled-components'
 import { Trade, TradeType } from '@becoswap-libs/sdk'
 import { Button, Text } from '@becoswap-libs/uikit'
 import { ArrowDown, AlertTriangle } from 'react-feather'
-import { Field } from '../../state/swap/actions'
+import { Field } from '../../swapstate/swap/actions'
 import { isAddress, shortenAddress } from '../../utils'
 import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import { AutoColumn } from '../Column'
@@ -34,10 +34,10 @@ export default function SwapModalHeader({
   showAcceptChanges: boolean
   onAcceptChanges: () => void
 }) {
-  const slippageAdjustedAmounts = useMemo(() => computeSlippageAdjustedAmounts(trade, allowedSlippage), [
-    trade,
-    allowedSlippage,
-  ])
+  const slippageAdjustedAmounts = useMemo(
+    () => computeSlippageAdjustedAmounts(trade, allowedSlippage),
+    [trade, allowedSlippage],
+  )
   const { priceImpactWithoutFee } = useMemo(() => computeTradePriceBreakdown(trade), [trade])
   const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
 
