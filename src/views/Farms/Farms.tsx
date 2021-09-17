@@ -12,7 +12,7 @@ import useRefresh from 'hooks/useRefresh'
 import { fetchFarmUserDataAsync } from 'state/actions'
 import usePersistState from 'hooks/usePersistState'
 import { Farm } from 'state/types'
-import { useTranslation } from 'contexts/Localization'
+// import { useTranslation } from 'contexts/Localization'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { getFarmApr } from 'utils/apr'
 import { orderBy } from 'lodash'
@@ -95,7 +95,7 @@ const NUMBER_OF_FARMS_VISIBLE = 12
 const Farms: React.FC = () => {
   const { path } = useRouteMatch()
   const { pathname } = useLocation()
-  const { t } = useTranslation()
+  // const { t } = useTranslation()
   const { data: farmsLP, userDataLoaded } = useFarms()
   const cakePrice = usePriceNovaBusd()
   const [query, setQuery] = useState('')
@@ -356,10 +356,10 @@ const Farms: React.FC = () => {
     <>
       <PageHeader>
         <Heading as="h1" size="xxl" color="secondary" mb="24px">
-          {t('Farms')}
+          Farms
         </Heading>
         <Heading size="lg" color="text">
-          {t('Stake Liquidity Pool (LP) tokens to earn.')}
+          Stake Liquidity Pool (LP) tokens to earn.
         </Heading>
       </PageHeader>
       <Page>
@@ -370,7 +370,7 @@ const Farms: React.FC = () => {
               <Toggle checked={stakedOnly} onChange={() => setStakedOnly(!stakedOnly)} 
               // scale="sm" 
               />
-              <Text> {t('Staked only')}</Text>
+              <Text> Staked only</Text>
             </ToggleWrapper>
             <FarmTabButtons hasStakeInFinishedFarms={stakedInactiveFarms.length > 0} />
           </ViewControls>
