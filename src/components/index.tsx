@@ -2,12 +2,12 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { Text } from '@becoswap-libs/uikit'
 import useI18n from 'hooks/useI18n'
-import useENS from '../../hooks/useENS'
-import { useActiveWeb3React } from '../../hooks'
-import { ExternalLink } from '../Shared'
-import { AutoColumn } from '../Column'
-import { RowBetween } from '../Row'
-import { getBscScanLink } from '../../utils'
+import useENS from 'hooks/useENS'
+import { useActiveWeb3React } from 'hooks'
+import { ExternalLink } from 'components/Shared'
+import { AutoColumn } from 'components/Column'
+import { RowBetween } from 'components/Row'
+import { getBscScanLink } from 'utils'
 
 const InputPanel = styled.div`
   display: flex;
@@ -89,7 +89,7 @@ export default function AddressInputPanel({
       const withoutSpaces = input.replace(/\s+/g, '')
       onChange(withoutSpaces)
     },
-    [onChange]
+    [onChange],
   )
 
   const error = Boolean(value.length > 0 && !loading && !address)

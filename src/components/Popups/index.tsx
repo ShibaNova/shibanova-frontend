@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useActivePopups } from '../../state/application/hooks'
+import { useActivePopups } from '../../swapstate/application/hooks'
 import { AutoColumn } from '../Column'
 import PopupItem from './PopupItem'
 

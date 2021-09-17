@@ -2,9 +2,9 @@ import React, { useCallback, useMemo } from 'react'
 import { diffTokenLists, TokenList } from '@uniswap/token-lists'
 import { Button, Text } from '@becoswap-libs/uikit'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../state'
-import { useRemovePopup } from '../../state/application/hooks'
-import { acceptListUpdate } from '../../state/lists/actions'
+import { AppDispatch } from '../../swapstate'
+import { useRemovePopup } from '../../swapstate/application/hooks'
+import { acceptListUpdate } from '../../swapstate/lists/actions'
 import listVersionLabel from '../../utils/listVersionLabel'
 import { AutoColumn } from '../Column'
 import { AutoRow } from '../Row'
@@ -32,13 +32,17 @@ export default function ListUpdatePopup({
     removeThisPopup()
   }, [auto, dispatch, listUrl, removeThisPopup])
 
-  const { added: tokensAdded, changed: tokensChanged, removed: tokensRemoved } = useMemo(() => {
+  const {
+    added: tokensAdded,
+    changed: tokensChanged,
+    removed: tokensRemoved,
+  } = useMemo(() => {
     return diffTokenLists(oldList.tokens, newList.tokens)
   }, [newList.tokens, oldList.tokens])
   const numTokensChanged = useMemo(
     () =>
       Object.keys(tokensChanged).reduce((memo, chainId: any) => memo + Object.keys(tokensChanged[chainId]).length, 0),
-    [tokensChanged]
+    [tokensChanged],
   )
 
   return (
