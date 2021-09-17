@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { ToastContainer, Toast } from '@becoswap-libs/uikit'
 import useToast from 'hooks/useToast'
-import { AppState } from '../../state'
+import { AppState } from '../../swapstate'
 
 const ToastListener = () => {
   const toasts: Toast[] = useSelector((state: AppState) => state.toasts.data)
