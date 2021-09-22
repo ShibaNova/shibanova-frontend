@@ -240,6 +240,7 @@ export default function AddLiquidity({
         currencies={currencies}
         parsedAmounts={parsedAmounts}
         noLiquidity={noLiquidity}
+        // eslint-disable-next-line react/jsx-no-bind
         onAdd={onAdd}
         poolTokenPercentage={poolTokenPercentage}
       />

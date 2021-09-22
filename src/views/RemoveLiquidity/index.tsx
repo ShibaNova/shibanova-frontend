@@ -7,26 +7,25 @@ import { Currency, currencyEquals, ETHER, Percent, WETH } from '@becoswap-libs/s
 import { Button, Flex, Text } from '@becoswap-libs/uikit'
 import { ArrowDown, Plus } from 'react-feather'
 import { RouteComponentProps } from 'react-router'
-
+import { useTransactionAdder } from 'swapstate/transactions/hooks'
+import { Field } from 'swapstate/burn/actions'
+import { useUserDeadline, useUserSlippageTolerance } from 'swapstate/user/hooks'
+import { useBurnActionHandlers, useDerivedBurnInfo, useBurnState } from 'swapstate/burn/hooks'
 import { BigNumber } from '@ethersproject/bignumber'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import useI18n from 'hooks/useI18n'
-import { AutoColumn, ColumnCenter } from '../../components/Column'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { AddRemoveTabs } from '../../components/NavigationTabs'
 import { MinimalPositionCard } from '../../components/PositionCard'
 import { RowBetween, RowFixed } from '../../components/Row'
-
 import Slider from '../../components/Slider'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { ROUTER_ADDRESS } from '../../constants'
 import { useActiveWeb3React } from '../../hooks'
 import { useCurrency } from '../../hooks/Tokens'
 import { usePairContract } from '../../hooks/useContract'
-
-import { useTransactionAdder } from 'swapstate/transactions/hooks'
 import { StyledInternalLink } from '../../components/Shared'
 import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from '../../utils'
 import { currencyId } from '../../utils/currencyId'
@@ -36,10 +35,7 @@ import AppBody from '../AppBody'
 import { ClickableText, Wrapper } from '../Pool/styleds'
 import { useApproveCallback, ApprovalState } from '../../hooks/useApproveCallback'
 import { Dots } from '../../components/swap/styleds'
-import { useBurnActionHandlers, useDerivedBurnInfo, useBurnState } from 'swapstate/burn/hooks'
-
-import { Field } from 'swapstate/burn/actions'
-import { useUserDeadline, useUserSlippageTolerance } from 'swapstate/user/hooks'
+import { AutoColumn, ColumnCenter } from '../../components/Column'
 
 const OutlineCard = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.borderColor};
@@ -382,6 +378,7 @@ export default function RemoveLiquidity({
             </RowBetween>
           </>
         )}
+      { /* eslint-disable-next-line react/jsx-no-bind */ }
         <Button disabled={!(approval === ApprovalState.APPROVED || signatureData !== null)} onClick={onRemove}>
           {TranslateString(1136, 'Confirm')}
         </Button>
@@ -457,7 +454,9 @@ export default function RemoveLiquidity({
               <ConfirmationModalContent
                 title={TranslateString(1156, 'You will receive')}
                 onDismiss={handleDismissConfirmation}
+                // eslint-disable-next-line react/jsx-no-bind 
                 topContent={modalHeader}
+                // eslint-disable-next-line react/jsx-no-bind 
                 bottomContent={modalBottom}
               />
             )}
@@ -639,6 +638,7 @@ export default function RemoveLiquidity({
                 ) : (
                   <RowBetween>
                     <Button
+                    //  eslint-disable-next-line react/jsx-no-bind 
                       onClick={onAttemptToApprove}
                       variant={approval === ApprovalState.APPROVED || signatureData !== null ? 'success' : 'primary'}
                       disabled={approval !== ApprovalState.NOT_APPROVED || signatureData !== null}
