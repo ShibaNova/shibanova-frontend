@@ -6,7 +6,6 @@ import { Flex, useWalletModal } from '@pancakeswap-libs/uikit'
 import ModalVideo from 'react-modal-video'
 import ReactGA from 'react-ga'
 import ReactPixel from 'react-facebook-pixel'
-import showCountdown from 'utils/countdownTimer'
 import logo from './assets/novariaLogoMain.png'
 import StartMenu from './components/StartMenu'
 import 'react-modal-video/scss/modal-video.scss'
@@ -106,8 +105,6 @@ const Novaria: React.FC = () => {
     onPresentConnectModal()
   }
 
-  const launchCountdown = showCountdown(new Date(1647547200000))
-
   return (
     <Page1>
       <Body>
@@ -121,14 +118,12 @@ const Novaria: React.FC = () => {
           />
 
           <SubHeading>
-            <span style={{color:'gold'}}>The legend begins in {launchCountdown}</span>
-
-            {/* {connected ? <StartMenu />
+            {connected ? <StartMenu />
               : <Button onClick={handleConnectWalletClick}>CONNECT WALLET</Button>
-            } */}
+            }
 
 
-            <br /><br /><br />Legend of Novaria is a space strategy game built on the Binance Smart Chain fueled by NOVA.<br />
+            <br /><br /><br />A 4x space strategy game built on the Binance Smart Chain.<br />
 
             <Button type="button" onClick={() => { setOpen(true) }} >Trailer</Button>
             <a href='https://discord.gg/vQdxbGx9pV' rel='noopener noreferrer' target='blank'><Button type="button" >Official Discord</Button></a>

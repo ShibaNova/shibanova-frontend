@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button } from '@pancakeswap-libs/uikit'
 import styled from 'styled-components'
-import showCountdown from 'utils/countdownTimer'
 import NovariaLogo from '../assets/novariaLogoMain.png'
 
 const Body = styled.div`
@@ -27,16 +26,13 @@ const Img = styled.img`
 `
 
 const NovariaCard = ({ title }: { title: string }) => {
-
-  const launchCountdown = showCountdown(new Date(1647547200000))
-
   return (
     <Body id={title}>
       <a href="/legend-of-novaria" style={{ display: 'flex' }}>
         <Img src={NovariaLogo} alt="Legend of Novaria" />
       </a>
       <a href="/legend-of-novaria" style={{ display: 'flex' }}>
-        <Button style={{ margin: '10px auto' }}>The Battle is Coming {launchCountdown}</Button>
+        <Button style={{ margin: '10px auto' }}>The Battle is Coming</Button>
       </a>
       {/* <VideoModal /> */}
     </Body>
