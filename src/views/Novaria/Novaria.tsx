@@ -118,9 +118,13 @@ const Novaria: React.FC = () => {
           />
 
           <SubHeading>
-            {connected ? <StartMenu />
+            <span style={{color:'gold'}}>The legend begins in <br /> 
+            <span style={{color:'red', fontSize:32}}>{launchCountdown}</span></span>
+
+            {/* {connected ? <StartMenu />
+
               : <Button onClick={handleConnectWalletClick}>CONNECT WALLET</Button>
-            }
+            } */}
 
 
             <br /><br /><br />A 4x space strategy game built on the Binance Smart Chain.<br />
