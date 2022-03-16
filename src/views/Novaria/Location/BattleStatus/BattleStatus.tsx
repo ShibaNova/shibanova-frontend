@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useModal } from '@pancakeswap-libs/uikit'
 import { useGetBattle } from 'hooks/useNovaria'
+import showCountdown from 'utils/countdownTimer'
 import BattleModal from '../OpenBattlesTable/BattleModal'
 
 const Body = styled.div`
@@ -38,7 +39,7 @@ const BattleStatus = ({ playerBattleStatus, playerBattleInfo, currentLocation })
     const attacking = playerBattleInfo.battleStatus === '1'
     const defending = playerBattleInfo.battleStatus === '2'
     const battleId = Number(playerBattleInfo.battleId)
-    const startTime = new Date(useGetBattle(battleId).deadline * 1000).toLocaleString()
+    const startTime = showCountdown(new Date(useGetBattle(battleId).deadline * 1000))
 
     const isSameLocation = Number(currentLocation.X) === Number(playerBattleInfo.coordX) && Number(currentLocation.Y) === Number(playerBattleInfo.coordY)
     

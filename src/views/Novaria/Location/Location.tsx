@@ -286,7 +286,7 @@ const Location: React.FC = () => {
                   notInBattle={(playerBattleInfo.battleStatus).toString() === '0' && playerInBattle === false}
                 />
               )}
-            </LeftCol>
+            </LeftCol> 
             <CenterCol>
               <InputControl>
                 SEARCH LOCATION:

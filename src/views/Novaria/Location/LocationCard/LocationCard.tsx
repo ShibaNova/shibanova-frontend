@@ -373,7 +373,8 @@ const LocationCard = ({
           <span>{unexplored ? 'UNEXPLORED' : ''}</span>
           <span>{star ? <span>STAR Luminosity {Luminosity}</span> : ''}</span>
           <span>{wormhole && 'WORMHOLE'}</span>
-          <span>Discovered by {discovererName}</span>
+          <br />
+          <span>Discoverer - {discovererName}</span>
         </Row>
       </PlaceHeader>
       <PlaceBody>
@@ -443,6 +444,7 @@ const LocationCard = ({
             {unexplored && <span>Explore Cost (NOVA): {(exploreCost/10**18).toFixed(2)}</span>}<br />
             {wormhole && 'Wormholes allow players to tunnel (travel) from one wormhole to any other wormhole at 1/10th the cost and no cooldown'}
             {canTunnel && <span>Tunnel Cost (NOVA): {travelCost/10}</span>}
+            
             {shipyard && !haven && <span>Shipyards can be taken over once every 7 days, dependent upon last takeover/discovery time. 
               A successful takeover allows the owner to set the shipyard name and set/collect the build fee.</span>}
           </Row>
