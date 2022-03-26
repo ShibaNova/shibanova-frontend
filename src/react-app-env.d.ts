@@ -1,5 +1,7 @@
 /// <reference types="react-scripts" />
 
+declare module '*.mp3';
+
 interface Window {
     ethereum?: {
       isMetaMask?: true
