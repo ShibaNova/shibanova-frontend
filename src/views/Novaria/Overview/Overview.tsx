@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import {
   useGetBattlesAtLocation,
@@ -11,10 +11,12 @@ import {
   useGetFleetMineralRefined,
 } from 'hooks/useNovaria'
 import { ConnectedAccountContext } from 'App'
+import useSound from 'use-sound'
 import GameHeader from '../components/GameHeader'
 import GameMenu from '../components/GameMenu'
 import OpenBattlesTable from '../Location/OpenBattlesTable'
 import logo from '../assets/novariaLogoMain.png'
+import backgoundSfx from '../assets/sounds/background.mp3'
 
 const Page = styled.div`
   background-size: cover;
@@ -40,7 +42,6 @@ const Body = styled.div`
   border: 1px solid #5affff;
   padding: 10px;
   color: white;
-  
 `
 
 const Header = styled.div`
@@ -88,11 +89,20 @@ const Overview: React.FC = () => {
   const playerEXP = player.experience
   const playerName = player.name
   const playerBattleStatus = useGetPlayerBattleStatus(account)
-  const refinedMineral = (useGetFleetMineralRefined(account)/10**18).toFixed(2)
+  const refinedMineral = (useGetFleetMineralRefined(account) / 10 ** 18).toFixed(2)
 
   const playerCount = useGetPlayerCount()
-  const currentTime = Math.round((new Date()). getTime() / 1000)
+  const currentTime = Math.round(new Date().getTime() / 1000)
   const recentLocationBattles = useGetBattlesAtLocation(fleetLocation.X, fleetLocation.Y, 2, currentTime)
+
+  const [isPlayingBackgroundSfx, setIsPlayingBackgroundSfx] = useState(false)
+  const [playBackgroundSfx] = useSound(backgoundSfx, {onplay: () => setIsPlayingBackgroundSfx(true)})
+
+  useEffect(() => {
+    if (!isPlayingBackgroundSfx) {
+      playBackgroundSfx()
+    }
+  })
 
   return (
     <Page>
@@ -110,20 +120,31 @@ const Overview: React.FC = () => {
             <img src={logo} style={{}} alt="novaria logo" />
             <Header>Welcome to the Legend of Novaria</Header>
             <Text>
-              You are about to embark on a journey to explore the world of Novaria.
-              The mysterious Draken forces have pushed Humanity to the edge of the galaxy. They have been repelled for now, but we never know when they will strike again.
+              You are about to embark on a journey to explore the world of Novaria. The mysterious Draken forces have
+              pushed Humanity to the edge of the galaxy. They have been repelled for now, but we never know when they
+              will strike again.
               <br />
               <br />
-              By building ships, mining planets, and refining mineral into NOVA, you can help humanity rebuild. Along the way, you will meet friends and foes - are you cunning enough to figure out who will help you or destroy you?            
+              By building ships, mining planets, and refining mineral into NOVA, you can help humanity rebuild. Along
+              the way, you will meet friends and foes - are you cunning enough to figure out who will help you or
+              destroy you?
               <br />
               <br />
-              The journey will be perilous - the challenges will seem insurmountable - but the time to act is NOW!  Are you ready to begin your mission?
+              The journey will be perilous - the challenges will seem insurmountable - but the time to act is NOW! Are
+              you ready to begin your mission?
               <br />
               <br />
               Good Luck!
               <br />
               <br />
-              <a href='https://docs.shibanova.io/shibanova-documentation/legend-of-novaria' rel='noopener noreferrer' target='blank' style={{color:'#5affff'}}>[LEARN MORE]</a>
+              <a
+                href="https://docs.shibanova.io/shibanova-documentation/legend-of-novaria"
+                rel="noopener noreferrer"
+                target="blank"
+                style={{ color: '#5affff' }}
+              >
+                [LEARN MORE]
+              </a>
             </Text>
           </div>
           <div style={{ background: '#11427399', padding: 15, textAlign: 'center' }}>
@@ -131,7 +152,7 @@ const Overview: React.FC = () => {
               <span>Total Players: {playerCount}</span>
               <span>Your Total Refined Minerals: {refinedMineral}</span>
             </StatsSection>
-            
+
             <OpenBattlesCard>
               <Header>Your Recent Battles</Header>
               <SubHeader>(Only shows battles at your current location)</SubHeader>

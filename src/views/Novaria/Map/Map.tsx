@@ -4,6 +4,9 @@ import { ConnectedAccountContext } from 'App'
 import { useGetFleetLocation, useGetFleetMineral, useGetMaxMineralCapacity, useGetPlayer } from 'hooks/useNovaria'
 import styled from 'styled-components'
 import { useMap } from 'hooks/useContract'
+import useSound from 'use-sound'
+import backgoundSfx from '../assets/sounds/background.mp3'
+import clickSfx from '../assets/sounds/click.mp3'
 import GameHeader from '../components/GameHeader'
 import GameMenu from '../components/GameMenu'
 import shipyardLogo from '../assets/shipyard.png'
@@ -85,7 +88,7 @@ const Grid = styled.div`
   padding: 10px;
 `
 
-const GridCell = styled.div<{hasBattle: boolean, canTravel: boolean}>`
+const GridCell = styled.div<{ hasBattle: boolean; canTravel: boolean }>`
   display: flex;
   color: white;
   justify-content: center;
@@ -95,7 +98,6 @@ const GridCell = styled.div<{hasBattle: boolean, canTravel: boolean}>`
 
   border: ${(props) => props.hasBattle && '1px solid red'};
   background: ${(props) => props.canTravel && '#ffffff05'};
-  
 
   @media (mmin-width: 800px) {
     width: 100px;
@@ -159,7 +161,7 @@ const MainRow = styled.div`
   }
 `
 
-const GridCellId = styled.div<{canTravel: boolean}>`
+const GridCellId = styled.div<{ canTravel: boolean }>`
   position: absolute;
   bottom: 0px;
   right: 2px;
@@ -212,8 +214,6 @@ const InputControl = styled.div`
   margin: 10px;
 `
 
-
-
 const MoveControls = styled.div`
   display: flex;
 `
@@ -263,20 +263,37 @@ const Map: React.FC = () => {
   const [formX, setFormX] = useState(X)
   const [formY, setFormY] = useState(Y)
 
+  const [isPlayingBackgroundSfx, setIsPlayingBackgroundSfx] = useState(false)
+  const [playBackgroundSfx] = useSound(backgoundSfx, { onplay: () => setIsPlayingBackgroundSfx(true) })
+
+  useEffect(() => {
+    if (!isPlayingBackgroundSfx) {
+      playBackgroundSfx()
+    }
+  })
+
+  const [playClickSfx] = useSound(clickSfx)
+
   // Find location button
   const handleFindLocationClick = () => {
+    playClickSfx()
+
     if (X === formX && Y === formY) {
       return
     }
+
     setX(formX)
     setY(formY)
   }
 
   // My Location button
   const handleFleetLocation = async (newX, newY) => {
+    playClickSfx()
+
     if (X === newX && Y === newY) {
       return
     }
+
     setX(newX)
     setY(newY)
     setFormX(newX)
@@ -285,7 +302,10 @@ const Map: React.FC = () => {
 
   // Map Arrows
   const handleMapArrow = async (moveX, moveY) => {
+    playClickSfx()
+
     let calcX = X
+
     let calcY = Y
     if (X < 3) {
       calcX = 3
@@ -293,6 +313,7 @@ const Map: React.FC = () => {
     if (Y < 3) {
       calcY = 3
     }
+
     const newX = Math.max(Math.min(Math.floor(NX / 2), Number(calcX)), Number(calcX) + moveX)
     const newY = Math.max(Math.min(Math.floor(NY / 2), Number(calcY)), Number(calcY) + moveY)
 
@@ -306,10 +327,9 @@ const Map: React.FC = () => {
     setFormY(newY)
   }
 
-  const travelDistance = (x:number, y:number) => {
-    return Math.floor(((fleetLocation.X-x)**2 + (fleetLocation.Y-y)**2)**(1/2))
-    
-  } 
+  const travelDistance = (x: number, y: number) => {
+    return Math.floor(((fleetLocation.X - x) ** 2 + (fleetLocation.Y - y) ** 2) ** (1 / 2))
+  }
 
   if (!mapData) {
     return null
@@ -333,8 +353,10 @@ const Map: React.FC = () => {
                 const ry = Number(mapData.data.length - y - 1)
                 return mapData.data[y].map((planet, x) => {
                   return (
-                    <GridCell hasBattle={planet.activeBattleCount > 0} 
-                      canTravel={travelDistance(Number(x) + Number(mapData.x0), Number(ry) + Number(mapData.y0)) <= 5} >
+                    <GridCell
+                      hasBattle={planet.activeBattleCount > 0}
+                      canTravel={travelDistance(Number(x) + Number(mapData.x0), Number(ry) + Number(mapData.y0)) <= 5}
+                    >
                       <Link
                         to={{
                           pathname: '/location',
@@ -370,23 +392,39 @@ const Map: React.FC = () => {
                                 alt="unexplored"
                               />
                             )}
-                            {planet.placeType === '5' && planet.availableMineral > 0 && <GridCellImg src={asteroid} alt="asteroid" />}
-                            {planet.placeType === '5' && planet.availableMineral <= 0 &&  <GridCellImg src={emptyLogo} alt="asteroid" />}
+                            {planet.placeType === '5' && planet.availableMineral > 0 && (
+                              <GridCellImg src={asteroid} alt="asteroid" />
+                            )}
+                            {planet.placeType === '5' && planet.availableMineral <= 0 && (
+                              <GridCellImg src={emptyLogo} alt="asteroid" />
+                            )}
                             {planet.placeType === '6' && <GridCellImg src={wormholeLogo} alt="wormhole" />}
 
-                            {planet.placeType === '4' && !planet.hasRefinery === true && !planet.hasShipyard && <GridCellImg src={miningPlanet} alt="mining planet" />}
-                            {planet.placeType === '4' && !planet.hasRefinery === true && planet.hasShipyard && <GridCellImg src={shipyardPlanet} alt="shipyard planet" />}
-                            {planet.placeType === '4' && planet.hasRefinery === true && planet.hasShipyard === true && <GridCellImg src={dualPlanet} alt="dual planet" />}
-                            {planet.placeType === '4' && planet.hasRefinery === true && !planet.hasShipyard && <GridCellImg src={refineryPlanet} alt="refinery planet" />}
+                            {planet.placeType === '4' && !planet.hasRefinery === true && !planet.hasShipyard && (
+                              <GridCellImg src={miningPlanet} alt="mining planet" />
+                            )}
+                            {planet.placeType === '4' && !planet.hasRefinery === true && planet.hasShipyard && (
+                              <GridCellImg src={shipyardPlanet} alt="shipyard planet" />
+                            )}
+                            {planet.placeType === '4' && planet.hasRefinery === true && planet.hasShipyard === true && (
+                              <GridCellImg src={dualPlanet} alt="dual planet" />
+                            )}
+                            {planet.placeType === '4' && planet.hasRefinery === true && !planet.hasShipyard && (
+                              <GridCellImg src={refineryPlanet} alt="refinery planet" />
+                            )}
 
                             {planet.placeType === '3' && <GridCellImg src={star1} alt="star" />}
                             {planet.placeType === '1' && planet.canTravel && (
                               <GridCellImg src={emptyLogo} alt="empty" />
                             )}
                           </Row>
-                          <GridCellId canTravel={travelDistance(Number(x) + Number(mapData.x0), Number(ry) + Number(mapData.y0)) > 5}>
-                            {travelDistance(Number(x) + Number(mapData.x0), Number(ry) + Number(mapData.y0))} AU <br />
-                            ( {Number(x) + Number(mapData.x0)} ,{Number(ry) + Number(mapData.y0)} )
+                          <GridCellId
+                            canTravel={
+                              travelDistance(Number(x) + Number(mapData.x0), Number(ry) + Number(mapData.y0)) > 5
+                            }
+                          >
+                            {travelDistance(Number(x) + Number(mapData.x0), Number(ry) + Number(mapData.y0))} AU <br />({' '}
+                            {Number(x) + Number(mapData.x0)} ,{Number(ry) + Number(mapData.y0)} )
                           </GridCellId>
                         </GridCellContent>
                       </Link>

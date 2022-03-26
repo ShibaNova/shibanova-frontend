@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useModal } from '@pancakeswap-libs/uikit'
 import styled from 'styled-components/macro'
 import Select from 'react-select'
@@ -26,6 +26,9 @@ import {
   useGetPlayerExists,
 } from 'hooks/useNovaria'
 import { ConnectedAccountContext } from 'App'
+import useSound from 'use-sound'
+import backgoundSfx from '../assets/sounds/background.mp3'
+import clickSfx from '../assets/sounds/click.mp3'
 import GameHeader from '../components/GameHeader'
 import GameMenu from '../components/GameMenu'
 import ShipCardModal from './ShipCardModal'
@@ -62,7 +65,6 @@ const LeftCol = styled.div`
   flex-direction: column;
   // max-width: 78%;
   max-width: 95vw;
-   
 
   ${({ theme }) => theme.mediaQueries.xl} {
     max-width: 80vw;
@@ -306,6 +308,17 @@ const Shipyard = () => {
   const [handleGorianClick] = useModal(<ShipCardModal shipclass="Gorian" />)
   const [handleUnknownClick] = useModal(<ShipCardModal shipclass="Unknown" />)
 
+  const [isPlayingBackgroundSfx, setIsPlayingBackgroundSfx] = useState(false)
+  const [playBackgroundSfx] = useSound(backgoundSfx, { onplay: () => setIsPlayingBackgroundSfx(true) })
+
+  useEffect(() => {
+    if (!isPlayingBackgroundSfx) {
+      playBackgroundSfx()
+    }
+  })
+
+  const [playClickSfx] = useSound(clickSfx)
+
   const handleShipyardChange = (option) => {
     const selectedShipyardId = option.value
     const selectedShipyard = shipyards[selectedShipyardId]
@@ -333,7 +346,9 @@ const Shipyard = () => {
   const timeMod = useGetTimeModifier()
 
   const handleBuild = async () => {
+    playClickSfx()
     setPendingTx(true)
+
     try {
       await onBuild(shipyardX, shipyardY, shipId, shipAmount, buildCost)
       console.log(shipyardX, shipyardY, shipId, shipAmount, buildCost)
@@ -348,7 +363,9 @@ const Shipyard = () => {
   const [newName, setShipyardNewName] = useState('')
   const { onShipyardChange } = useSetShipyardName()
   const sendShipyardNameChange = async (nameX, nameY, name) => {
+    playClickSfx()
     setPendingTx(true)
+
     try {
       await onShipyardChange(nameX, nameY, name)
     } catch (error) {
@@ -365,7 +382,9 @@ const Shipyard = () => {
   const [newFee, setNewFee] = useState(0)
   const { onShipyardFeeChange } = useSetShipyardFee()
   const sendShipyardFeeChange = async (nameX, nameY, amount) => {
+    playClickSfx()
     setPendingTx(true)
+
     try {
       await onShipyardFeeChange(nameX, nameY, amount)
     } catch (error) {
@@ -416,7 +435,7 @@ const Shipyard = () => {
                 <Select
                   maxMenuHeight={150}
                   placeholder="Select Shipyard"
-                  options={shipyards.map((s, i) => ({ value: i, label: `${s.name} (${s.coordX}, ${s.coordY})`}))}
+                  options={shipyards.map((s, i) => ({ value: i, label: `${s.name} (${s.coordX}, ${s.coordY})` }))}
                   onChange={handleShipyardChange}
                   styles={selectStyles}
                 />

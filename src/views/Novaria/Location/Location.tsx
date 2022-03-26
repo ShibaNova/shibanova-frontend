@@ -26,6 +26,9 @@ import {
 } from 'hooks/useNovaria'
 import { ConnectedAccountContext } from 'App'
 import { Text } from '@pancakeswap-libs/uikit'
+import useSound from 'use-sound'
+import backgoundSfx from '../assets/sounds/background.mp3'
+import clickSfx from '../assets/sounds/click.mp3'
 import GameHeader from '../components/GameHeader'
 import GameMenu from '../components/GameMenu'
 import LocationCard from './LocationCard'
@@ -216,6 +219,8 @@ const Location: React.FC = () => {
   }, [location.state, fleetLocation.X, fleetLocation.Y, loadedCoords.x, loadedCoords.y])
 
   const handleHome = () => {
+    playClickSfx()
+
     setX(fleetLocation.X)
     setY(fleetLocation.Y)
   }
@@ -248,6 +253,17 @@ const Location: React.FC = () => {
   const timeMod = useGetTimeModifier()
 
   const playerInBattle = useGetPlayerInBattle(account)
+
+  const [isPlayingBackgroundSfx, setIsPlayingBackgroundSfx] = useState(false)
+  const [playBackgroundSfx] = useSound(backgoundSfx, { onplay: () => setIsPlayingBackgroundSfx(true) })
+
+  useEffect(() => {
+    if (!isPlayingBackgroundSfx) {
+      playBackgroundSfx()
+    }
+  })
+
+  const [playClickSfx] = useSound(clickSfx)
 
   return (
     <Page>
