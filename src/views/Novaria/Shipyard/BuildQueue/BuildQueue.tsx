@@ -40,6 +40,7 @@ const ShipCard = styled.div<{ shipclass: string }>`
   background: ${(props) => props.shipclass === '2' && 'url(/images/novaria/fireflyQueue.png)'};
   background: ${(props) => props.shipclass === '3' && 'url(/images/novaria/gorianQueue.png)'};
   background: ${(props) => props.shipclass === '4' && 'url(/images/novaria/lancerQueue.png)'};
+  background: ${(props) => props.shipclass === '5' && 'url(/images/novaria/viperSwarmQueue.png)'};
   background-repeat: no-repeat;
 
   display: flex;
