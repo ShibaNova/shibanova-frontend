@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { useGetBattle, useRecall, useSetRecall, useGetSavedSpawnPlace } from 'hooks/useNovaria'
+import { useGetBattle, useRecall, useSetRecall, useGetSavedSpawnPlace, useGetPlaceInfo } from 'hooks/useNovaria'
 import showCountdown from 'utils/countdownTimer'
 import { getWeb3 } from 'utils/web3'
 
@@ -52,11 +52,12 @@ const YourFleetStats = ({
   const miningCooldown = showCountdown(currentMiningCooldown)
   const travelCooldown = showCountdown(currentTravelCooldown)
   const savedShipyard = useGetSavedSpawnPlace(account)
+  const isShipyardLocation = useGetPlaceInfo(savedShipyard.x, savedShipyard.y).shipyard === true
   const atSavedShipyard = Number(fleetLocation.X) === Number(savedShipyard.x) && Number(fleetLocation.Y) === Number(savedShipyard.y)
   const Haven = Number(fleetLocation.X) === Number(0) && Number(fleetLocation.Y) === Number(0)
   const smallFleet = Number(fleetSize) < Number(25)
   const canRecall = smallFleet && !Haven
-  const canRecallShipyard = smallFleet && !atSavedShipyard
+  const canRecallShipyard = smallFleet && !atSavedShipyard && (savedShipyard.x !== 2 && savedShipyard.y !== 2)
 
   const { onRecall } = useRecall()
   const sendRecallTx = async (haven: boolean) => {
@@ -127,7 +128,7 @@ const YourFleetStats = ({
         <div>BATTLE</div>
         <div>{battleCooldown}</div>
       </Stat>
-      {!atSavedShipyard && <Button onClick={sendSetRecall}>{!pending ? 'SET SHIPYARD RECALL POINT' : 'pending'}</Button>}
+      {!atSavedShipyard && isShipyardLocation && <Button onClick={sendSetRecall}>{!pending ? 'SET SHIPYARD RECALL POINT' : 'pending'}</Button>}
       {canRecall && <Button onClick={()=>sendRecallTx(true)}>{!pending ? 'RECALL TO HAVEN' : 'pending'}</Button>}
       {canRecallShipyard && <Button onClick={()=>sendRecallTx(false)}>{!pending ? `RECALL TO SHIPYARD (${savedShipyard.x},${savedShipyard.y})` : 'pending'}</Button>}
     </Stats>

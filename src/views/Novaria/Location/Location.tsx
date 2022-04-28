@@ -414,7 +414,7 @@ const Location: React.FC = () => {
             </RightCol>
           </Content>
         </BodyWrapper>
-        <ChatButton playerName={playerName} playerExists={playerExists} />
+        {/* <ChatButton playerName={playerName} playerExists={playerExists} /> */}
       </Row>
     </Page>
   )

@@ -327,7 +327,7 @@ const Map: React.FC = () => {
         <GameMenu pageName="starmap" />
         <Body>
           <BodyWrapper>
-            <ChatButton playerExists={playerExists} playerName={player.name} />
+            {/* <ChatButton playerExists={playerExists} playerName={player.name} /> */}
             <Grid nx={mapData.data[0].length} ny={mapData.data.length}>
               {mapData.data.map((arr, y) => {
                 const ry = Number(mapData.data.length - y - 1)

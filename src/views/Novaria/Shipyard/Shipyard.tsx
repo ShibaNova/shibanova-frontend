@@ -394,7 +394,7 @@ const Shipyard = () => {
         <GameMenu pageName="shipyard" />
 
         <BodyWrapper>
-          <ChatButton playerExists={playerExists} playerName={playerName} />
+          {/* <ChatButton playerExists={playerExists} playerName={playerName} /> */}
           <LeftCol>
             <ShipClassMenu>
               <ShipClassCard src={viperCard} alt="viper" role="button" onClick={handleViperClick} />

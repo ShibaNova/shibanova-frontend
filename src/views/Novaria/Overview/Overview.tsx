@@ -332,7 +332,7 @@ const Overview: React.FC = () => {
                 playerSize={fleetSize} 
                 playerLocation={fleetLocation}
               />
-              <ChatButton playerExists={playerExists} playerName={playerName} />
+              {/* <ChatButton playerExists={playerExists} playerName={playerName} /> */}
             </StatsRow>
           </UpperSection>
           <StatsSection>
