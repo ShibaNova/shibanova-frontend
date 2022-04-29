@@ -121,7 +121,7 @@ const GameRankings = ({exp, playerName, playerSize, playerAttack, playerTotalMin
 
     return (
         <Wrapper>
-            <Header>Player Rankings</Header>
+            <Header>Active Player Rankings</Header>
             <LabelRow>
                 <LeftSpan>#</LeftSpan>
                 <LeftSpan>Name</LeftSpan>

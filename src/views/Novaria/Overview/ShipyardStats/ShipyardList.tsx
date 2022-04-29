@@ -1,11 +1,13 @@
-import { useGetPlaceInfo, useGetTimeModifier } from 'hooks/useNovaria'
+import { useGetPlaceInfo, useGetPlayer, useGetTimeModifier } from 'hooks/useNovaria'
 import React from 'react'
 import styled from 'styled-components'
 
 const StatsRow = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr .7fr 1fr 1fr;
   text-align: initial;
+  font-size: .7rem;
+  white-space:nowrap;
 `
 
 const StatsCol = styled.div`
@@ -32,6 +34,7 @@ const ShipyardList = ({shipyard}) => {
     const underAttack = Number(shipyard.status) !== 0
     const placeInfo = useGetPlaceInfo(Number(shipyard.coordX), Number(shipyard.coordY))
     const isRefinery = placeInfo.refinery
+    const shipyardOwner = useGetPlayer(shipyard.owner).name
     
 
     return(
@@ -41,6 +44,9 @@ const ShipyardList = ({shipyard}) => {
           </StatsCol>
           <StatsCol>
             <StatsItem style={{textAlign:'right'}} >({shipyard.coordX}, {shipyard.coordY})</StatsItem>
+          </StatsCol>
+          <StatsCol style={{textAlign:'right'}}>
+            {shipyardOwner}
           </StatsCol>
           <StatsCol>
             <StatsItem style={{textAlign:'right'}} >

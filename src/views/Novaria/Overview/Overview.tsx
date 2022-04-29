@@ -24,8 +24,10 @@ import {
   useCheckReferrals,
   useGetReferralBonus,
   useGetTotalReferrals,
+  useGetNovaBalance,
 } from 'hooks/useNovaria'
 import { ConnectedAccountContext } from 'App'
+import { getTreasuryAddress } from 'utils/addressHelpers'
 import GameHeader from '../components/GameHeader'
 import GameMenu from '../components/GameMenu'
 import GameRankings from '../components/GameRankings'
@@ -172,8 +174,9 @@ const StatsSection = styled.div`
 
 const ShipyardSubHeader = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr .7fr 1fr 1fr;
   color: #289794;
+  font-size:.9rem;
 `
 
 const RefButton = styled.button`
@@ -250,6 +253,7 @@ const Overview: React.FC = () => {
   const rewardsAmount = useCheckReferrals(account) * 25
   const rewardsDisabled = rewardsAmount <= 0 || pending
   const totalReferrals = useGetTotalReferrals(account)
+  const asteroidMineral = Number(useGetNovaBalance(getTreasuryAddress())/10**19).toFixed(0)
 
   const { onGet } = useGetReferralBonus(account)
 
@@ -303,7 +307,7 @@ const Overview: React.FC = () => {
                   The journey will be perilous - the challenges will seem insurmountable - but the time to act is NOW!  Are you ready to begin your mission?
                   <br />
                   <br />
-                  Good Luck! - is this working?
+                  Good Luck!
                   <br />
                   <br />
                   <a href='https://docs.shibanova.io/shibanova-documentation/legend-of-novaria' rel='noopener noreferrer' target='blank' style={{color:'#5affff'}}>[LEARN MORE]</a>
@@ -353,11 +357,13 @@ const Overview: React.FC = () => {
               <StatsRow>
                 <StatsCol>
                   <StatsItem>Total Players: </StatsItem>
+                  <StatsItem>Next Asteroid Mineral: </StatsItem>
                   <StatsItem>My Total Referrals: </StatsItem>
                   <StatsItem>My Total Refined Mineral: </StatsItem>
                 </StatsCol>
                 <StatsCol>
                   <StatsItem>{playerCount}</StatsItem>
+                  <StatsItem>~{asteroidMineral}</StatsItem>
                   <StatsItem>{totalReferrals}</StatsItem>
                   <StatsItem>{refinedMineral}</StatsItem>
                 </StatsCol>
@@ -381,7 +387,8 @@ const Overview: React.FC = () => {
               <Header>Shipyards</Header>
               <ShipyardSubHeader>
                 <span style={{textAlign:'left'}} >Name</span>
-                <span style={{textAlign:'right'}} >Location</span>
+                <span style={{textAlign:'right'}} >Coords</span>
+                <span style={{textAlign:'right'}} >Owner</span>
                 <span style={{textAlign:'right'}} >Takeover?</span>
               </ShipyardSubHeader>
                 {shipyards.map((shipyard) => {
