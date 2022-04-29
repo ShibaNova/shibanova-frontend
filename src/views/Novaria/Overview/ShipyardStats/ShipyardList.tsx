@@ -7,7 +7,6 @@ const StatsRow = styled.div`
   grid-template-columns: 1fr .7fr 1fr 1fr;
   text-align: initial;
   font-size: .7rem;
-  white-space:nowrap;
 `
 
 const StatsCol = styled.div`
@@ -45,8 +44,8 @@ const ShipyardList = ({shipyard}) => {
           <StatsCol>
             <StatsItem style={{textAlign:'right'}} >({shipyard.coordX}, {shipyard.coordY})</StatsItem>
           </StatsCol>
-          <StatsCol style={{textAlign:'right'}}>
-            {shipyardOwner}
+          <StatsCol>
+            <StatsItem style={{textAlign:'right'}} >{shipyardOwner}</StatsItem>
           </StatsCol>
           <StatsCol>
             <StatsItem style={{textAlign:'right'}} >
