@@ -1,12 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
-import novaABI from 'config/abi/nova.json'
-import fleetABI from 'config/abi/Fleet.json'
-import mapABI from 'config/abi/Map.json'
-import treasuryABI from 'config/abi/Treasury.json'
-import ReferralsABI from 'config/abi/Referrals.json'
-import { getContract } from 'utils/web3'
-import { getNovaAddress, getFleetAddress, getMapAddress, getTreasuryAddress, getReferralsAddress } from 'utils/addressHelpers'
 import {
   buildShips,
   claimShips,
@@ -31,15 +24,8 @@ import {
   setRecall,
 } from 'utils/callHelpers'
 import BigNumber from 'bignumber.js'
-import { useFleet, useMap, useNova, useReferrals } from './useContract'
+import { useFleet, useMap, useNova, useReferrals, useTreasury } from './useContract'
 import useRefresh from './useRefresh'
-
-// Contract constants
-const fleetContract = getContract(fleetABI, getFleetAddress())
-const mapContract = getContract(mapABI, getMapAddress())
-const novaContract = getContract(novaABI, getNovaAddress())
-const treasuryContract = getContract(treasuryABI, getTreasuryAddress())
-const referralsContract = getContract(ReferralsABI, getReferralsAddress())
 
 // ~~~Fleet contract functions~~~
 // player setup and current ships, building ships, combat
@@ -184,6 +170,7 @@ export const useSetShipyardFee = () => {
 // ***View functions***
 
 export const useGetShipClasses = () => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [shipClasses, setShipClasses] = useState([])
 
@@ -194,11 +181,12 @@ export const useGetShipClasses = () => {
     }
 
     fetchshipClasses()
-  }, [fastRefresh])
+  }, [fleetContract, fastRefresh])
   return shipClasses
 }
 
 export const useGetBuildTime = (shipId: number, amount: number) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [BuildTime, setBuildTime] = useState(0)
 
@@ -208,11 +196,12 @@ export const useGetBuildTime = (shipId: number, amount: number) => {
       setBuildTime(data)
     }
     fetch()
-  }, [fastRefresh, shipId, amount])
+  }, [shipId, amount, fleetContract, fastRefresh])
   return BuildTime
 }
 
 export const useGetShipyards = () => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [shipyards, setShipyards] = useState([])
 
@@ -222,11 +211,12 @@ export const useGetShipyards = () => {
       setShipyards(data)
     }
     fetchShipyards()
-  }, [fastRefresh])
+  }, [fleetContract, fastRefresh])
   return shipyards
 }
 
 export const useGetSpaceDock = (player: string) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [spaceDock, setSpaceDock] = useState([])
 
@@ -236,11 +226,12 @@ export const useGetSpaceDock = (player: string) => {
       setSpaceDock(data)
     }
     fetchSpaceDock()
-  }, [fastRefresh, player])
+  }, [player, fleetContract, fastRefresh])
   return spaceDock
 }
 
 export const useGetShips = (fleet: string) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [ships, setShips] = useState([])
 
@@ -250,11 +241,12 @@ export const useGetShips = (fleet: string) => {
       setShips(data)
     }
     fetchShips()
-  }, [fastRefresh, fleet])
+  }, [fleet, fleetContract, fastRefresh])
   return ships
 }
 
 export const useGetFleetSize = (fleet: string) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [fleetSize, setFleetSize] = useState(0)
 
@@ -264,11 +256,12 @@ export const useGetFleetSize = (fleet: string) => {
       setFleetSize(data)
     }
     fetch()
-  }, [fastRefresh, fleet])
+  }, [fleet, fleetContract, fastRefresh])
   return fleetSize
 }
 
 export const useGetMaxFleetSize = (fleet: string) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [maxFleetSize, setMAxFleetSize] = useState(null)
 
@@ -278,11 +271,12 @@ export const useGetMaxFleetSize = (fleet: string) => {
       setMAxFleetSize(data)
     }
     fetch()
-  }, [fastRefresh, fleet])
+  }, [fleet, fleetContract, fastRefresh])
   return maxFleetSize
 }
 
 export const useGetFleetMineral = (fleet: string) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [fleetMineral, setFleetMineral] = useState('')
 
@@ -292,11 +286,12 @@ export const useGetFleetMineral = (fleet: string) => {
       setFleetMineral(data)
     }
     fetch()
-  }, [fastRefresh, fleet])
+  }, [fleet, fleetContract, fastRefresh])
   return fleetMineral
 }
 
 export const useGetMaxMineralCapacity = (fleet: string) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [maxMineralCapacity, setMaxMineralCapacity] = useState('')
 
@@ -306,11 +301,12 @@ export const useGetMaxMineralCapacity = (fleet: string) => {
       setMaxMineralCapacity(data)
     }
     fetch()
-  }, [fastRefresh, fleet])
+  }, [fleet, fleetContract, fastRefresh])
   return maxMineralCapacity
 }
 
 export const useGetMiningCapacity = (fleet: string) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [miningCapacity, setMiningCapacity] = useState('')
 
@@ -320,12 +316,13 @@ export const useGetMiningCapacity = (fleet: string) => {
       setMiningCapacity(data)
     }
     fetch()
-  }, [fastRefresh, fleet])
+  }, [fleet, fleetContract, fastRefresh])
   return miningCapacity
 }
 
 // returns list of battle IDs at a location
 export const useGetBattlesAtLocation = (x: any, y: any, startTime: number, endTime: number) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [battlesAtLocation, setBattlesAtLocation] = useState([])
 
@@ -337,12 +334,13 @@ export const useGetBattlesAtLocation = (x: any, y: any, startTime: number, endTi
       }
     }
     fetch()
-  }, [fastRefresh, x, y, startTime, endTime])
+  }, [x, y, startTime, endTime, fleetContract, fastRefresh])
   return battlesAtLocation
 }
 
 // returns battle info
 export const useGetBattle = (Id: number) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [battle, setBattle] = useState({
     attackTeam: [],
@@ -370,12 +368,13 @@ export const useGetBattle = (Id: number) => {
       })
     }
     fetch()
-  }, [fastRefresh, Id])
+  }, [Id, fleetContract, fastRefresh])
   return battle
 }
 
 // returns battle info of player
 export const useGetPlayerBattle = (player) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [PlayerBattle, setPlayerBattle] = useState({ battleStatus: 0, battleId: null })
 
@@ -388,11 +387,12 @@ export const useGetPlayerBattle = (player) => {
       })
     }
     fetch()
-  }, [fastRefresh, player])
+  }, [player, fleetContract, fastRefresh])
   return PlayerBattle
 }
 
 export const useGetPlayerBattleStatus = (player) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [PlayerBattleStatus, setPlayerBattleStatus] = useState(false)
 
@@ -402,11 +402,12 @@ export const useGetPlayerBattleStatus = (player) => {
       setPlayerBattleStatus(data)
     }
     fetch()
-  }, [fastRefresh, player])
+  }, [player, fleetContract, fastRefresh])
   return PlayerBattleStatus
 }
 
 export const useGetAttackPower = (fleet) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [attackPower, setAttackPower] = useState(0)
 
@@ -416,11 +417,12 @@ export const useGetAttackPower = (fleet) => {
       setAttackPower(data)
     }
     fetch()
-  }, [fastRefresh, fleet])
+  }, [fleet, fleetContract, fastRefresh])
   return attackPower
 }
 
 export const useGetPlayer = (player) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [Player, setPlayer] = useState({
     name: '',
@@ -447,11 +449,12 @@ export const useGetPlayer = (player) => {
       }
     }
     fetch()
-  }, [fastRefresh, player])
+  }, [player, fleetContract, fastRefresh])
   return Player
 }
 
 export const useGetNameByAddress = (player) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [name, setName] = useState('')
 
@@ -470,11 +473,12 @@ export const useGetNameByAddress = (player) => {
       }
     }
     fetch()
-  }, [fastRefresh, player])
+  }, [player, fleetContract, fastRefresh])
   return name
 }
 
 export const useGetPlayerExists = (player) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [PlayerExists, setPlayerExists] = useState(false)
 
@@ -484,11 +488,12 @@ export const useGetPlayerExists = (player) => {
       setPlayerExists(data)
     }
     fetch()
-  }, [fastRefresh, player])
+  }, [player, fleetContract, fastRefresh])
   return PlayerExists
 }
 
 export const useGetDockCost = (shipClassId: number, amount: number) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [DockCost, setDockCost] = useState(0)
 
@@ -498,11 +503,12 @@ export const useGetDockCost = (shipClassId: number, amount: number) => {
       setDockCost(data)
     }
     fetch()
-  }, [fastRefresh, shipClassId, amount])
+  }, [shipClassId, amount, fleetContract, fastRefresh])
   return DockCost
 }
 
 export const useGetPlayerInBattle = (account) => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [playerInBattle, setPlayerInBattle] = useState(false)
 
@@ -512,7 +518,7 @@ export const useGetPlayerInBattle = (account) => {
       setPlayerInBattle(data)
     }
     fetch()
-  }, [fastRefresh, account])
+  }, [account, fleetContract, fastRefresh])
   return playerInBattle
 }
 
@@ -636,6 +642,7 @@ export const useRecall = () => {
 // ***View Functions***
 
 export const useGetSavedSpawnPlace = (account) => {
+  const mapContract = useMap()
   const { fastRefresh } = useRefresh()
   const [savedPlace, setSavedPlace] = useState({x: 0, y: 0})
 
@@ -645,11 +652,12 @@ export const useGetSavedSpawnPlace = (account) => {
       const place = await mapContract.methods.places(placeId).call()
       setSavedPlace({x: place.coordX, y: place.coordY})
     } fetch()
-  }, [fastRefresh, account])
+  }, [account, mapContract, fastRefresh])
   return savedPlace
 }
 
 export const useGetPlayerCount = () => {
+  const fleetContract = useFleet()
   const { fastRefresh } = useRefresh()
   const [playerCount, setPlayerCount] = useState(0)
 
@@ -659,11 +667,12 @@ export const useGetPlayerCount = () => {
       setPlayerCount(data)
     }
     fetch()
-  }, [fastRefresh])
+  }, [fleetContract, fastRefresh])
   return playerCount
 }
 
 export const useGetFleetMineralRefined = (account) => {
+  const mapContract = useMap()
   const { fastRefresh } = useRefresh()
   const [mineralRefined, setmineralRefined] = useState(0)
 
@@ -673,11 +682,12 @@ export const useGetFleetMineralRefined = (account) => {
       setmineralRefined(data)
     }
     fetch()
-  }, [fastRefresh, account])
+  }, [account, mapContract, fastRefresh])
   return mineralRefined
 }
 
 export const useGetFleetLocation = (fleet) => {
+  const mapContract = useMap()
   const { fastRefresh } = useRefresh()
   const [fleetLocation, setFleetLocation] = useState({ X: 0, Y: 0 })
 
@@ -687,11 +697,12 @@ export const useGetFleetLocation = (fleet) => {
       setFleetLocation({ X: data.x, Y: data.y })
     }
     fetch()
-  }, [fastRefresh, fleet])
+  }, [fleet, mapContract, fastRefresh])
   return fleetLocation
 }
 
 export const useGetExploreCost = (x, y, account) => {
+  const mapContract = useMap()
   const { fastRefresh } = useRefresh()
   const [ExploreCost, setExploreCost] = useState(0)
 
@@ -701,11 +712,12 @@ export const useGetExploreCost = (x, y, account) => {
       setExploreCost(data)
     }
     fetch()
-  }, [fastRefresh, x, y, account])
+  }, [x, y, account, mapContract, fastRefresh])
   return ExploreCost
 }
 
 export const useGetPlaceInfo = (x1: any, y1: any) => {
+  const mapContract = useMap()
   const { fastRefresh } = useRefresh()
   const [placeInfo, setPlaceInfo] = useState({
     name: '',
@@ -741,11 +753,12 @@ export const useGetPlaceInfo = (x1: any, y1: any) => {
       }
     }
     fetch()
-  }, [fastRefresh, x1, y1])
+  }, [x1, y1, mapContract, fastRefresh])
   return placeInfo
 }
 
 export const useGetFleetsAtLocation = (x: any, y: any) => {
+  const mapContract = useMap()
   const { fastRefresh } = useRefresh()
   const [fleetsAtLocation, setFleetsAtLocation] = useState([])
 
@@ -757,11 +770,12 @@ export const useGetFleetsAtLocation = (x: any, y: any) => {
       }
     }
     fetch()
-  }, [fastRefresh, x, y])
+  }, [x, y, mapContract, fastRefresh])
   return fleetsAtLocation
 }
 
 export const useGetDistanceFromFleet = (fleet: string, x: number, y: number) => {
+  const mapContract = useMap()
   const { fastRefresh } = useRefresh()
   const [DistanceFromFleet, setDistanceFromFleet] = useState(0)
 
@@ -771,11 +785,12 @@ export const useGetDistanceFromFleet = (fleet: string, x: number, y: number) => 
       setDistanceFromFleet(data)
     }
     fetch()
-  }, [fastRefresh, fleet, x, y])
+  }, [fleet, x, y, mapContract, fastRefresh])
   return DistanceFromFleet
 }
 
 export const useGetFleetTravelCost = (fleet: string, x: number, y: number) => {
+  const mapContract = useMap()
   const { fastRefresh } = useRefresh()
   const [FleetTravelCost, setFleetTravelCost] = useState(0)
 
@@ -785,11 +800,12 @@ export const useGetFleetTravelCost = (fleet: string, x: number, y: number) => {
       setFleetTravelCost(data)
     }
     fetch()
-  }, [fastRefresh, fleet, x, y])
+  }, [fleet, x, y, mapContract, fastRefresh])
   return FleetTravelCost
 }
 
 export const useGetTravelCooldown = (fleet: string, x: number, y: number) => {
+  const mapContract = useMap()
   const { fastRefresh } = useRefresh()
   const [TravelCooldown, setTravelCooldown] = useState(0)
 
@@ -799,11 +815,12 @@ export const useGetTravelCooldown = (fleet: string, x: number, y: number) => {
       setTravelCooldown(data)
     }
     fetch()
-  }, [fastRefresh, fleet, x, y])
+  }, [fleet, x, y, mapContract, fastRefresh])
   return TravelCooldown
 }
 
 export const useGetCurrentTravelCooldown = (fleet: string) => {
+  const mapContract = useMap()
   const { fastRefresh } = useRefresh()
   const [CurrentCooldown, setCurrentCooldown] = useState(0)
 
@@ -813,11 +830,12 @@ export const useGetCurrentTravelCooldown = (fleet: string) => {
       setCurrentCooldown(data)
     }
     fetch()
-  }, [fastRefresh, fleet])
+  }, [fleet, mapContract, fastRefresh])
   return CurrentCooldown
 }
 
 export const useGetCurrentMiningCooldown = (fleet: string) => {
+  const mapContract = useMap()
   const { fastRefresh } = useRefresh()
   const [currentCooldown, setCurrentCooldown] = useState(0)
 
@@ -827,7 +845,7 @@ export const useGetCurrentMiningCooldown = (fleet: string) => {
       setCurrentCooldown(data)
     }
     fetch()
-  }, [fastRefresh, fleet])
+  }, [fleet, mapContract, fastRefresh])
   return currentCooldown
 }
 
@@ -864,6 +882,7 @@ export const useApprove = () => {
 
 export const useGetAllowance = (contract) => {
   const { account } = useWallet()
+  const novaContract = useNova()
   const { fastRefresh } = useRefresh()
   const [allowance, setAllowance] = useState(null)
 
@@ -873,11 +892,12 @@ export const useGetAllowance = (contract) => {
       setAllowance(data)
     }
     fetch()
-  }, [fastRefresh, account, contract])
+  }, [contract, account, novaContract, fastRefresh])
   return allowance
 }
 
 export const useGetNovaBalance = (account) => {
+  const novaContract = useNova()
   const { fastRefresh } = useRefresh()
   const [balance, setBalance] = useState(0)
 
@@ -887,12 +907,13 @@ export const useGetNovaBalance = (account) => {
       setBalance(data)
     }
     fetch()
-  }, [fastRefresh, account])
+  }, [account, novaContract, fastRefresh])
   return balance
 }
 // *** Treasury Contract ***
 
 export const useGetCostMod = () => {
+  const treasuryContract = useTreasury()
   const { fastRefresh } = useRefresh()
   const [CostMod, setCostMod] = useState(0)
 
@@ -902,7 +923,7 @@ export const useGetCostMod = () => {
       setCostMod(data)
     }
     fetch()
-  }, [fastRefresh])
+  }, [treasuryContract, fastRefresh])
   return CostMod
 }
 
@@ -936,6 +957,7 @@ export const useGetReferralBonus = (player: string) => {
 }
 
 export const useCheckReferrals = (player: string) => {
+  const referralsContract = useReferrals()
   const { slowRefresh } = useRefresh()
   const [totalReferrals, settotalReferrals] = useState(0)
 
@@ -945,11 +967,12 @@ export const useCheckReferrals = (player: string) => {
       settotalReferrals(data)
     }
     fetch()
-  }, [player, slowRefresh])
+  }, [player, referralsContract, slowRefresh])
   return totalReferrals
 }
 
 export const useCheckReferralStatus = (player: string) => {
+  const referralsContract = useReferrals()
   const { slowRefresh } = useRefresh()
   const [referralStatus, setReferralStatus] = useState(false)
 
@@ -959,11 +982,12 @@ export const useCheckReferralStatus = (player: string) => {
       setReferralStatus(data)
     }
     fetch()
-  }, [player, slowRefresh])
+  }, [player, referralsContract, slowRefresh])
   return referralStatus
 }
 
 export const useGetTotalReferrals = (player: string) => {
+  const referralsContract = useReferrals()
   const {slowRefresh} = useRefresh()
   const [totalReferrals, settotalReferrals] = useState(0)
 
@@ -973,6 +997,6 @@ export const useGetTotalReferrals = (player: string) => {
       settotalReferrals(data)
     }
     fetch()
-  }, [player, slowRefresh])
+  }, [player, referralsContract, slowRefresh])
   return totalReferrals
 }

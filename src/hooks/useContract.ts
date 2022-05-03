@@ -13,7 +13,8 @@ import {
   getFleetAddress,
   getMapAddress,
   getApprovalsAddress,
-  getReferralsAddress
+  getReferralsAddress,
+  getTreasuryAddress
 } from 'utils/addressHelpers'
 import { poolsConfig } from 'config/constants'
 import { PoolCategory } from 'config/constants/types'
@@ -31,6 +32,7 @@ import fleet from 'config/abi/Fleet.json'
 import referrals from 'config/abi/Referrals.json'
 import map from 'config/abi/Map.json'
 import approvals from 'config/abi/Approvals.json'
+import treasury from 'config/abi/Treasury.json'
 
 const useContract = (abi: AbiItem, address: string, contractOptions?: ContractOptions) => {
   const web3 = useWeb3()
@@ -121,6 +123,11 @@ export const useApprovals = () => {
 export const useReferrals = () => {
   const referralsABI = referrals as unknown as AbiItem
   return useContract(referralsABI, getReferralsAddress())
+}
+
+export const useTreasury = () => {
+  const treasuryABI = treasury as unknown as AbiItem
+  return useContract(treasuryABI, getTreasuryAddress())
 }
 
 export default useContract
