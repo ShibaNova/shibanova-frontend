@@ -28,6 +28,7 @@ import {
 } from 'hooks/useNovaria'
 import { ConnectedAccountContext } from 'App'
 import { getTreasuryAddress } from 'utils/addressHelpers'
+import NovariaTurboContext from 'contexts/NovariaTurboContext'
 import GameHeader from '../components/GameHeader'
 import GameMenu from '../components/GameMenu'
 import GameRankings from '../components/GameRankings'
@@ -253,7 +254,8 @@ const Overview: React.FC = () => {
   const rewardsAmount = useCheckReferrals(account) * 25
   const rewardsDisabled = rewardsAmount <= 0 || pending
   const totalReferrals = useGetTotalReferrals(account)
-  const asteroidMineral = Number(useGetNovaBalance(getTreasuryAddress())/10**19).toFixed(0)
+  const turbo = useContext(NovariaTurboContext)
+  const asteroidMineral = Number(useGetNovaBalance(getTreasuryAddress(turbo))/10**19).toFixed(0)
 
   const { onGet } = useGetReferralBonus(account)
 

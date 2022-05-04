@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { useGetAllowance, useApprove } from 'hooks/useNovaria'
 import { getTreasuryAddress } from 'utils/addressHelpers'
+import NovariaTurboContext from 'contexts/NovariaTurboContext'
 
 const Wrapper = styled.div`
   display: flex;
@@ -44,7 +45,8 @@ const Button = styled.button`
 const UpdateBanner = () => {
   const [pendingApprove, setPendingApproveTx] = useState(false)
 
-  const treasuryContract = getTreasuryAddress()
+  const turbo = useContext(NovariaTurboContext)
+  const treasuryContract = getTreasuryAddress(turbo)
   const allowanceTreasury = useGetAllowance(treasuryContract)
   const treasuryContractApproved = allowanceTreasury === null ? null : allowanceTreasury > 0
 

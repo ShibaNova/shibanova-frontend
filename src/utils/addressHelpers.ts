@@ -1,49 +1,53 @@
-import addresses from 'config/constants/contracts'
+import { defaultContracts, turboContracts } from 'config/constants/contracts'
 
 const chainId = process.env.REACT_APP_CHAIN_ID
 
 export const getNovaAddress = () => {
-  return addresses.nova[chainId]
+  return defaultContracts.nova[chainId]
 }
 export const getMasterChefAddress = () => {
-  return addresses.masterChef[chainId]
+  return defaultContracts.masterChef[chainId]
 }
 export const getMulticallAddress = () => {
-  return addresses.mulltiCall[chainId]
+  return defaultContracts.mulltiCall[chainId]
 }
 export const getWbnbAddress = () => {
-  return addresses.wbnb[chainId]
+  return defaultContracts.wbnb[chainId]
 }
 export const getLotteryAddress = () => {
-  return addresses.lottery[chainId]
+  return defaultContracts.lottery[chainId]
 }
 export const getLotteryTicketAddress = () => {
-  return addresses.lotteryNFT[chainId]
+  return defaultContracts.lotteryNFT[chainId]
 }
 export const getSNovaAddress = () => {
-  return addresses.snova[chainId]
+  return defaultContracts.snova[chainId]
 }
 export const getMoneyPotAddress = () => {
-  return addresses.moneyPot[chainId]
+  return defaultContracts.moneyPot[chainId]
 }
 export const getMoneyPotOldAddress = () => {
-  return addresses.moneyPotOld[chainId]
+  return defaultContracts.moneyPotOld[chainId]
 }
 export const getBusdAddress = () => {
-  return addresses.busd[chainId]
+  return defaultContracts.busd[chainId]
 }
-export const getMapAddress = () => {
-  return addresses.map[chainId]
+export const getMapAddress = (turbo: boolean) => {
+  const contracts = turbo ? turboContracts : defaultContracts
+  return contracts.map[chainId]
 }
-export const getFleetAddress = () => {
-  return addresses.fleet[chainId]
+export const getFleetAddress = (turbo: boolean) => {
+  const contracts = turbo ? turboContracts : defaultContracts
+  return contracts.fleet[chainId]
 }
 export const getApprovalsAddress = () => {
-  return addresses.approvals[chainId]
+  return defaultContracts.approvals[chainId]
 }
-export const getTreasuryAddress = () => {
-  return addresses.treasury[chainId]
+export const getTreasuryAddress = (turbo: boolean) => {
+  const contracts = turbo ? turboContracts : defaultContracts
+  return contracts.treasury[chainId]
 }
-export const getReferralsAddress = () => {
-  return addresses.referrals[chainId]
+export const getReferralsAddress = (turbo: boolean) => {
+  const contracts = turbo ? turboContracts : defaultContracts
+  return contracts.referrals[chainId]
 }

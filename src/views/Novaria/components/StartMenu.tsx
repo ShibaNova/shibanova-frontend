@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import {
@@ -15,6 +15,7 @@ import ReactGA from 'react-ga'
 import ReactPixel from 'react-facebook-pixel'
 import { useHistory } from 'react-router-dom'
 import { usePriceNovaBusd } from 'state/hooks'
+import NovariaTurboContext from 'contexts/NovariaTurboContext'
 
 const Button = styled.button`
   cursor: pointer;
@@ -53,11 +54,13 @@ const StartMenu = () => {
   const [pendingApprove, setPendingApproveTx] = useState(false)
   const [name, setName] = useState('')
 
-  const fleetContract = getFleetAddress()
+  const turbo = useContext(NovariaTurboContext)
+
+  const fleetContract = getFleetAddress(turbo)
   const allowanceFleet = useGetAllowance(fleetContract)
   const fleetContractApproved = allowanceFleet === null ? null : allowanceFleet > 0
 
-  const treasuryContract = getTreasuryAddress()
+  const treasuryContract = getTreasuryAddress(turbo)
   const allowanceTreasury = useGetAllowance(treasuryContract)
   const treasuryContractApproved = allowanceTreasury === null ? null : allowanceTreasury > 0
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AbiItem } from 'web3-utils'
 import { ContractOptions } from 'web3-eth-contract'
 import useWeb3 from 'hooks/useWeb3'
@@ -14,7 +14,7 @@ import {
   getMapAddress,
   getApprovalsAddress,
   getReferralsAddress,
-  getTreasuryAddress
+  getTreasuryAddress,
 } from 'utils/addressHelpers'
 import { poolsConfig } from 'config/constants'
 import { PoolCategory } from 'config/constants/types'
@@ -33,6 +33,7 @@ import referrals from 'config/abi/Referrals.json'
 import map from 'config/abi/Map.json'
 import approvals from 'config/abi/Approvals.json'
 import treasury from 'config/abi/Treasury.json'
+import NovariaTurboContext from 'contexts/NovariaTurboContext'
 
 const useContract = (abi: AbiItem, address: string, contractOptions?: ContractOptions) => {
   const web3 = useWeb3()
@@ -106,13 +107,15 @@ export const useSNova = () => {
 }
 
 export const useFleet = () => {
+  const turbo = useContext(NovariaTurboContext)
   const fleetABI = fleet as unknown as AbiItem
-  return useContract(fleetABI, getFleetAddress())
+  return useContract(fleetABI, getFleetAddress(turbo))
 }
 
 export const useMap = () => {
+  const turbo = useContext(NovariaTurboContext)
   const mapABI = map as unknown as AbiItem
-  return useContract(mapABI, getMapAddress())
+  return useContract(mapABI, getMapAddress(turbo))
 }
 
 export const useApprovals = () => {
@@ -121,13 +124,15 @@ export const useApprovals = () => {
 }
 
 export const useReferrals = () => {
+  const turbo = useContext(NovariaTurboContext)
   const referralsABI = referrals as unknown as AbiItem
-  return useContract(referralsABI, getReferralsAddress())
+  return useContract(referralsABI, getReferralsAddress(turbo))
 }
 
 export const useTreasury = () => {
+  const turbo = useContext(NovariaTurboContext)
   const treasuryABI = treasury as unknown as AbiItem
-  return useContract(treasuryABI, getTreasuryAddress())
+  return useContract(treasuryABI, getTreasuryAddress(turbo))
 }
 
 export default useContract
