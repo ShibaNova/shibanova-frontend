@@ -40,9 +40,6 @@ export const getFleetAddress = (turbo: boolean) => {
   const contracts = turbo ? turboContracts : defaultContracts
   return contracts.fleet[chainId]
 }
-export const getApprovalsAddress = () => {
-  return defaultContracts.approvals[chainId]
-}
 export const getTreasuryAddress = (turbo: boolean) => {
   const contracts = turbo ? turboContracts : defaultContracts
   return contracts.treasury[chainId]

@@ -12,7 +12,6 @@ import {
   getMoneyPotOldAddress,
   getFleetAddress,
   getMapAddress,
-  getApprovalsAddress,
   getReferralsAddress,
   getTreasuryAddress,
 } from 'utils/addressHelpers'
@@ -116,11 +115,6 @@ export const useMap = () => {
   const turbo = useContext(NovariaTurboContext)
   const mapABI = map as unknown as AbiItem
   return useContract(mapABI, getMapAddress(turbo))
-}
-
-export const useApprovals = () => {
-  const approvalsABI = approvals as unknown as AbiItem
-  return useContract(approvalsABI, getApprovalsAddress())
 }
 
 export const useReferrals = () => {
