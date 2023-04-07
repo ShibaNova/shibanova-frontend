@@ -49,7 +49,7 @@ const Stats = ({ stats }: { stats: Stat[] }) => (
             {value}
           </Text>
         ) : (
-          <CardValue fontSize="14px" prefix={prefix} suffix={suffix} value={value} decimals={2} />
+          label == 'NOVA/BLOCK' ? <CardValue fontSize="14px" prefix={prefix} suffix={suffix} value={value} decimals={4} /> : <CardValue fontSize="14px" prefix={prefix} suffix={suffix} value={value} decimals={2} />
         )}
       </Row>
     ))}
