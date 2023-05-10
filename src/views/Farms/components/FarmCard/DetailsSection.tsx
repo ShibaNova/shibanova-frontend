@@ -41,6 +41,7 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
   bscScanAddress,
   // totalValueFormated,
   lpLabel,
+  depositFee,
   quoteTokenAdresses,
   quoteTokenSymbol,
   tokenAddresses,
@@ -52,7 +53,7 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
     <Wrapper>
       <Flex justifyContent="space-between">
         <Text bold fontSize="14px">
-          {TranslateString(316, 'STAKE')}:
+          {TranslateString(316, 'STAKE')}: {depositFee}%
         </Text>
         <StyledLinkExternal
           href={

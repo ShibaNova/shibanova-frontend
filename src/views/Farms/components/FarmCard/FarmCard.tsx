@@ -166,10 +166,10 @@ const FarmCard: React.FC<FarmCardProps> = ({
       />
       {!removed && (
         <Flex justifyContent="space-between" alignItems="center">
-          <Text bold glowing fontSize="14px">
+          <Text bold glowing fontSize="18px">
             {TranslateString(999, 'APR')}:
           </Text>
-          <Text glowing bold style={{ display: 'flex', alignItems: 'center', fontSize: '14px' }}>
+          <Text glowing bold style={{ display: 'flex', alignItems: 'center', fontSize: '18px' }}>
             {farm.apy ? (
               <>
                 <ApyButton
@@ -192,7 +192,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
       )}
 
       <Flex justifyContent="space-between">
-        <Text bold fontSize="12px">
+        <Text bold fontSize="14px">
           {TranslateString(318, 'EARN')}:
         </Text>
         <Text color={earnLabel === 'sNOVA' ? 'gold' : null}>{earnLabel}</Text>
