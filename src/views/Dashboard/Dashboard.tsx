@@ -7,7 +7,6 @@ import Header from 'components/Header'
 import HowToPlay from './components/HowToPlay'
 import FarmStakingCard from './components/FarmStakingCard'
 import SNovaStakingCard from './components/sNovaStakingCard'
-import MoneyedPotCard from './components/MoneyPotCard'
 import TradeRouteCard from './components/TradeRouteCard'
 import SubHero from './components/SubHero'
 import NovaEcosystem from './components/NovaEcosystem'
@@ -19,8 +18,8 @@ const Dashboard: React.FC = () => {
   return (
     <Page>
       <SubHero />
-      <HowToPlay />
       <NovaEcosystem />
+      <HowToPlay />
     </Page>
   )
 }

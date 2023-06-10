@@ -10,7 +10,7 @@ import NovaHarvestBalance from './NovaHarvestBalance'
 import NovaWalletBalance from './NovaWalletBalance'
 import { usePriceNovaBusd, useFarms } from '../../../state/hooks'
 import useTokenBalance, { useTotalSupply, useNovaBurnSupply, useBurnedBalance } from '../../../hooks/useTokenBalance'
-import { getNovaAddress } from '../../../utils/addressHelpers'
+import { getNovaAddress, getPHXAddress } from '../../../utils/addressHelpers'
 import useNovaEarnings from '../../../hooks/useNovaEarnings'
 import { getBalanceNumber } from '../../../utils/formatBalance'
 import StatsCard from './StatsCard'
@@ -59,12 +59,12 @@ const Actions = styled.div`
   margin-top: 12px;
 `
 
-const FarmedStakingCard = () => {
+const PhxStakingCard = () => {
   const [pendingTx, setPendingTx] = useState(false)
   const { account } = useWallet()
   const TranslateString = useI18n()
   const farmsNovaWithBalance = useNovaFarmsWithBalance()
-  const novaBalance = getBalanceNumber(useTokenBalance(getNovaAddress()))
+  const novaBalance = getBalanceNumber(useTokenBalance(getPHXAddress()))
   const novaPrice = usePriceNovaBusd().toNumber()
   const novaEarnings = useNovaEarnings()
   const earningsNovaSum = novaEarnings.reduce((accum, earning) => {
@@ -116,22 +116,15 @@ const FarmedStakingCard = () => {
   ]
 
   return (
-    <StatsCard title="NOVA Stats">
+    <StatsCard title="PHX Stats">
       <GridRow>
-        <CardImage src="/images/tokens/nova.png" alt="nova logo" width={80} height={80} />
+        <CardImage src="/images/tokens/phoenix2.png" alt="nova logo" width={80} height={80} />
         <Col>
           <Block>
-            <Label>NOVA Balance (${(novaPrice * novaBalance).toFixed(2)})</Label>
+            <Label>PHX Balance (${(novaPrice * novaBalance).toFixed(2)})</Label>
             <Label1>
               &nbsp;
               <NovaWalletBalance novaBalance={novaBalance} />
-            </Label1>
-          </Block>
-          <Block>
-            <Label>Pending NOVA (${(novaPrice * earningsNovaSum).toFixed(2)})</Label>
-            <Label1>
-              &nbsp;
-              <NovaHarvestBalance earningsSum={earningsNovaSum} />
             </Label1>
           </Block>
         </Col>
@@ -151,10 +144,9 @@ const FarmedStakingCard = () => {
           <UnlockButton fullWidth />
         )}
       </Actions>
-
       <Stats stats={stats} />
     </StatsCard>
   )
 }
 
-export default FarmedStakingCard
+export default PhxStakingCard

@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { darkColors } from '@pancakeswap-libs/uikit'
 import FarmStakingCard from './FarmStakingCard'
+import PhxStakingCard from './PhxCard'
 import SNovaStakingCard from './sNovaStakingCard'
 import MoneyedPotCard from './MoneyPotCard'
 import howto1 from '../assets/howto1.png'
@@ -99,9 +100,10 @@ const HowToInfo = [
 const NovaEcosystem = () => {
   return (
     <div>
-      <Heading>Nova Ecosystem</Heading>
+      <Heading>NovaDEX Ecosystem</Heading>
       <Body>
         <FarmStakingCard />
+        <PhxStakingCard />
         <SNovaStakingCard />
         <MoneyedPotCard />
       </Body>

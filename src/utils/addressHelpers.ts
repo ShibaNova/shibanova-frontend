@@ -5,6 +5,9 @@ const chainId = process.env.REACT_APP_CHAIN_ID
 export const getNovaAddress = () => {
   return addresses.nova[chainId]
 }
+export const getPHXAddress = () => {
+  return addresses.phoenix[chainId]
+}
 export const getMasterChefAddress = () => {
   return addresses.masterChef[chainId]
 }
