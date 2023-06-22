@@ -1,21 +1,20 @@
-import React, { useState, useCallback } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { useWallet } from '@binance-chain/bsc-use-wallet'
 import BigNumber from 'bignumber.js'
 import useI18n from 'hooks/useI18n'
-import { useNovaHarvest } from 'hooks/useHarvest'
-import UnlockButton from 'components/UnlockButton'
-import useNovaFarmsWithBalance from 'hooks/useNovaFarmsWithBalance'
-import NovaHarvestBalance from './NovaHarvestBalance'
-import NovaWalletBalance from './NovaWalletBalance'
-import { usePriceNovaBusd, useFarms } from '../../../state/hooks'
-import useTokenBalance, { useTotalSupply, useNovaBurnSupply, useBurnedBalance } from '../../../hooks/useTokenBalance'
-import { getNovaAddress, getPHXAddress } from '../../../utils/addressHelpers'
-import useNovaEarnings from '../../../hooks/useNovaEarnings'
+import {
+  usePhoenixOffChainBal,
+  usePhoenixWalletAmt,
+  usePhoenixWalletBnb,
+  useTotalPHXSupply,
+} from 'hooks/usePhoenixBalance'
+import { usePriceNovaBusd } from '../../../state/hooks'
+import { getPHXAddress } from '../../../utils/addressHelpers'
 import { getBalanceNumber } from '../../../utils/formatBalance'
 import StatsCard from './StatsCard'
 import Stats from './Stats'
-import HarvestButton from './HarvestButton'
+import useTokenBalance from '../../../hooks/useTokenBalance'
+import PhoenixWalletBalance from './PhoenixWalletBalance'
 
 const Block = styled.div`
   margin-bottom: 0px;
@@ -55,98 +54,65 @@ const Label1 = styled.div`
   justify-content: right;
 `
 
-const Actions = styled.div`
-  margin-top: 12px;
-`
-
-const PhxStakingCard = () => {
-  const [pendingTx, setPendingTx] = useState(false)
-  const { account } = useWallet()
+const PhxCard = () => {
   const TranslateString = useI18n()
-  const farmsNovaWithBalance = useNovaFarmsWithBalance()
-  const novaBalance = getBalanceNumber(useTokenBalance(getPHXAddress()))
+
+  // Get user wallet balance
+  const phoenixBalance = getBalanceNumber(useTokenBalance(getPHXAddress()))
+
+  // Get PHX price
   const novaPrice = usePriceNovaBusd().toNumber()
-  const novaEarnings = useNovaEarnings()
-  const earningsNovaSum = novaEarnings.reduce((accum, earning) => {
-    return accum + new BigNumber(earning).div(new BigNumber(10).pow(18)).toNumber()
-  }, 0)
 
-  const balancesNovaWithValue = farmsNovaWithBalance.filter((balanceType) => balanceType.balance.toNumber() > 0)
-  const { onNovaReward } = useNovaHarvest(balancesNovaWithValue.map((farmWithBalance) => farmWithBalance.pid))
-  const harvestNovaFarms = useCallback(async () => {
-    setPendingTx(true)
-    try {
-      await onNovaReward()
-    } catch (error) {
-      // TODO: find a way to handle when the user rejects transaction or it fails
-    } finally {
-      setPendingTx(false)
-    }
-  }, [onNovaReward])
+  // Total PHX Minted
+  const phoenixSupply = useTotalPHXSupply()
+  const totalPhoenixMinted = getBalanceNumber(phoenixSupply)
 
-  // Stats
-  const farms = useFarms()
-  const totalSupply = useTotalSupply()
+  // Amount of PHX in Phoenix Wallet Amount
+  const phoenixWalletPHXBalance = usePhoenixWalletAmt()
 
-  const burnedBalance = useNovaBurnSupply()
-  const burnedNova = burnedBalance ? getBalanceNumber(burnedBalance) : 0
+  // Circulating Supply = Total PHX minted minus PHX in Phoenix wallet
+  const circPhoenix = phoenixSupply ? phoenixSupply.minus(phoenixWalletPHXBalance) : new BigNumber(0)
 
-  const supply = totalSupply ? totalSupply.minus(-burnedBalance) : new BigNumber(0)
-  const novaSupply = getBalanceNumber(supply)
+  const marketCap = usePriceNovaBusd().times(circPhoenix)
 
-  const fakeburn = useBurnedBalance(getNovaAddress())
-  const theSupply = totalSupply ? totalSupply.minus(fakeburn) : new BigNumber(0)
-  const circNova = getBalanceNumber(theSupply)
+  // Get Off chain balance
+  const offChainBalanceInt = usePhoenixOffChainBal()
+  const offChainBalanceNova = offChainBalanceInt / novaPrice
 
-  const marketCap = usePriceNovaBusd().times(theSupply)
-
-  const NovaPerBlock = farms[0]?.NovaPerBlock ? getBalanceNumber(new BigNumber(farms[0].NovaPerBlock)) : 0
+  // Get On chain balances
+  const onChainBalanceBnb = usePhoenixWalletBnb()
+  console.log(onChainBalanceBnb)
 
   const stats = [
+    { label: TranslateString(999, 'Market Cap').toUpperCase(), value: getBalanceNumber(marketCap), prefix: '$' },
+    { label: TranslateString(536, 'Total Minted'), value: totalPhoenixMinted },
+    { label: TranslateString(999, 'Circulating Supply').toUpperCase(), value: getBalanceNumber(circPhoenix) },
     {
-      label: TranslateString(999, 'Market Cap').toUpperCase(),
-      value: getBalanceNumber(marketCap),
+      label: TranslateString(999, 'OffChain Balance $'),
+      value: new BigNumber(offChainBalanceInt).toNumber(),
       prefix: '$',
-      decimals: 2,
     },
-    { label: TranslateString(536, 'Total Minted'), value: novaSupply, decimals: 2 },
-    { label: TranslateString(538, 'Total Burned'), value: burnedNova, decimals: 2 },
-    { label: TranslateString(999, 'Circulating Supply').toUpperCase(), value: circNova, decimals: 2 },
-    { label: 'NOVA/BLOCK', value: NovaPerBlock, decimals: 4 },
+    { label: TranslateString(999, 'OffChain Balance NOVA'), value: offChainBalanceNova.toFixed(2) },
+    { label: TranslateString(999, 'OnChain Balance BNB'), value: getBalanceNumber(onChainBalanceBnb) },
   ]
 
   return (
     <StatsCard title="PHX Stats">
       <GridRow>
-        <CardImage src="/images/tokens/phoenix2.png" alt="nova logo" width={80} height={80} />
+        <CardImage src="/images/tokens/phoenix2.png" alt="phoenix logo" width={80} height={80} />
         <Col>
           <Block>
-            <Label>PHX Balance (${(novaPrice * novaBalance).toFixed(2)})</Label>
+            <Label>PHX Balance (${(novaPrice * phoenixBalance).toFixed(2)})</Label>
             <Label1>
               &nbsp;
-              <NovaWalletBalance novaBalance={novaBalance} />
+              <PhoenixWalletBalance phoenixBalance={phoenixBalance} />
             </Label1>
           </Block>
         </Col>
       </GridRow>
-      <Actions>
-        {account ? (
-          <HarvestButton
-            id="harvest-nova"
-            disabled={balancesNovaWithValue.length <= 0 || pendingTx}
-            onClick={harvestNovaFarms}
-          >
-            {pendingTx
-              ? TranslateString(999, 'Collecting NOVA')
-              : TranslateString(999, `Harvest all NOVA (${balancesNovaWithValue.length})`)}
-          </HarvestButton>
-        ) : (
-          <UnlockButton fullWidth />
-        )}
-      </Actions>
       <Stats stats={stats} />
     </StatsCard>
   )
 }
 
-export default PhxStakingCard
+export default PhxCard
