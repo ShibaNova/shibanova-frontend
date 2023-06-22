@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import phoenixABI from 'config/abi/phoenix.json'
+import novaABI from 'config/abi/nova.json'
 import { getContract } from 'utils/web3'
-import { getPHXAddress, getPhoenixWalletAddress } from 'utils/addressHelpers'
+import { getNovaAddress, getPHXAddress, getPhoenixWalletAddress } from 'utils/addressHelpers'
 import useRefresh from './useRefresh'
 import useWeb3 from './useWeb3'
 
 const phoenixContract = getContract(phoenixABI, getPHXAddress())
+const novaContract = getContract(novaABI, getNovaAddress())
 
 export const useTotalPHXSupply = () => {
   const { slowRefresh } = useRefresh()
@@ -22,6 +24,22 @@ export const useTotalPHXSupply = () => {
   }, [slowRefresh])
 
   return totalPHXSupply
+}
+
+export const usePhoenixWalletNova = () => {
+  const { slowRefresh } = useRefresh()
+  const [phoenixWalletNova, setPhoenixWalletNova] = useState<BigNumber>()
+
+  useEffect(() => {
+    async function fetchPhoenixWalletNova() {
+      const pwNova = await novaContract.methods.balanceOf(getPhoenixWalletAddress()).call()
+      setPhoenixWalletNova(new BigNumber(pwNova))
+    }
+
+    fetchPhoenixWalletNova()
+  }, [slowRefresh])
+
+  return phoenixWalletNova
 }
 
 export const usePhoenixWalletBnb = () => {

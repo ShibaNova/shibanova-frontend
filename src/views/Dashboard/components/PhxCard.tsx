@@ -6,9 +6,10 @@ import {
   usePhoenixOffChainBal,
   usePhoenixWalletAmt,
   usePhoenixWalletBnb,
+  usePhoenixWalletNova,
   useTotalPHXSupply,
 } from 'hooks/usePhoenixBalance'
-import { usePriceNovaBusd } from '../../../state/hooks'
+import { usePriceBnbBusd, usePriceNovaBusd } from '../../../state/hooks'
 import { getPHXAddress } from '../../../utils/addressHelpers'
 import { getBalanceNumber } from '../../../utils/formatBalance'
 import StatsCard from './StatsCard'
@@ -77,11 +78,17 @@ const PhxCard = () => {
 
   // Get Off chain balance
   const offChainBalanceInt = usePhoenixOffChainBal()
-  const offChainBalanceNova = offChainBalanceInt / novaPrice
+  const offChainBalanceInNova = offChainBalanceInt / novaPrice
 
   // Get On chain balances
   const onChainBalanceBnb = usePhoenixWalletBnb()
-  console.log(onChainBalanceBnb)
+  const onChainBalanceNova = usePhoenixWalletNova()
+
+  const onChainBalanceBnbInNova = getBalanceNumber(usePriceBnbBusd().times(onChainBalanceBnb)) / novaPrice
+  const totalOnChainBalanceInNova = getBalanceNumber(onChainBalanceNova) + onChainBalanceBnbInNova
+
+  // Total PHX Nova Value
+  const totalPHXValueInNova = offChainBalanceInNova + totalOnChainBalanceInNova
 
   const stats = [
     { label: TranslateString(999, 'Market Cap').toUpperCase(), value: getBalanceNumber(marketCap), prefix: '$' },
@@ -92,8 +99,11 @@ const PhxCard = () => {
       value: new BigNumber(offChainBalanceInt).toNumber(),
       prefix: '$',
     },
-    { label: TranslateString(999, 'OffChain Balance NOVA'), value: offChainBalanceNova.toFixed(2) },
+    { label: TranslateString(999, 'OffChain Balance in NOVA'), value: offChainBalanceInNova },
     { label: TranslateString(999, 'OnChain Balance BNB'), value: getBalanceNumber(onChainBalanceBnb) },
+    { label: TranslateString(999, 'OnChain Balance NOVA'), value: getBalanceNumber(onChainBalanceNova) },
+    { label: TranslateString(999, 'Total OnChain in NOVA'), value: totalOnChainBalanceInNova },
+    { label: TranslateString(999, 'TOTAL PHX Value in NOVA'), value: totalPHXValueInNova },
   ]
 
   return (

@@ -18,6 +18,8 @@ import {
 } from 'utils/addressHelpers'
 import useRefresh from './useRefresh'
 
+const novaContract = getContract(novaABI, getNovaAddress())
+
 const useTokenBalance = (tokenAddress: string) => {
   const [balance, setBalance] = useState(new BigNumber(0))
   const { account, ethereum }: { account: string; ethereum: provider } = useWallet()
@@ -43,7 +45,6 @@ export const useTotalSupply = () => {
 
   useEffect(() => {
     async function fetchTotalSupply() {
-      const novaContract = getContract(novaABI, getNovaAddress())
       const supply = await novaContract.methods.totalSupply().call()
       setTotalSupply(new BigNumber(supply))
     }
@@ -60,7 +61,6 @@ export const useNovaBurnSupply = () => {
 
   useEffect(() => {
     async function fetchNovaBurnSupply() {
-      const novaContract = getContract(novaABI, getNovaAddress())
       const supply = await novaContract.methods.burnSupply().call()
       setNovaBurnSupply(new BigNumber(supply))
     }
@@ -94,7 +94,6 @@ export const useBurnedBalance = (tokenAddress: string) => {
 
   useEffect(() => {
     const fetchBalance = async () => {
-      const novaContract = getContract(novaABI, getNovaAddress())
       const bal = await novaContract.methods.balanceOf('0x000000000000000000000000000000000000dEaD').call()
       setBalance(new BigNumber(bal))
     }
