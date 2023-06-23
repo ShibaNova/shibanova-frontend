@@ -66,7 +66,6 @@ const FarmedStakingCard = () => {
   const farmsNovaWithBalance = useNovaFarmsWithBalance()
   const novaBalance = getBalanceNumber(useTokenBalance(getNovaAddress()))
   const novaPrice = usePriceNovaBusd().toNumber()
-  console.log(novaPrice)
   const novaEarnings = useNovaEarnings()
   const earningsNovaSum = novaEarnings.reduce((accum, earning) => {
     return accum + new BigNumber(earning).div(new BigNumber(10).pow(18)).toNumber()

@@ -9,7 +9,7 @@ import {
   usePhoenixWalletNova,
   useTotalPHXSupply,
 } from 'hooks/usePhoenixBalance'
-import { usePriceBnbBusd, usePriceNovaBusd } from '../../../state/hooks'
+import { usePriceBnbBusd, usePriceNovaBusd, usePricePhxNova } from '../../../state/hooks'
 import { getPHXAddress } from '../../../utils/addressHelpers'
 import { getBalanceNumber } from '../../../utils/formatBalance'
 import StatsCard from './StatsCard'
@@ -61,12 +61,15 @@ const PhxCard = () => {
   // Get user wallet balance
   const phoenixBalance = getBalanceNumber(useTokenBalance(getPHXAddress()))
 
-  // Get PHX price
+  // Get NOVA price
   const novaPrice = usePriceNovaBusd().toNumber()
+
+  // Get PHX price in NOVA
+  const phxPrice = usePricePhxNova().toNumber()
+  const phxPriceUsd = phxPrice * novaPrice
 
   // Total PHX Minted
   const phoenixSupply = useTotalPHXSupply()
-  const totalPhoenixMinted = getBalanceNumber(phoenixSupply)
 
   // Amount of PHX in Phoenix Wallet Amount
   const phoenixWalletPHXBalance = usePhoenixWalletAmt()
@@ -77,7 +80,7 @@ const PhxCard = () => {
   const marketCap = usePriceNovaBusd().times(circPhoenix)
 
   // Get Off chain balance
-  const offChainBalanceInt = usePhoenixOffChainBal()
+  const offChainBalanceInt = usePhoenixOffChainBal() - 445
   const offChainBalanceInNova = offChainBalanceInt / novaPrice
 
   // Get On chain balances
@@ -93,21 +96,35 @@ const PhxCard = () => {
   // PHX NAV
   const phxNavInNova = totalPHXValueInNova / getBalanceNumber(circPhoenix)
 
+  // PHX Price Discrepancy
+  const phxPricePercent = (phxPrice - phxNavInNova) / phxPrice
+
+  // Pending Oracle Action
+  let oracleAction = 'NONE';
+  if(phxPricePercent < -.05) {
+    oracleAction = "BUY"
+  }
+  else if(phxPricePercent > .05) {
+    oracleAction = "SELL"
+  }
+
   const stats = [
-    { label: TranslateString(999, 'Market Cap').toUpperCase(), value: getBalanceNumber(marketCap), prefix: '$' },
-    { label: TranslateString(536, 'Total Minted'), value: totalPhoenixMinted.toFixed(2) },
-    { label: TranslateString(999, 'Circulating Supply').toUpperCase(), value: getBalanceNumber(circPhoenix) },
+    { label: 'PHX Price'.toUpperCase(), value: phxPriceUsd, prefix: '$' },
+    { label: 'Market Cap'.toUpperCase(), value: getBalanceNumber(marketCap), prefix: '$' },
+    { label: 'Circulating Supply'.toUpperCase(), value: getBalanceNumber(circPhoenix) },
     {
-      label: TranslateString(999, 'OffChain Balance $'),
+      label: 'PHX Balance $ (OffChain)',
       value: new BigNumber(offChainBalanceInt).toNumber(),
+      decimals: 0,
       prefix: '$',
     },
-    { label: TranslateString(999, 'OffChain Balance in NOVA'), value: offChainBalanceInNova.toFixed(2) },
-    { label: TranslateString(999, 'OnChain Balance BNB'), value: getBalanceNumber(onChainBalanceBnb).toFixed(2) },
-    { label: TranslateString(999, 'OnChain Balance NOVA'), value: getBalanceNumber(onChainBalanceNova).toFixed(2) },
-    { label: TranslateString(999, 'Total OnChain in NOVA'), value: totalOnChainBalanceInNova.toFixed(2) },
-    { label: TranslateString(999, 'TOTAL PHX Value in NOVA'), value: totalPHXValueInNova.toFixed(2) },
-    { label: TranslateString(999, 'PHX NAV in NOVA'), value: phxNavInNova },
+    { label: 'PHX Balance BNB', value: getBalanceNumber(onChainBalanceBnb).toFixed(2) },
+    { label: 'PHX Balance NOVA', value: getBalanceNumber(onChainBalanceNova).toFixed(2) },
+    { label: 'TOTAL PHX VALUE (NOVA)', value: totalPHXValueInNova.toFixed(2) },
+    { label: 'PHX NAV (NOVA)', value: phxNavInNova.toFixed(2) },
+    { label: 'PHX Price (NOVA)', value: phxPrice },
+    { label: 'Price Diff', value: (phxPricePercent * 100).toFixed(2), suffix: '%' },
+    { label: 'Pending Oracle Action', value: oracleAction }
   ]
 
   return (
@@ -116,7 +133,7 @@ const PhxCard = () => {
         <CardImage src="/images/tokens/phoenix2.png" alt="phoenix logo" width={80} height={80} />
         <Col>
           <Block>
-            <Label>PHX Balance (${(novaPrice * phoenixBalance).toFixed(2)})</Label>
+            <Label>PHX Balance (${(phxPriceUsd * phoenixBalance).toFixed(2)})</Label>
             <Label1>
               &nbsp;
               <PhoenixWalletBalance phoenixBalance={phoenixBalance} />
