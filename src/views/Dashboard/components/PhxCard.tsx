@@ -91,7 +91,7 @@ const PhxCard = () => {
   const totalPHXValueInNova = offChainBalanceInNova + totalOnChainBalanceInNova
 
   // PHX NAV
-  const phxNavInNova = totalPHXValueInNova / getBalanceNumber(circPhoenix);
+  const phxNavInNova = totalPHXValueInNova / getBalanceNumber(circPhoenix)
 
   const stats = [
     { label: TranslateString(999, 'Market Cap').toUpperCase(), value: getBalanceNumber(marketCap), prefix: '$' },
@@ -107,7 +107,7 @@ const PhxCard = () => {
     { label: TranslateString(999, 'OnChain Balance NOVA'), value: getBalanceNumber(onChainBalanceNova).toFixed(2) },
     { label: TranslateString(999, 'Total OnChain in NOVA'), value: totalOnChainBalanceInNova.toFixed(2) },
     { label: TranslateString(999, 'TOTAL PHX Value in NOVA'), value: totalPHXValueInNova.toFixed(2) },
-    { label: TranslateString(999, 'PHX NAV in NOVA'), value: phxNavInNova.toFixed(2) },
+    { label: TranslateString(999, 'PHX NAV in NOVA'), value: phxNavInNova },
   ]
 
   return (
