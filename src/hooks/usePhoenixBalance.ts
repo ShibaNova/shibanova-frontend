@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import phoenixABI from 'config/abi/phoenix.json'
 import novaABI from 'config/abi/nova.json'
 import { getContract } from 'utils/web3'
 import { getNovaAddress, getPHXAddress, getPhoenixWalletAddress } from 'utils/addressHelpers'
+import { useWallet } from '@binance-chain/bsc-use-wallet'
+import { buyDirect } from 'utils/callHelpers'
+import { getBalanceNumber } from 'utils/formatBalance'
 import useRefresh from './useRefresh'
 import useWeb3 from './useWeb3'
+import { usePhoenix } from './useContract'
 
 const phoenixContract = getContract(phoenixABI, getPHXAddress())
 const novaContract = getContract(novaABI, getNovaAddress())
@@ -89,4 +93,34 @@ export const usePhoenixOffChainBal = () => {
   }, [slowRefresh])
 
   return phoenixOffChainBal
+}
+
+export const useBuyDirectCost = (amount: number) => {
+  const { slowRefresh } = useRefresh()
+  const [buyDirectCost, setBuyDirectCost] = useState<BigNumber>()
+
+  useEffect(() => {
+    async function fetchBuyDirectCost() {
+      const bnbCost = await phoenixContract.methods.getBnbCost(amount).call()
+      setBuyDirectCost(new BigNumber(bnbCost))
+    }
+
+    fetchBuyDirectCost()
+  }, [slowRefresh, amount])
+
+  return getBalanceNumber(buyDirectCost)
+}
+
+export const useBuyDirect = () => {
+  const { account } = useWallet()
+  const usePHXContract = usePhoenix()
+
+  const handleBuy = useCallback(
+    async (payable, amount) => {
+      const txHash = await buyDirect(usePHXContract, payable, amount, account)
+      console.info(txHash)
+    },
+    [account, usePHXContract],
+  )
+  return { onBuy: handleBuy }
 }

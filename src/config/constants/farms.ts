@@ -3,14 +3,16 @@ import { FarmConfig, QuoteToken } from './types'
 
 const farms: FarmConfig[] = [
   {
-    pid: 27,
-    risk: 4,
-    lpSymbol: 'PHX-NOVA LP',
+    pid: 32,
+    risk: 20,
+    lpSymbol: 'NOVA-PHX LP',
     lpAddresses: {
+      97: '0xe283b646891AF96b003DB63c272520fDa3b66057',
       56: '0xe283b646891AF96b003DB63c272520fDa3b66057',
     },
-    tokenSymbol: 'NOVA',
+    tokenSymbol: 'PHX',
     tokenAddresses: {
+      97: '0x0F925153230C836761F294eA0d81Cef58E271Fb7',
       56: '0x0F925153230C836761F294eA0d81Cef58E271Fb7',
     },
     quoteTokenSymbol: QuoteToken.NOVA,

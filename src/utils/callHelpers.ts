@@ -317,3 +317,13 @@ export const setRecall = async (mapContract, account) => {
       return tx.transactionHash
     })
 }
+
+
+export const buyDirect = async (phoenixContract, payable, amount, account) => {
+  return phoenixContract.methods
+    .buy(amount)
+    .send({ from: account, value: payable })
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
+}

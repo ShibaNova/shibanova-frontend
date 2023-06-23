@@ -80,7 +80,7 @@ export const usePriceNovaBusd = (): BigNumber => {
 }
 
 export const usePricePhxNova = (): BigNumber => {
-  const pid = 27 // PHX-NOVA LP
+  const pid = 32 // PHX-NOVA LP
   const farm = useFarmFromPid(pid)
   return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO
 }
