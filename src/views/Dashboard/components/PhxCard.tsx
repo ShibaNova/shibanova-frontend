@@ -100,12 +100,11 @@ const PhxCard = () => {
   const phxPricePercent = (phxPrice - phxNavInNova) / phxPrice
 
   // Pending Oracle Action
-  let oracleAction = 'NONE';
-  if(phxPricePercent < -.05) {
-    oracleAction = "BUY"
-  }
-  else if(phxPricePercent > .05) {
-    oracleAction = "SELL"
+  let oracleAction = 'NONE'
+  if (phxPricePercent < -0.05) {
+    oracleAction = 'BUY'
+  } else if (phxPricePercent > 0.05) {
+    oracleAction = 'SELL'
   }
 
   const stats = [
@@ -118,12 +117,12 @@ const PhxCard = () => {
       decimals: 0,
       prefix: '$',
     },
-    { label: 'PHX Balance BNB', value: getBalanceNumber(onChainBalanceBnb).toFixed(2) },
-    { label: 'PHX Balance NOVA', value: getBalanceNumber(onChainBalanceNova).toFixed(2) },
-    { label: 'TOTAL PHX VALUE (NOVA)', value: totalPHXValueInNova.toFixed(2) },
-    { label: 'PHX NAV (NOVA)', value: phxNavInNova.toFixed(2) },
+    { label: 'PHX Balance BNB', value: getBalanceNumber(onChainBalanceBnb) },
+    { label: 'PHX Balance NOVA', value: getBalanceNumber(onChainBalanceNova) },
+    { label: 'TOTAL PHX VALUE (NOVA)', value: totalPHXValueInNova },
+    { label: 'PHX NAV (NOVA)', value: phxNavInNova },
     { label: 'PHX Price (NOVA)', value: phxPrice },
-    { label: 'Price Diff', value: (phxPricePercent * 100).toFixed(2), suffix: '%' },
+    { label: 'Price Diff', value: (phxPricePercent * 100), suffix: '%' },
     { label: 'Pending Oracle Action', value: oracleAction }
   ]
 
