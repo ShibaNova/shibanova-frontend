@@ -48,7 +48,9 @@ const StatsCard = ({
     title === 'NOVA Stats'
       ? 'NOVA is the utility token for ShibaNova. It can be obtained as yield rewards for liquidity farms and can also be obtained by swapping sNOVA for it.'
       : ''
-  const infoArray = [novaInfo, snovaInfo, moneyPotInfo]
+  const phxInfo =
+    title === 'PHX Stats' ? 'PHX is a synthetic token representing the value/token of the Phoenix trading account.' : ''
+  const infoArray = [novaInfo, snovaInfo, moneyPotInfo, phxInfo]
   const infoMap = infoArray
     .map((item) => item)
     .join('')

@@ -13,11 +13,12 @@ import {
   getNovaAddress,
   getSNovaAddress,
   getMoneyPotAddress,
-  getMoneyPotOldAddress,
   getBusdAddress,
   getWbnbAddress,
 } from 'utils/addressHelpers'
 import useRefresh from './useRefresh'
+
+const novaContract = getContract(novaABI, getNovaAddress())
 
 const useTokenBalance = (tokenAddress: string) => {
   const [balance, setBalance] = useState(new BigNumber(0))
@@ -44,7 +45,6 @@ export const useTotalSupply = () => {
 
   useEffect(() => {
     async function fetchTotalSupply() {
-      const novaContract = getContract(novaABI, getNovaAddress())
       const supply = await novaContract.methods.totalSupply().call()
       setTotalSupply(new BigNumber(supply))
     }
@@ -61,7 +61,6 @@ export const useNovaBurnSupply = () => {
 
   useEffect(() => {
     async function fetchNovaBurnSupply() {
-      const novaContract = getContract(novaABI, getNovaAddress())
       const supply = await novaContract.methods.burnSupply().call()
       setNovaBurnSupply(new BigNumber(supply))
     }
@@ -95,7 +94,6 @@ export const useBurnedBalance = (tokenAddress: string) => {
 
   useEffect(() => {
     const fetchBalance = async () => {
-      const novaContract = getContract(novaABI, getNovaAddress())
       const bal = await novaContract.methods.balanceOf('0x000000000000000000000000000000000000dEaD').call()
       setBalance(new BigNumber(bal))
     }
@@ -183,32 +181,6 @@ export const useMoneyPotBNBReward = () => {
   return moneyPotBNBReward
 }
 
-export const useMoneyPotOldBNBReward = () => {
-  const { slowRefresh } = useRefresh()
-  const [moneyPotOldBNBReward, setMoneyPotOldBNBReward] = useState<BigNumber>()
-  const { account }: { account: string } = useWallet()
-  const bnbAddress = getWbnbAddress()
-  let user
-
-  if (account === null || account === undefined || account === '') {
-    user = '0x0000000000000000000000000000000000000000'
-  } else {
-    user = account
-  }
-
-  useEffect(() => {
-    async function fetchMoneyPotOldBNBReward() {
-      const moneyPotOldContract = getContract(moneypotoldABI, getMoneyPotOldAddress())
-      const reward = await moneyPotOldContract.methods.pendingTokenRewardsAmount(bnbAddress, user).call()
-      setMoneyPotOldBNBReward(new BigNumber(reward))
-    }
-
-    fetchMoneyPotOldBNBReward()
-  }, [bnbAddress, user, slowRefresh])
-
-  return moneyPotOldBNBReward
-}
-
 export const useMoneyPotBUSDReward = () => {
   const { slowRefresh } = useRefresh()
   const [moneyPotBUSDReward, setMoneyPotBUSDReward] = useState<BigNumber>()
@@ -233,32 +205,6 @@ export const useMoneyPotBUSDReward = () => {
   }, [busdAddress, user, slowRefresh])
 
   return moneyPotBUSDReward
-}
-
-export const useMoneyPotOldBUSDReward = () => {
-  const { slowRefresh } = useRefresh()
-  const [moneyPotOldBUSDReward, setMoneyPotOldBUSDReward] = useState<BigNumber>()
-  const { account }: { account: string } = useWallet()
-  const busdAddress = getBusdAddress()
-  let user
-
-  if (account === null || account === undefined || account === '') {
-    user = '0x0000000000000000000000000000000000000000'
-  } else {
-    user = account
-  }
-
-  useEffect(() => {
-    async function fetchMoneyPotOldBUSDReward() {
-      const moneyPotOldContract = getContract(moneypotABI, getMoneyPotOldAddress())
-      const reward = await moneyPotOldContract.methods.pendingTokenRewardsAmount(busdAddress, user).call()
-      setMoneyPotOldBUSDReward(new BigNumber(reward))
-    }
-
-    fetchMoneyPotOldBUSDReward()
-  }, [busdAddress, user, slowRefresh])
-
-  return moneyPotOldBUSDReward
 }
 
 export const useSNovaPenalty = () => {

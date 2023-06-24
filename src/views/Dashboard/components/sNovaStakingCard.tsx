@@ -7,7 +7,6 @@ import useI18n from 'hooks/useI18n'
 import { useSNovaHarvest } from 'hooks/useHarvest'
 import useSNovaFarmsWithBalance from 'hooks/useSNovaFarmsWithBalance'
 import UnlockButton from 'components/UnlockButton'
-import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import NovaHarvestBalance from './NovaHarvestBalance'
 import NovaWalletBalance from './NovaWalletBalance'
 import useTokenBalance, {
@@ -68,15 +67,9 @@ const Actions = styled.div`
   margin-top: 12px;
 `
 
-const ExpandingWrapper = styled.div<{ expanded: boolean }>`
-  height: ${(props) => (props.expanded ? '100%' : '0px')};
-  overflow: hidden;
-`
-
 const SNovaStakingCard = () => {
   const [pendingTx, setPendingTx] = useState(false)
   const { account } = useWallet()
-  const [showExpandableSection, setShowExpandableSection] = useState(false)
   const TranslateString = useI18n()
   const farmsSNovaWithBalance = useSNovaFarmsWithBalance()
   const totalSupply = useSNovaTotalSupply()
@@ -153,21 +146,15 @@ const SNovaStakingCard = () => {
         )}
       </Actions>
 
-      <ExpandableSectionButton
-        onClick={() => setShowExpandableSection(!showExpandableSection)}
-        expanded={showExpandableSection}
-      />
-      <ExpandingWrapper expanded={showExpandableSection}>
-        <Stats stats={stats} />
-        {account && sNovaBalance.comparedTo(0) > 0 ? (
-          <Row style={{ marginTop: -15 }}>
-            <Button onClick={onPresentSwapToNova}>{TranslateString(999, 'Swap to NOVA')}</Button>
-            <Text fontSize="14px">
-              {penalty}% {TranslateString(999, 'Penalty')}
-            </Text>
-          </Row>
-        ) : null}
-      </ExpandingWrapper>
+      <Stats stats={stats} />
+      {account && sNovaBalance.comparedTo(0) > 0 ? (
+        <Row style={{ marginTop: -15 }}>
+          <Button onClick={onPresentSwapToNova}>{TranslateString(999, 'Swap to NOVA')}</Button>
+          <Text fontSize="14px">
+            {penalty}% {TranslateString(999, 'Penalty')}
+          </Text>
+        </Row>
+      ) : null}
     </StatsCard>
   )
 }
