@@ -14,7 +14,7 @@ import {
 import { Button, Input } from '@pancakeswap-libs/uikit'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import UnlockButton from 'components/UnlockButton'
-import { usePriceBnbBusd, usePriceNovaBusd, usePricePhxNova } from '../../../state/hooks'
+import { usePriceBnbBusd, usePriceNovaBnb, usePriceNovaBusd, usePricePhxNova } from '../../../state/hooks'
 import { getPHXAddress } from '../../../utils/addressHelpers'
 import { getBalanceNumber } from '../../../utils/formatBalance'
 import StatsCard from './StatsCard'
@@ -77,7 +77,8 @@ const PhxCard = () => {
   // Get PHX price in NOVA
   const phxPrice = usePricePhxNova().toNumber()
   const phxPriceUsd = phxPrice * novaPrice
-  const phxBuyDirectPrice = useBuyDirectCost(1) * 10**18 * getBalanceNumber(usePriceBnbBusd())
+
+  const phxBuyDirectPriceInNova = useBuyDirectCost(1) / usePriceNovaBnb().toNumber()
 
   // Total PHX Minted
   const phoenixSupply = useTotalPHXSupply()
@@ -91,7 +92,7 @@ const PhxCard = () => {
   const marketCap = phxPriceUsd * getBalanceNumber(circPhoenix)
 
   // Get Off chain balance
-  const offChainBalanceInt = usePhoenixOffChainBal() - 445
+  const offChainBalanceInt = usePhoenixOffChainBal()
   const offChainBalanceInNova = offChainBalanceInt / novaPrice
 
   // Get On chain balances
@@ -109,7 +110,7 @@ const PhxCard = () => {
 
   // PHX Price Discrepancy
   const phxPricePercent = (phxPrice - phxNavInNova) / phxPrice
-  const phxPricePercentStr = (phxPricePercent * 100).toFixed(2).concat("%")
+  const phxPricePercentStr = (phxPricePercent * 100).toFixed(2).concat('%')
 
   // Pending Oracle Action
   let oracleAction = 'NONE'
@@ -122,28 +123,27 @@ const PhxCard = () => {
   const stats = [
     { label: 'Market Cap'.toUpperCase(), value: marketCap, prefix: '$' },
     { label: 'Circulating Supply'.toUpperCase(), value: getBalanceNumber(circPhoenix) },
-    { label: 'PHX Market Price'.toUpperCase(), value: phxPriceUsd, prefix: '$' },
-    { label: 'PHX Buy Direct Price'.toUpperCase(), value: phxBuyDirectPrice.toFixed(2), prefix: '$' },
     {
-      label: 'PHX Balance $ (OffChain)',
+      label: '$ Balance (OffChain)',
       value: new BigNumber(offChainBalanceInt).toNumber(),
       decimals: 0,
       prefix: '$',
     },
-    { label: 'PHX Balance BNB', value: getBalanceNumber(onChainBalanceBnb).toFixed(2) },
-    { label: 'PHX Balance NOVA', value: getBalanceNumber(onChainBalanceNova).toFixed(2) },
-    { label: 'TOTAL PHX VALUE (NOVA)', value: totalPHXValueInNova.toFixed(2)},
-    { label: 'PHX NAV (NOVA)', value: phxNavInNova.toFixed(2) },
-    { label: 'PHX Price (NOVA)', value: phxPrice },
-    { label: 'Price Diff', value: phxPricePercentStr },
-    { label: 'Pending Oracle Action', value: oracleAction },
+    { label: 'BNB Balance', value: getBalanceNumber(onChainBalanceBnb).toFixed(2) },
+    { label: 'NOVA Balance', value: getBalanceNumber(onChainBalanceNova).toFixed(2) },
+    { label: 'TOTAL VALUE (NOVA)', value: totalPHXValueInNova.toFixed(2) },
+    { label: 'NAV (NOVA)', value: phxNavInNova.toFixed(2) },
+    { label: 'Market Price (NOVA)', value: phxPrice.toFixed(2) },
+    { label: 'Buy Direct Price (NOVA)', value: phxBuyDirectPriceInNova.toLocaleString(undefined, {maximumFractionDigits:2}) },
+    { label: 'Price Diff (Market Premium)', value: phxPricePercentStr },
+    { label: 'Pending Oracle Action (Sell/Buy +-5%)', value: oracleAction },
   ]
 
   const [buyAmount, setBuyAmount] = useState(1)
   const buyCost = useBuyDirectCost(buyAmount)
-  const buyTotal = buyCost * 10**18
+  const buyTotal = buyCost * 10 ** 18
 
-  const {onBuy} = useBuyDirect()
+  const { onBuy } = useBuyDirect()
 
   const handleBuyDirectAmountChange = (e) => {
     setBuyAmount(e.target.validity.valid ? e.target.value : buyAmount)
@@ -158,7 +158,7 @@ const PhxCard = () => {
     } finally {
       setPendingTx(false)
     }
-  }, [buyAmount, buyTotal, onBuy]) 
+  }, [buyAmount, buyTotal, onBuy])
 
   return (
     <StatsCard title="PHX Stats">
@@ -176,9 +176,17 @@ const PhxCard = () => {
       </GridRow>
       <Actions>
         {account ? (
-          <GridRow style={{marginTop: 20}}>
-            <Input style={{maxWidth: 150}} type="number" min="1" value={buyAmount} onChange={(e) => handleBuyDirectAmountChange(e)} />
-            <Button onClick={HandleBuyDirect} disabled={pendingTx}>Buy Direct: {buyCost.toFixed(4)} BNB</Button>
+          <GridRow style={{ marginTop: 20 }}>
+            <Input
+              style={{ maxWidth: 150 }}
+              type="number"
+              min="1"
+              value={buyAmount}
+              onChange={(e) => handleBuyDirectAmountChange(e)}
+            />
+            <Button onClick={HandleBuyDirect} disabled={pendingTx}>
+              Buy Direct: {buyCost.toFixed(3)} BNB
+            </Button>
           </GridRow>
         ) : (
           <UnlockButton fullWidth />

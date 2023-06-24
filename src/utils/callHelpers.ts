@@ -318,7 +318,6 @@ export const setRecall = async (mapContract, account) => {
     })
 }
 
-
 export const buyDirect = async (phoenixContract, payable, amount, account) => {
   return phoenixContract.methods
     .buy(amount)
