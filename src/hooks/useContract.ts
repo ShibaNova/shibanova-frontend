@@ -14,6 +14,7 @@ import {
   getMapAddress,
   getApprovalsAddress,
   getReferralsAddress,
+  getPHXAddress,
 } from 'utils/addressHelpers'
 import { poolsConfig } from 'config/constants'
 import { PoolCategory } from 'config/constants/types'
@@ -30,6 +31,7 @@ import sNova from 'config/abi/snova.json'
 import fleet from 'config/abi/Fleet.json'
 import referrals from 'config/abi/Referrals.json'
 import map from 'config/abi/Map.json'
+import phx from 'config/abi/phoenix.json'
 import approvals from 'config/abi/Approvals.json'
 
 const useContract = (abi: AbiItem, address: string, contractOptions?: ContractOptions) => {
@@ -106,6 +108,11 @@ export const useSNova = () => {
 export const useFleet = () => {
   const fleetABI = fleet as unknown as AbiItem
   return useContract(fleetABI, getFleetAddress())
+}
+
+export const usePhoenix = () => {
+  const phoenixABI = phx as unknown as AbiItem
+  return useContract(phoenixABI, getPHXAddress())
 }
 
 export const useMap = () => {

@@ -79,6 +79,18 @@ export const usePriceNovaBusd = (): BigNumber => {
   return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO
 }
 
+export const usePriceNovaBnb = (): BigNumber => {
+  const pid = 1 // NOVA-BNB LP
+  const farm = useFarmFromPid(pid)
+  return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO
+}
+
+export const usePricePhxNova = (): BigNumber => {
+  const pid = 32 // PHX-NOVA LP
+  const farm = useFarmFromPid(pid)
+  return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO
+}
+
 export const usePriceUsdtBusd = (): BigNumber => {
   const pid = 13 // Usdt-BUSD LP
   const farm = useFarmFromPid(pid)

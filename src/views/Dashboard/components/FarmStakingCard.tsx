@@ -5,7 +5,6 @@ import BigNumber from 'bignumber.js'
 import useI18n from 'hooks/useI18n'
 import { useNovaHarvest } from 'hooks/useHarvest'
 import UnlockButton from 'components/UnlockButton'
-import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import useNovaFarmsWithBalance from 'hooks/useNovaFarmsWithBalance'
 import NovaHarvestBalance from './NovaHarvestBalance'
 import NovaWalletBalance from './NovaWalletBalance'
@@ -60,14 +59,8 @@ const Actions = styled.div`
   margin-top: 12px;
 `
 
-const ExpandingWrapper = styled.div<{ expanded: boolean }>`
-  height: ${(props) => (props.expanded ? '100%' : '0px')};
-  overflow: hidden;
-`
-
 const FarmedStakingCard = () => {
   const [pendingTx, setPendingTx] = useState(false)
-  const [showExpandableSection, setShowExpandableSection] = useState(false)
   const { account } = useWallet()
   const TranslateString = useI18n()
   const farmsNovaWithBalance = useNovaFarmsWithBalance()
@@ -159,13 +152,7 @@ const FarmedStakingCard = () => {
         )}
       </Actions>
 
-      <ExpandableSectionButton
-        onClick={() => setShowExpandableSection(!showExpandableSection)}
-        expanded={showExpandableSection}
-      />
-      <ExpandingWrapper expanded={showExpandableSection}>
-        <Stats stats={stats} />
-      </ExpandingWrapper>
+      <Stats stats={stats} />
     </StatsCard>
   )
 }
