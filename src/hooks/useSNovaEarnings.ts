@@ -22,6 +22,7 @@ const useSNovaEarnings = () => {
             farm.pid === 5 ||
             farm.pid === 7 ||
             farm.pid === 9 ||
+            farm.pid === 32 ||
             farm.pid === 10,
         )
         .map((farm) => ({
