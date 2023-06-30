@@ -19,6 +19,7 @@ const useNovaEarnings = () => {
             farm.pid !== 1 &&
             farm.pid !== 2 &&
             farm.pid !== 30 &&
+            farm.pid !== 32 &&
             farm.pid !== 5 &&
             farm.pid !== 7 &&
             farm.pid !== 9 &&
