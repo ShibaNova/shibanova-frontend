@@ -55,3 +55,6 @@ export const getTreasuryAddress = () => {
 export const getReferralsAddress = () => {
   return addresses.referrals[chainId]
 }
+export const getSnovaFarms = () => {
+  return [1, 2, 5, 7, 9, 10, 30, 32]
+}

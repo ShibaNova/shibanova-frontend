@@ -8,6 +8,7 @@ import useI18n from 'hooks/useI18n'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { QuoteToken } from 'config/constants/types'
 import { calculateNovaEarnedPerThousandDollars, apyModalRoi } from 'utils/compoundApyHelpers'
+import { getSnovaFarms } from 'utils/addressHelpers'
 import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
@@ -128,16 +129,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
   const lpLabel = farm.lpSymbol
   let earnLabel = ''
 
-  if (
-    farm.pid === 1 ||
-    farm.pid === 2 ||
-    farm.pid === 30 ||
-    farm.pid === 32 ||
-    farm.pid === 5 ||
-    farm.pid === 7 ||
-    farm.pid === 9 ||
-    farm.pid === 10
-  ) {
+  if (getSnovaFarms().includes(farm.pid)) {
     earnLabel = 'sNOVA'
   } else {
     earnLabel = 'NOVA'
