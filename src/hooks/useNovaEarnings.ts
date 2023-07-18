@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import multicall from 'utils/multicall'
-import { getMasterChefAddress } from 'utils/addressHelpers'
+import { getMasterChefAddress, getSnovaFarms } from 'utils/addressHelpers'
 import masterChefABI from 'config/abi/masterchef.json'
 import { farmsConfig } from 'config/constants'
 import useRefresh from './useRefresh'
@@ -14,17 +14,7 @@ const useNovaEarnings = () => {
   useEffect(() => {
     const fetchNovaBalances = async () => {
       const calls = farmsConfig
-        .filter(
-          (farm) =>
-            farm.pid !== 1 &&
-            farm.pid !== 2 &&
-            farm.pid !== 30 &&
-            farm.pid !== 32 &&
-            farm.pid !== 5 &&
-            farm.pid !== 7 &&
-            farm.pid !== 9 &&
-            farm.pid !== 10,
-        )
+        .filter((farm) => !getSnovaFarms().includes(farm.pid))
         .map((farm) => ({
           address: getMasterChefAddress(),
           name: 'pendingNova',

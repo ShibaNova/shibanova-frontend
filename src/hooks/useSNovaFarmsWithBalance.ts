@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import multicall from 'utils/multicall'
-import { getMasterChefAddress } from 'utils/addressHelpers'
+import { getMasterChefAddress, getSnovaFarms } from 'utils/addressHelpers'
 import masterChefABI from 'config/abi/masterchef.json'
 import { farmsConfig } from 'config/constants'
 import { FarmConfig } from 'config/constants/types'
@@ -19,17 +19,7 @@ const useSNovaFarmsWithBalance = () => {
 
   useEffect(() => {
     const fetchSNovaBalances = async () => {
-      const sNovaFarms = farmsConfig.filter(
-        (farm) =>
-          farm.pid === 1 ||
-          farm.pid === 2 ||
-          farm.pid === 5 ||
-          farm.pid === 7 ||
-          farm.pid === 9 ||
-          farm.pid === 10 ||
-          farm.pid === 32 ||
-          farm.pid === 30,
-      )
+      const sNovaFarms = farmsConfig.filter((farm) => getSnovaFarms().includes(farm.pid))
 
       const calls = sNovaFarms.map((farm) => ({
         address: getMasterChefAddress(),
