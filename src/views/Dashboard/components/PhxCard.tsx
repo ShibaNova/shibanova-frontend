@@ -114,9 +114,9 @@ const PhxCard = () => {
 
   // Pending Oracle Action
   let oracleAction = 'NONE'
-  if (phxPricePercent < -0.05) {
+  if (phxPricePercent < -0.1) {
     oracleAction = 'BUY'
-  } else if (phxPricePercent > 0.05) {
+  } else if (phxPricePercent > 0.1) {
     oracleAction = 'SELL'
   }
 
@@ -130,13 +130,22 @@ const PhxCard = () => {
       prefix: '$',
     },
     { label: 'BNB Balance', value: getBalanceNumber(onChainBalanceBnb).toFixed(2) },
-    { label: 'NOVA Balance', value: Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(getBalanceNumber(onChainBalanceNova)) },
-    { label: 'TOTAL VALUE (NOVA)', value: Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(totalPHXValueInNova) },
+    {
+      label: 'NOVA Balance',
+      value: Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(getBalanceNumber(onChainBalanceNova)),
+    },
+    {
+      label: 'TOTAL VALUE (NOVA)',
+      value: Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(totalPHXValueInNova),
+    },
     { label: 'NAV (NOVA)', value: phxNavInNova.toFixed(2) },
     { label: 'Market Price (NOVA)', value: phxPrice.toFixed(2) },
-    { label: 'Buy Direct Price (NOVA)', value: phxBuyDirectPriceInNova.toLocaleString(undefined, {maximumFractionDigits:2}) },
+    {
+      label: 'Buy Direct Price (NOVA)',
+      value: phxBuyDirectPriceInNova.toLocaleString(undefined, { maximumFractionDigits: 2 }),
+    },
     { label: 'Price Diff (Market Premium)', value: phxPricePercentStr },
-    { label: 'Pending Oracle Action (Sell/Buy +-5%)', value: oracleAction },
+    { label: 'Pending Oracle Action (+-10%)', value: oracleAction },
   ]
 
   const [buyAmount, setBuyAmount] = useState(1)
