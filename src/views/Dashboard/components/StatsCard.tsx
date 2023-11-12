@@ -6,7 +6,6 @@ import QuestionHelper from '../../../components/QuestionHelper'
 const StyledCard = styled(Card)`
   text-align: center;
   flex: 1;
-  max-width: 400px;
   margin: 2px 2.5px;
 `
 

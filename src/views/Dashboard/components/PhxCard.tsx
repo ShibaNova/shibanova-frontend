@@ -108,18 +108,6 @@ const PhxCard = () => {
   // PHX NAV
   const phxNavInNova = totalPHXValueInNova / getBalanceNumber(circPhoenix)
 
-  // PHX Price Discrepancy
-  const phxPricePercent = (phxPrice - phxNavInNova) / phxPrice
-  const phxPricePercentStr = (phxPricePercent * 100).toFixed(2).concat('%')
-
-  // Pending Oracle Action
-  let oracleAction = 'NONE'
-  if (phxPricePercent < -0.1) {
-    oracleAction = 'BUY'
-  } else if (phxPricePercent > 0.1) {
-    oracleAction = 'SELL'
-  }
-
   const stats = [
     { label: 'Market Cap'.toUpperCase(), value: marketCap, prefix: '$' },
     { label: 'Circulating Supply'.toUpperCase(), value: getBalanceNumber(circPhoenix) },
@@ -135,17 +123,15 @@ const PhxCard = () => {
       value: Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(getBalanceNumber(onChainBalanceNova)),
     },
     {
-      label: 'TOTAL VALUE (NOVA)',
+      label: 'TOTAL ASSET VALUE (NOVA)',
       value: Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(totalPHXValueInNova),
     },
-    { label: 'NAV (NOVA)', value: phxNavInNova.toFixed(2) },
+    { label: 'Asset Value Price (NOVA)', value: phxNavInNova.toFixed(2) },
     { label: 'Market Price (NOVA)', value: phxPrice.toFixed(2) },
     {
       label: 'Buy Direct Price (NOVA)',
       value: phxBuyDirectPriceInNova.toLocaleString(undefined, { maximumFractionDigits: 2 }),
     },
-    { label: 'Price Diff (Market Premium)', value: phxPricePercentStr },
-    { label: 'Pending Oracle Action (+-10%)', value: oracleAction },
   ]
 
   const [buyAmount, setBuyAmount] = useState(1)
