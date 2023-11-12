@@ -1,15 +1,15 @@
 import React from 'react'
 import Page from 'components/layout/Page'
 import HowToPlay from './components/HowToPlay'
-import SubHero from './components/SubHero'
 import NovaEcosystem from './components/NovaEcosystem'
+import NovariaCard from './components/NovariaCard'
 
 const Dashboard: React.FC = () => {
   return (
     <Page>
-      <SubHero />
+      <NovariaCard title="Novaria" />
       <NovaEcosystem />
-      <HowToPlay />
+      {/* <HowToPlay /> */}
     </Page>
   )
 }

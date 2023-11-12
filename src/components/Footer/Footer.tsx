@@ -50,7 +50,7 @@ const Footer = () => (
   <Hero>
     <Row>
       <Col>
-        <Text style={{ fontSize: '12px', paddingBottom: '0px' }}>NOVA Contract: (ONLY ON NOVADEX)</Text>
+        <Text style={{ fontSize: '12px', paddingBottom: '0px' }}>NOVA Contract:</Text>
         <Text style={{ fontSize: '8px' }}>
           <a
             target="_blank"
@@ -115,7 +115,9 @@ const Footer = () => (
       </Col>
     </Row>
     <Row style={{ marginBottom: '15px' }}>
-      <Text style={{ fontSize: '12px' }}>Copyright © 2021. All rights reserved. NovaDEX.finance</Text>
+      <Text style={{ fontSize: '12px' }}>
+        Copyright © {new Date().getFullYear()}. All rights reserved. NovaDEX.finance
+      </Text>
     </Row>
   </Hero>
 )

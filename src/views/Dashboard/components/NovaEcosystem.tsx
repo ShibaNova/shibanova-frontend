@@ -15,8 +15,9 @@ const Body = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   color: ${darkColors.text};
-  margin-top: 5px;
+  margin: 20px auto;
   justify-content: center;
+  width: 95%;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     justify-content: initial;
@@ -100,7 +101,6 @@ const HowToInfo = [
 const NovaEcosystem = () => {
   return (
     <div>
-      <Heading>NovaDEX Ecosystem</Heading>
       <Body>
         <FarmStakingCard />
         <PhxCard />
