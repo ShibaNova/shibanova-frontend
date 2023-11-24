@@ -85,7 +85,7 @@ export const sousEmegencyUnstake = async (sousChefContract, amount, account) => 
 export const harvest = async (masterChefContract, pid, account) => {
   return masterChefContract.methods
     .deposit(pid, '0')
-    .send({ from: account })
+    .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
     .on('transactionHash', (tx) => {
       return tx.transactionHash
     })
@@ -119,7 +119,7 @@ export const harvestRewards = async (moneyPotContract, address, account) => {
 
   return moneyPotContract.methods
     .harvestRewards(sNovaHolder)
-    .send({ from: account })
+    .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
     .on('transactionHash', (tx) => {
       return tx.transactionHash
     })
@@ -128,7 +128,7 @@ export const harvestRewards = async (moneyPotContract, address, account) => {
 export const swapToNova = async (sNovaContract, amount, account) => {
   return sNovaContract.methods
     .swapToNova(new BigNumber(amount).times(new BigNumber(10).pow(18)).toString())
-    .send({ from: account })
+    .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
     .on('transactionHash', (tx) => {
       return tx.transactionHash
     })
@@ -321,7 +321,7 @@ export const setRecall = async (mapContract, account) => {
 export const buyDirect = async (phoenixContract, payable, amount, account) => {
   return phoenixContract.methods
     .buy(amount)
-    .send({ from: account, value: payable })
+    .send({ from: account, value: payable, maxPriorityFeePerGas: null, maxFeePerGas: null })
     .on('transactionHash', (tx) => {
       return tx.transactionHash
     })

@@ -47,6 +47,7 @@ const Stats = ({ stats }: { stats: Stat[] }) => (
         </Text>
         {typeof value === 'string' ? (
           <Text glowing bold fontSize="14px">
+            {prefix}
             {value}
           </Text>
         ) : (

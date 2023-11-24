@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { getPHXAddress } from 'utils/addressHelpers'
 import { Text, Flex } from '@pancakeswap-libs/uikit'
 import discordIcon from './Discord.svg'
 import coinBrain from './coinBrain.png'
@@ -50,7 +51,7 @@ const Footer = () => (
   <Hero>
     <Row>
       <Col>
-        <Text style={{ fontSize: '12px', paddingBottom: '0px' }}>NOVA Contract: (ONLY ON NOVADEX)</Text>
+        <Text style={{ fontSize: '12px', paddingBottom: '0px' }}>NOVA Contract:</Text>
         <Text style={{ fontSize: '8px' }}>
           <a
             target="_blank"
@@ -58,6 +59,16 @@ const Footer = () => (
             href="https://bscscan.com/address/0x56E344bE9A7a7A1d27C854628483Efd67c11214F#code"
           >
             0x56E344bE9A7a7A1d27C854628483Efd67c11214F{' '}
+          </a>
+        </Text>
+        <Text style={{ fontSize: '12px', paddingBottom: '0px' }}>PHX Contract:</Text>
+        <Text style={{ fontSize: '8px' }}>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://bscscan.com/address/0x0F925153230C836761F294eA0d81Cef58E271Fb7#code"
+          >
+            {getPHXAddress()}
           </a>
         </Text>
         <Row>
@@ -115,7 +126,9 @@ const Footer = () => (
       </Col>
     </Row>
     <Row style={{ marginBottom: '15px' }}>
-      <Text style={{ fontSize: '12px' }}>Copyright © 2021. All rights reserved. NovaDEX.finance</Text>
+      <Text style={{ fontSize: '12px' }}>
+        Copyright © {new Date().getFullYear()}. All rights reserved. NovaDEX.finance
+      </Text>
     </Row>
   </Hero>
 )

@@ -79,6 +79,7 @@ const PhxCard = () => {
   const phxPriceUsd = phxPrice * novaPrice
 
   const phxBuyDirectPriceInNova = useBuyDirectCost(1) / usePriceNovaBnb().toNumber()
+  const phxBuyDirectPriceInUsd = phxBuyDirectPriceInNova * novaPrice
 
   // Total PHX Minted
   const phoenixSupply = useTotalPHXSupply()
@@ -104,51 +105,36 @@ const PhxCard = () => {
 
   // Total PHX Nova Value
   const totalPHXValueInNova = offChainBalanceInNova + totalOnChainBalanceInNova
+  const totalPHXValueInUsd = totalPHXValueInNova * novaPrice
 
   // PHX NAV
-  const phxNavInNova = totalPHXValueInNova / getBalanceNumber(circPhoenix)
-
-  // PHX Price Discrepancy
-  const phxPricePercent = (phxPrice - phxNavInNova) / phxPrice
-  const phxPricePercentStr = (phxPricePercent * 100).toFixed(2).concat('%')
-
-  // Pending Oracle Action
-  let oracleAction = 'NONE'
-  if (phxPricePercent < -0.1) {
-    oracleAction = 'BUY'
-  } else if (phxPricePercent > 0.1) {
-    oracleAction = 'SELL'
-  }
+//  const phxNavInNova = totalPHXValueInNova / getBalanceNumber(circPhoenix)
 
   const stats = [
     { label: 'Market Cap'.toUpperCase(), value: marketCap, prefix: '$' },
-    { label: 'Circulating Supply'.toUpperCase(), value: getBalanceNumber(circPhoenix) },
     {
-      label: '$ Balance (OffChain)',
-      value: new BigNumber(offChainBalanceInt).toNumber(),
-      decimals: 0,
+      label: 'Total Minted'.toUpperCase(),
+      value: Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(
+        getBalanceNumber(phoenixSupply),
+      ),
+    },
+    {
+      label: 'Circulating Supply'.toUpperCase(),
+      value: Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(getBalanceNumber(circPhoenix)),
+    },
+    {
+      label: 'TOTAL ASSETS',
+      value: Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(totalPHXValueInUsd),
       prefix: '$',
     },
-    { label: 'BNB Balance', value: getBalanceNumber(onChainBalanceBnb).toFixed(2) },
     {
-      label: 'NOVA Balance',
-      value: Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(getBalanceNumber(onChainBalanceNova)),
+      label: 'Buy Direct Price',
+      value: Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(phxBuyDirectPriceInUsd),
+      prefix: '$',
     },
-    {
-      label: 'TOTAL VALUE (NOVA)',
-      value: Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(totalPHXValueInNova),
-    },
-    { label: 'NAV (NOVA)', value: phxNavInNova.toFixed(2) },
-    { label: 'Market Price (NOVA)', value: phxPrice.toFixed(2) },
-    {
-      label: 'Buy Direct Price (NOVA)',
-      value: phxBuyDirectPriceInNova.toLocaleString(undefined, { maximumFractionDigits: 2 }),
-    },
-    { label: 'Price Diff (Market Premium)', value: phxPricePercentStr },
-    { label: 'Pending Oracle Action (+-10%)', value: oracleAction },
   ]
 
-  const [buyAmount, setBuyAmount] = useState(1)
+  const [buyAmount, setBuyAmount] = useState(10)
   const buyCost = useBuyDirectCost(buyAmount)
   const buyTotal = buyCost * 10 ** 18
 
@@ -189,7 +175,7 @@ const PhxCard = () => {
             <Input
               style={{ maxWidth: 150 }}
               type="number"
-              min="1"
+              min="10"
               value={buyAmount}
               onChange={(e) => handleBuyDirectAmountChange(e)}
             />

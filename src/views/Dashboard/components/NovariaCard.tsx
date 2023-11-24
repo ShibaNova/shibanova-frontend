@@ -2,7 +2,6 @@ import React from 'react'
 import { Button } from '@pancakeswap-libs/uikit'
 import styled from 'styled-components'
 import showCountdown from 'utils/countdownTimer'
-import NovariaLogo from '../assets/novariaLogoMain.png'
 
 const Body = styled.div`
     display: flex;
@@ -10,7 +9,9 @@ const Body = styled.div`
     justify-content: center;
     background-position: center bottom;
     background-size: cover;
-    background-image: url('/images/home/mainBackground-dark.jpg');
+    background-image: url('/images/home/act2_banner.png');
+    background-size:auto auto;
+    background-repeat: no-repeat;
     min-height: 500px;
     width: 95%;
     margin: 20px auto;
@@ -19,23 +20,33 @@ const Body = styled.div`
     paddingL 10px;
 `
 
-const Img = styled.img`
+const ImgCountdown = styled.div`
+  font-size: 1.8em;
   margin-left: auto;
   margin-right: auto;
   position: relative;
   align-self: center;
+  color: white;
+  background: rgb(1, 191, 253);
+  background: linear-gradient(90deg, rgba(1, 191, 253, 1) 0%, rgba(0, 22, 76, 1) 20%, rgba(0, 3, 8, 1) 94%);
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 20px;
+  text-align: center;
+  border: 2px solid white;
 `
 
 const NovariaCard = ({ title }: { title: string }) => {
-  const launchCountdown = showCountdown(new Date(1647547200000))
+  const launchCountdown = showCountdown(new Date(1702630800000))
 
   return (
     <Body id={title}>
-      <a href="/legend-of-novaria" style={{ display: 'flex' }}>
-        <Img src={NovariaLogo} alt="Legend of Novaria" />
-      </a>
-      <a href="/legend-of-novaria" style={{ display: 'flex' }}>
-        <Button style={{ margin: '10px auto', fontSize: 20, color: 'gold' }}>Join the Battle</Button>
+      <a href="/legend-of-novaria" style={{ display: 'flex', marginTop: 'auto' }}>
+        <ImgCountdown>
+          The Battle Continues In:
+          <br />
+          {launchCountdown}
+        </ImgCountdown>
       </a>
       {/* <VideoModal /> */}
     </Body>
