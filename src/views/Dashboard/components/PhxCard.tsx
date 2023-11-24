@@ -134,7 +134,7 @@ const PhxCard = () => {
     },
   ]
 
-  const [buyAmount, setBuyAmount] = useState(1)
+  const [buyAmount, setBuyAmount] = useState(10)
   const buyCost = useBuyDirectCost(buyAmount)
   const buyTotal = buyCost * 10 ** 18
 
@@ -175,7 +175,7 @@ const PhxCard = () => {
             <Input
               style={{ maxWidth: 150 }}
               type="number"
-              min="1"
+              min="10"
               value={buyAmount}
               onChange={(e) => handleBuyDirectAmountChange(e)}
             />
