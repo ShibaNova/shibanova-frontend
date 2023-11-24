@@ -37,18 +37,18 @@ const StatsCard = ({
 }) => {
   const moneyPotInfo =
     title === 'Money Pot'
-      ? 'The pot is distributed out to all sNOVA holders. Your reward/snova is delivered every block. The pot is updated daily with the fees from the previous day.'
+      ? 'The pot is distributed out to all sNOVA holders. Your reward/snova is delivered every block. The pot is updated when a rewards are available.'
       : ''
   const snovaInfo =
     title === 'sNOVA Stats'
-      ? 'sNOVA is the share token for ShibaNova. Holders get rewarded with dividends from the Money Pot. sNOVA can only be obtained through NOVA-BNB and NOVA-BUSD farms.'
+      ? 'sNOVA is the share token for ShibaNova. Holders get rewarded with dividends from the Money Pot. sNOVA can be obtained by depositing in Trade Routes.'
       : ''
   const novaInfo =
     title === 'NOVA Stats'
       ? 'NOVA is the utility token for ShibaNova. It can be obtained as yield rewards for liquidity farms and can also be obtained by swapping sNOVA for it.'
       : ''
   const phxInfo =
-    title === 'PHX Stats' ? 'PHX is a synthetic token representing the value/token of the Phoenix trading account.' : ''
+    title === 'PHX Stats' ? 'PHX is an additional token in the NOVADEX ecosystem that can be purchased through Buy Direct or traded for in the Exchange.  PHX has a baseline value of its Total Assets.' : ''
   const infoArray = [novaInfo, snovaInfo, moneyPotInfo, phxInfo]
   const infoMap = infoArray
     .map((item) => item)
