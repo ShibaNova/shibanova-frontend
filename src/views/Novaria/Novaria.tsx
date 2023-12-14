@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react'
 import NovariaCard from 'views/Dashboard/components/NovariaCard'
 import Page from 'components/layout/Page'
