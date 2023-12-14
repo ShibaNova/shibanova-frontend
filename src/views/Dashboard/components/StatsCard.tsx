@@ -48,7 +48,9 @@ const StatsCard = ({
       ? 'NOVA is the utility token for ShibaNova. It can be obtained as yield rewards for liquidity farms and can also be obtained by swapping sNOVA for it.'
       : ''
   const phxInfo =
-    title === 'PHX Stats' ? 'PHX is an additional token in the NOVADEX ecosystem that can be purchased through Buy Direct or traded for in the Exchange.  PHX has a baseline value of its Total Assets.' : ''
+    title === 'PHX Stats'
+      ? 'PHX is an additional token in the NOVADEX ecosystem that can be purchased through Buy Direct or traded for in the Exchange.  PHX has a baseline value of its Total Assets.'
+      : ''
   const infoArray = [novaInfo, snovaInfo, moneyPotInfo, phxInfo]
   const infoMap = infoArray
     .map((item) => item)

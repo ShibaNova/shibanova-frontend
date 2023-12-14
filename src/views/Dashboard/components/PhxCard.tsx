@@ -108,7 +108,7 @@ const PhxCard = () => {
   const totalPHXValueInUsd = totalPHXValueInNova * novaPrice
 
   // PHX NAV
-//  const phxNavInNova = totalPHXValueInNova / getBalanceNumber(circPhoenix)
+  //  const phxNavInNova = totalPHXValueInNova / getBalanceNumber(circPhoenix)
 
   const stats = [
     { label: 'Market Cap'.toUpperCase(), value: marketCap, prefix: '$' },

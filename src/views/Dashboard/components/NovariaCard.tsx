@@ -4,20 +4,40 @@ import styled from 'styled-components'
 import showCountdown from 'utils/countdownTimer'
 
 const Body = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-position: center bottom;
-    background-size: cover;
-    background-image: url('/images/home/act2_banner.png');
-    background-size:auto auto;
-    background-repeat: no-repeat;
-    min-height: 500px;
-    width: 95%;
-    margin: 20px auto;
-    border: 2px solid #00aaff;
-    border-radius: 30px;
-    paddingL 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-position: center bottom;
+  background-size: cover;
+  background-image: url('/images/home/act2_banner.png');
+  background-repeat: no-repeat;
+  min-height: 500px;
+  width: 95%;
+  margin: 20px auto;
+  border: 2px solid #00aaff;
+  border-radius: 30px;
+  padding: 10px;
+
+  @media screen and (min-width: 200px) and (max-width: 355px) {
+    background-size: contain;
+    background-position: center top;
+    min-height: 180px;
+  }
+  @media screen and (min-width: 356px) and (max-width: 460px) {
+    background-size: contain;
+    background-position: center top;
+    min-height: 200px;
+  }
+  @media screen and (min-width: 461px) and (max-width: 640px) {
+    background-size: contain;
+    background-position: center top;
+    min-height: 230px;
+  }
+  @media screen and (min-width: 641px) and (max-width: 740px) {
+    background-size: contain;
+    background-position: center top;
+    min-height: 270px;
+  }
 `
 
 const ImgCountdown = styled.div`
@@ -34,10 +54,20 @@ const ImgCountdown = styled.div`
   border-radius: 20px;
   text-align: center;
   border: 2px solid white;
+
+  @media screen and (min-width: 200px) and (max-width: 355px) {
+    font-size: 1em;
+  }
+  @media screen and (min-width: 356px) and (max-width: 640px) {
+    font-size: 1.2em;
+  }
+  @media screen and (min-width: 641px) and (max-width: 740px) {
+    font-size: 1.4em;
+  }
 `
 
 const NovariaCard = ({ title }: { title: string }) => {
-  const launchCountdown = showCountdown(new Date(1702630800000))
+  const launchCountdown = showCountdown(new Date(1702746000000))
 
   return (
     <Body id={title}>
