@@ -4,41 +4,41 @@ import styled from 'styled-components'
 import showCountdown from 'utils/countdownTimer'
 
 const Body = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-position: center bottom;
-    background-size: cover;
-    background-image: url('/images/home/act2_banner.png');
-    background-repeat: no-repeat;
-    min-height: 500px;
-    width: 95%;
-    margin: 20px auto;
-    border: 2px solid #00aaff;
-    border-radius: 30px;
-    padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-position: center bottom;
+  background-size: cover;
+  background-image: url('/images/home/act2_banner.png');
+  background-repeat: no-repeat;
+  min-height: 500px;
+  width: 95%;
+  margin: 20px auto;
+  border: 2px solid #00aaff;
+  border-radius: 30px;
+  padding: 10px;
 
-    @media screen and (min-width: 200px) and (max-width: 355px) {
-      background-size: contain;
-      background-position: center top;
-      min-height: 180px;
-    }
-    @media screen and (min-width: 356px) and (max-width: 460px) {
-      background-size: contain;
-      background-position: center top;
-      min-height: 200px;
-    }
-    @media screen and (min-width: 461px) and (max-width: 640px) {
-      background-size: contain;
-      background-position: center top;
-      min-height: 230px;
-    }
-    @media screen and (min-width: 641px) and (max-width: 740px) {
-      background-size: contain;
-      background-position: center top;
-      min-height: 270px;
-    }
-`;
+  @media screen and (min-width: 200px) and (max-width: 355px) {
+    background-size: contain;
+    background-position: center top;
+    min-height: 180px;
+  }
+  @media screen and (min-width: 356px) and (max-width: 460px) {
+    background-size: contain;
+    background-position: center top;
+    min-height: 200px;
+  }
+  @media screen and (min-width: 461px) and (max-width: 640px) {
+    background-size: contain;
+    background-position: center top;
+    min-height: 230px;
+  }
+  @media screen and (min-width: 641px) and (max-width: 740px) {
+    background-size: contain;
+    background-position: center top;
+    min-height: 270px;
+  }
+`
 
 const ImgCountdown = styled.div`
   font-size: 1.8em;
