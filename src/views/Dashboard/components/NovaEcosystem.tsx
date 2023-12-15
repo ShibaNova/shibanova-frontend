@@ -18,6 +18,7 @@ const Body = styled.div`
   margin: 20px auto;
   justify-content: center;
   width: 95%;
+  max-width: 2720px;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     justify-content: initial;
