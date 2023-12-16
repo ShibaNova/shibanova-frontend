@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import showCountdown from 'utils/countdownTimer'
-import { useClaimShips, useGetSpaceDock } from 'hooks/useNovaria'
+import { useBoostProduction, useClaimShips, useGetSpaceDock } from 'hooks/useNovaria'
 import { ConnectedAccountContext } from 'App'
 
 const SpaceDockMenu = styled.div`
@@ -148,13 +148,14 @@ const BuildQueue = ({ fleetLocation }) => {
   const account = useContext(ConnectedAccountContext)
   const spaceDocks = useGetSpaceDock(account)
   const { onClaim } = useClaimShips(account)
+  const { onBoostProduction } = useBoostProduction(account)
 
   const [pending, setPendingTx] = useState(false)
   const [claimAmount, setClaimAmount] = useState(null)
 
   const handleClaim = async (claimId) => {
     setPendingTx(true)
-    console.log('claimId, claimAmount', typeof claimId, claimId, typeof claimAmount, claimAmount)
+    //console.log('claimId, claimAmount', typeof claimId, claimId, typeof claimAmount, claimAmount)
     try {
       await onClaim(claimId, claimAmount)
     } catch (error) {
@@ -164,9 +165,20 @@ const BuildQueue = ({ fleetLocation }) => {
     }
   }
 
+  const handleBoost = async (dockId) => {
+    setPendingTx(true)
+    try {
+      await onBoostProduction(dockId)
+    } catch (error) {
+      // console.log('error: ', error)
+    } finally {
+      setPendingTx(false)
+    }
+  }
+
   const handleClaimMax = async (claimId, amount) => {
     setPendingTx(true)
-    console.log('claimId, claimAmount', typeof claimId, claimId, typeof claimAmount, claimAmount)
+    //console.log('claimId, claimAmount', typeof claimId, claimId, typeof claimAmount, claimAmount)
     try {
       await onClaim(claimId, amount)
     } catch (error) {
@@ -226,7 +238,12 @@ const BuildQueue = ({ fleetLocation }) => {
                   <WrongLocationButton>Not at Shipyard</WrongLocationButton>
                 )}
                 {dock.completionTime * 1000 > Number(new Date()) && (
-                  <CountdownButton>{showCountdown(new Date(dock.completionTime * 1000))}</CountdownButton>
+                  <>
+                    <CountdownButton>{showCountdown(new Date(dock.completionTime * 1000))}</CountdownButton>
+                    <ClaimButton onClick={() => handleBoost(spaceDocks.indexOf(dock))}>
+                      {pending ? `1/2 Time Boost - ${dock.amount * 0.1} PHX` : 'pending...'}
+                    </ClaimButton>
+                  </>
                 )}
               </ClaimControls>
             </ShipCard>

@@ -14,7 +14,7 @@ export const novaApprove = async (novaContract, novariaContract, account) => {
 export const stake = async (masterChefContract, pid, amount, account) => {
   return masterChefContract.methods
     .deposit(pid, new BigNumber(amount).times(new BigNumber(10).pow(18)).toString())
-    .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null})
+    .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
     .on('transactionHash', (tx) => {
       return tx.transactionHash
     })
@@ -77,6 +77,15 @@ export const insertCoinHere = async (fleetContract, name, account) => {
 export const buildShips = async (fleetContract, x, y, classId, amount, buildCost, account) => {
   return fleetContract.methods
     .buildShips(x, y, classId, amount, buildCost)
+    .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
+}
+
+export const boostProduction = async (fleetContract, spaceDockId, account) => {
+  return fleetContract.methods
+    .boostProduction(spaceDockId)
     .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
     .on('transactionHash', (tx) => {
       return tx.transactionHash
@@ -151,6 +160,15 @@ export const collect = async (mapContract, account) => {
 export const travel = async (mapContract, x, y, account) => {
   return mapContract.methods
     .travel(x, y)
+    .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
+}
+
+export const boostTravel = async (mapContract, account) => {
+  return mapContract.methods
+    .boostTravel()
     .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
     .on('transactionHash', (tx) => {
       return tx.transactionHash

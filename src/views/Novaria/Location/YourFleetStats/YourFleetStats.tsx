@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { useGetBattle, useRecall, useSetRecall, useGetSavedSpawnPlace } from 'hooks/useNovaria'
+import { useGetBattle, useRecall, useSetRecall, useGetSavedSpawnPlace, useBoostTravel } from 'hooks/useNovaria'
 import showCountdown from 'utils/countdownTimer'
 import { getWeb3 } from 'utils/web3'
 
@@ -58,6 +58,18 @@ const YourFleetStats = ({
   const smallFleet = Number(fleetSize) < Number(25)
   const canRecall = smallFleet && !Haven
   const canRecallShipyard = smallFleet && !atSavedShipyard
+
+  const { onBoostTravel } = useBoostTravel()
+  const handleBoostTravel = async () => {
+    setPendingTx(true)
+    try {
+      await onBoostTravel()
+    } catch (error) {
+      console.log('error: ', error)
+    } finally {
+      setPendingTx(false)
+    }
+  }
 
   const { onRecall } = useRecall()
   const sendRecallTx = async (haven: boolean) => {
@@ -123,6 +135,11 @@ const YourFleetStats = ({
       <Stat>
         <div>TRAVEL</div>
         <div>{travelCooldown}</div>
+        <div>
+          <Button onClick={() => handleBoostTravel()}>
+            {!pending ? `1/2 Time Boost - ${fleetSize * 0.1} PHX` : 'pending'}
+          </Button>
+        </div>
       </Stat>
       <Stat>
         <div>BATTLE</div>
