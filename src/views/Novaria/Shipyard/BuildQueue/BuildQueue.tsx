@@ -155,11 +155,10 @@ const BuildQueue = ({ fleetLocation }) => {
 
   const handleClaim = async (claimId) => {
     setPendingTx(true)
-    //console.log('claimId, claimAmount', typeof claimId, claimId, typeof claimAmount, claimAmount)
     try {
       await onClaim(claimId, claimAmount)
     } catch (error) {
-      // console.log('error: ', error)
+      console.log('error: ', error)
     } finally {
       setPendingTx(false)
     }
@@ -170,7 +169,7 @@ const BuildQueue = ({ fleetLocation }) => {
     try {
       await onBoostProduction(dockId)
     } catch (error) {
-      // console.log('error: ', error)
+      console.log('error: ', error)
     } finally {
       setPendingTx(false)
     }
@@ -178,11 +177,10 @@ const BuildQueue = ({ fleetLocation }) => {
 
   const handleClaimMax = async (claimId, amount) => {
     setPendingTx(true)
-    //console.log('claimId, claimAmount', typeof claimId, claimId, typeof claimAmount, claimAmount)
     try {
       await onClaim(claimId, amount)
     } catch (error) {
-      // console.log('error: ', error)
+      console.log('error: ', error)
     } finally {
       setPendingTx(false)
     }
@@ -238,12 +236,12 @@ const BuildQueue = ({ fleetLocation }) => {
                   <WrongLocationButton>Not at Shipyard</WrongLocationButton>
                 )}
                 {dock.completionTime * 1000 > Number(new Date()) && (
-                  <>
+                  <div>
                     <CountdownButton>{showCountdown(new Date(dock.completionTime * 1000))}</CountdownButton>
                     <ClaimButton onClick={() => handleBoost(spaceDocks.indexOf(dock))}>
-                      {pending ? `1/2 Time Boost - ${dock.amount * 0.1} PHX` : 'pending...'}
+                      {pending ? `1/2 Time Boost - ${(dock.amount * 0.1).toFixed(1)} PHX` : 'pending...'}
                     </ClaimButton>
-                  </>
+                  </div>
                 )}
               </ClaimControls>
             </ShipCard>
