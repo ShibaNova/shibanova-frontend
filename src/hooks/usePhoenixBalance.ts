@@ -5,7 +5,7 @@ import novaABI from 'config/abi/nova.json'
 import { getContract } from 'utils/web3'
 import { getNovaAddress, getPHXAddress, getPhoenixWalletAddress } from 'utils/addressHelpers'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
-import { buyDirect } from 'utils/callHelpers'
+import { buyDirect, phxApprove } from 'utils/callHelpers'
 import { getBalanceNumber } from 'utils/formatBalance'
 import useRefresh from './useRefresh'
 import useWeb3 from './useWeb3'
@@ -13,6 +13,20 @@ import { usePhoenix } from './useContract'
 
 const phoenixContract = getContract(phoenixABI, getPHXAddress())
 const novaContract = getContract(novaABI, getNovaAddress())
+
+export const usePHXApprove = () => {
+  const { account } = useWallet()
+  const usePHXContract = usePhoenix()
+
+  const handleApprove = useCallback(
+    async (contract) => {
+      const txHash = await phxApprove(usePHXApprove, contract, account)
+      console.info(txHash)
+    },
+    [account, usePHXContract],
+  )
+  return { onPHXApprove: handleApprove }
+}
 
 export const useTotalPHXSupply = () => {
   const { slowRefresh } = useRefresh()

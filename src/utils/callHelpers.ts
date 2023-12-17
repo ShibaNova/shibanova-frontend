@@ -13,6 +13,15 @@ export const novaApprove = async (novaContract, novariaContract, account) => {
     .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
 }
 
+export const phxApprove = async (phoenixContract, targetContract, account) => {
+  return phoenixContract.methods
+    .approve(targetContract, ethers.constants.MaxUint256)
+    .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
+}
+
 export const stake = async (masterChefContract, pid, amount, account) => {
   return masterChefContract.methods
     .deposit(pid, new BigNumber(amount).times(new BigNumber(10).pow(18)).toString())
