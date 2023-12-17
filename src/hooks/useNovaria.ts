@@ -35,6 +35,8 @@ import {
   addReferral,
   getReferralBonus,
   setRecall,
+  boostProduction,
+  boostTravel,
 } from 'utils/callHelpers'
 import BigNumber from 'bignumber.js'
 import { useFleet, useMap, useNova, useReferrals } from './useContract'
@@ -99,6 +101,19 @@ export const useClaimShips = (player: string) => {
     [player, useFleetContract],
   )
   return { onClaim: handleClaimShips }
+}
+
+export const useBoostProduction = (player: string) => {
+  const useFleetContract = useFleet()
+
+  const handleBoostProduction = useCallback(
+    async (dockId: string) => {
+      const txHash = await boostProduction(useFleetContract, dockId, player)
+      console.info(txHash)
+    },
+    [player, useFleetContract],
+  )
+  return { onBoostProduction: handleBoostProduction }
 }
 
 export const useShipyardTakeover = () => {
@@ -596,6 +611,17 @@ export const useTravel = () => {
     [account, useMapContract],
   )
   return { onTravel: handleTravel }
+}
+
+export const useBoostTravel = () => {
+  const { account } = useWallet()
+  const useMapContract = useMap()
+
+  const handleBoostTravel = useCallback(async () => {
+    const txHash = await boostTravel(useMapContract, account)
+    console.info(txHash)
+  }, [account, useMapContract])
+  return { onBoostTravel: handleBoostTravel }
 }
 
 export const useExplore = () => {

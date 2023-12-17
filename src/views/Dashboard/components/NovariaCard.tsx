@@ -48,7 +48,7 @@ const Body = styled.div`
     background-size: contain;
     background-position: center top;
     min-height: 800px;
-   max-width: 2720px;
+    max-width: 2720px;
   }
 `
 
@@ -69,7 +69,6 @@ const ImgCountdown = styled.div`
 
   @media screen and (min-width: 200px) and (max-width: 355px) {
     font-size: 0.875em;
-
   }
   @media screen and (min-width: 356px) and (max-width: 640px) {
     font-size: 1.2em;

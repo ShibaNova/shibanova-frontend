@@ -3,7 +3,24 @@ import styled from 'styled-components'
 import { ButtonMenu, ButtonMenuItem, Text, Toggle, Checkbox, darkColors } from '@pancakeswap-libs/uikit'
 import useI18n from 'hooks/useI18n'
 
-const FarmTabButtons = ({ stakedOnly, setStakedOnly, setShowInactive }) => {
+const SearchFarm = styled.div`
+  margin-left: 14px;
+  color: white;
+  font-weight: bold;
+
+  > input {
+    background: transparent;
+    border: 1px solid #5affff;
+    border-radius: 16px;
+    height: 34px;
+    padding: 4px;
+    font-size: 16px;
+    color: #5affff;
+    width: 120px;
+  }
+`
+
+const FarmTabButtons = ({ stakedOnly, setStakedOnly, setShowInactive, setFilterValue, filterValue }) => {
   const [index, setIndex] = useState(0)
   const TranslateString = useI18n()
 
@@ -28,6 +45,9 @@ const FarmTabButtons = ({ stakedOnly, setStakedOnly, setShowInactive }) => {
         <ButtonMenuItem>{TranslateString(698, 'Active')}</ButtonMenuItem>
         <ButtonMenuItem>{TranslateString(700, 'Inactive')}</ButtonMenuItem>
       </ButtonMenu>
+      <SearchFarm>
+        Search: <input value={filterValue} onChange={(e) => setFilterValue(e.target.value)} />
+      </SearchFarm>
     </Wrapper>
   )
 }

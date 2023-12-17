@@ -39,6 +39,7 @@ export interface FarmsProps {
 //   }
 // `
 const Farms: React.FC<FarmsProps> = (farmsProps) => {
+  const [filterValue, setFilterValue] = useState('')
   const farmsLP = useFarms()
   const novaPrice = usePriceNovaBusd()
   const bnbPrice = usePriceBnbBusd()
@@ -105,22 +106,29 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
 
         return { ...farm, apy }
       })
-      return farmsToDisplayWithAPY.map((farm) => (
-        <FarmCard
-          key={farm.pid}
-          farm={farm}
-          removed={removed}
-          busdPrice={busdPrice}
-          bnbPrice={bnbPrice}
-          novaPrice={novaPrice}
-          usdtPrice={usdtPrice}
-          ethPrice={ethPrice}
-          ethereum={ethereum}
-          account={account}
-        />
-      ))
+      return farmsToDisplayWithAPY
+        .filter((farm) => {
+          if (filterValue.length > 0) {
+            return farm.lpSymbol.toLowerCase().includes(filterValue.toLowerCase())
+          }
+          return true
+        })
+        .map((farm) => (
+          <FarmCard
+            key={farm.pid}
+            farm={farm}
+            removed={removed}
+            busdPrice={busdPrice}
+            bnbPrice={bnbPrice}
+            novaPrice={novaPrice}
+            usdtPrice={usdtPrice}
+            ethPrice={ethPrice}
+            ethereum={ethereum}
+            account={account}
+          />
+        ))
     },
-    [bnbPrice, busdPrice, account, novaPrice, usdtPrice, ethPrice, ethereum],
+    [bnbPrice, busdPrice, account, novaPrice, usdtPrice, ethPrice, ethereum, filterValue],
   )
 
   return (
@@ -146,7 +154,13 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
         <Heading as="h6" color="#00aaff" mb="1.5rem" style={{ textAlign: 'center', fontSize: 16 }}>
           Trade routes fuel the economy of Novaria and the decentralized exchange
         </Heading>
-        <FarmTabButtons setShowInactive={setShowInactive} stakedOnly={stakedOnly} setStakedOnly={setStakedOnly} />
+        <FarmTabButtons
+          setShowInactive={setShowInactive}
+          setFilterValue={setFilterValue}
+          filterValue={filterValue}
+          stakedOnly={stakedOnly}
+          setStakedOnly={setStakedOnly}
+        />
       </div>
       <div>
         <FlexLayout>

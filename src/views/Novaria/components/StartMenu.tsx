@@ -10,11 +10,12 @@ import {
   useAddReferral,
   useCheckReferralStatus,
 } from 'hooks/useNovaria'
-import { getFleetAddress, getTreasuryAddress } from 'utils/addressHelpers'
+import { getFleetAddress, getMapAddress, getTreasuryAddress } from 'utils/addressHelpers'
 import ReactGA from 'react-ga'
 import ReactPixel from 'react-facebook-pixel'
 import { useHistory } from 'react-router-dom'
 import { usePriceNovaBusd } from 'state/hooks'
+import { usePHXApprove } from 'hooks/usePhoenixBalance'
 
 const Button = styled.button`
   cursor: pointer;
@@ -59,6 +60,7 @@ const StartMenu = () => {
   const [name, setName] = useState('')
 
   const fleetContract = getFleetAddress()
+  const mapContract = getMapAddress()
   const allowanceFleet = useGetAllowance(fleetContract)
   const fleetContractApproved = allowanceFleet === null ? null : allowanceFleet > 0
 
@@ -67,7 +69,7 @@ const StartMenu = () => {
   const treasuryContractApproved = allowanceTreasury === null ? null : allowanceTreasury > 0
 
   const playerExists = useGetPlayerExists(accountAddress)
-  const startCost = 103 / useGetCostMod()
+  const startCost = 800 / useGetCostMod()
   const startCostBUSD = Number(usePriceNovaBusd()) * startCost
 
   const history = useHistory()
@@ -75,6 +77,7 @@ const StartMenu = () => {
   const refStatus = useCheckReferralStatus(account)
 
   const { onClick } = useApprove()
+  const { onPHXApprove } = usePHXApprove()
   const { onCoin } = useInsertCoinHere()
   const { onAdd } = useAddReferral(account, refAddress)
 
@@ -118,11 +121,36 @@ const StartMenu = () => {
     }
   }
 
+  const sendPHXApproveTx = async (contract) => {
+    setPendingApproveTx(true)
+    try {
+      await onPHXApprove(contract)
+    } catch (error) {
+      console.log('error: ', error)
+    } finally {
+      setPendingApproveTx(false)
+    }
+  }
+
   const handleFleetApprove = () => {
     if (pendingApprove) {
       return
     }
     sendApproveTx(fleetContract)
+  }
+
+  const handlePHXFleetApprove = () => {
+    if (pendingApprove) {
+      return
+    }
+    sendPHXApproveTx(fleetContract)
+  }
+
+  const handlePHXMapApprove = () => {
+    if (pendingApprove) {
+      return
+    }
+    sendPHXApproveTx(mapContract)
   }
 
   const handleTreasuryApprove = () => {
@@ -178,14 +206,20 @@ const StartMenu = () => {
             {!pending ? 'Set Player Name' : 'pending...'}
           </Button>
           <div>
-            Registration: {startCost} NOVA ~${startCostBUSD.toFixed(2)} (includes 50 ship fleet)
+            Registration: {startCost} NOVA ~${startCostBUSD.toFixed(2)} (includes 250 ship fleet)
           </div>
-          <div style={{ fontSize: '0.9rem', marginTop: 5 }}>*Recommend 500 NOVA to build a competitive fleet</div>
         </div>
       ) : (
         ''
       )}
       {playerExists ? <Button onClick={handleStartGameClick}>Start Game</Button> : ''}
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div>Approve the Map and Fleet contract to spend PHX to use BOOSTS</div>
+        <div style={{ flexDirection: 'row', gap: '4px' }}>
+          <Button onClick={handlePHXFleetApprove}>{!pendingApprove ? 'Approve Fleet' : 'pending approval...'}</Button>
+          <Button onClick={handlePHXMapApprove}>{!pendingApprove ? 'Approve Map' : 'pending approval...'}</Button>
+        </div>
+      </div>
     </Body>
   )
 }
