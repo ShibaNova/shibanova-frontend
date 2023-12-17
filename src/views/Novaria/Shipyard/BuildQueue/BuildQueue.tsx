@@ -239,7 +239,7 @@ const BuildQueue = ({ fleetLocation }) => {
                   <div>
                     <CountdownButton>{showCountdown(new Date(dock.completionTime * 1000))}</CountdownButton>
                     <ClaimButton onClick={() => handleBoost(spaceDocks.indexOf(dock))}>
-                      {pending ? `1/2 Time Boost - ${(dock.amount * 0.1).toFixed(1)} PHX` : 'pending...'}
+                      {pending ? `1/2 Time Boost - ${(dock.amount * 0.02).toFixed(1)} PHX` : 'pending...'}
                     </ClaimButton>
                   </div>
                 )}

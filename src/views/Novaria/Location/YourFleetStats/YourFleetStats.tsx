@@ -136,9 +136,9 @@ const YourFleetStats = ({
         <div>TRAVEL</div>
         <div>{travelCooldown}</div>
         <div>
-          {travelCooldown > 0 && (
+          {currentTravelCooldown > 0 && (
             <Button onClick={() => handleBoostTravel()}>
-              {!pending ? `1/2 Time Boost - ${(fleetSize * 0.1).toFixed(1)} PHX` : 'pending'}
+              {!pending ? `1/2 Time Boost - ${(fleetSize * 0.02).toFixed(1)} PHX` : 'pending'}
             </Button>
           )}
         </div>

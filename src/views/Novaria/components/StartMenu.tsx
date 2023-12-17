@@ -67,7 +67,7 @@ const StartMenu = () => {
   const treasuryContractApproved = allowanceTreasury === null ? null : allowanceTreasury > 0
 
   const playerExists = useGetPlayerExists(accountAddress)
-  const startCost = 103 / useGetCostMod()
+  const startCost = 800 / useGetCostMod()
   const startCostBUSD = Number(usePriceNovaBusd()) * startCost
 
   const history = useHistory()
@@ -178,9 +178,8 @@ const StartMenu = () => {
             {!pending ? 'Set Player Name' : 'pending...'}
           </Button>
           <div>
-            Registration: {startCost} NOVA ~${startCostBUSD.toFixed(2)} (includes 50 ship fleet)
+            Registration: {startCost} NOVA ~${startCostBUSD.toFixed(2)} (includes 250 ship fleet)
           </div>
-          <div style={{ fontSize: '0.9rem', marginTop: 5 }}>*Recommend 500 NOVA to build a competitive fleet</div>
         </div>
       ) : (
         ''

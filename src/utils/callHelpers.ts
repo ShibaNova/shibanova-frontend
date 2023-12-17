@@ -8,7 +8,9 @@ export const approve = async (lpContract, masterChefContract, account) => {
 }
 
 export const novaApprove = async (novaContract, novariaContract, account) => {
-  return novaContract.methods.approve(novariaContract, ethers.constants.MaxUint256).send({ from: account })
+  return novaContract.methods
+    .approve(novariaContract, ethers.constants.MaxUint256)
+    .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
 }
 
 export const stake = async (masterChefContract, pid, amount, account) => {
@@ -85,7 +87,7 @@ export const buildShips = async (fleetContract, x, y, classId, amount, buildCost
 
 export const boostProduction = async (fleetContract, spaceDockId, account) => {
   return fleetContract.methods
-    .boostProduction(spaceDockId)
+    .boostBuildTime(spaceDockId)
     .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
     .on('transactionHash', (tx) => {
       return tx.transactionHash
@@ -168,7 +170,7 @@ export const travel = async (mapContract, x, y, account) => {
 
 export const boostTravel = async (mapContract, account) => {
   return mapContract.methods
-    .boostTravel()
+    .boostTravelTime()
     .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
     .on('transactionHash', (tx) => {
       return tx.transactionHash
