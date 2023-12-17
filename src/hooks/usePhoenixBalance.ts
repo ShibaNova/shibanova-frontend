@@ -20,7 +20,7 @@ export const usePHXApprove = () => {
 
   const handleApprove = useCallback(
     async (contract) => {
-      const txHash = await phxApprove(usePHXApprove, contract, account)
+      const txHash = await phxApprove(usePHXContract, contract, account)
       console.info(txHash)
     },
     [account, usePHXContract],
