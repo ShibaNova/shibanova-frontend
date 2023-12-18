@@ -43,6 +43,7 @@ import BodyWrapper from '../components/BodyWrapper'
 import BuildQueue from './BuildQueue'
 import { EmptyShipyardStats, ShipyardStats } from './ShipyardStats'
 import UpdateBanner from '../components/Banner'
+import ShipyardBodyWrapper from '../components/ShipyardBodyWrapper';
 
 const Page = styled.div`
   font-size: 15px;
@@ -61,22 +62,23 @@ const PageRow = styled.div`
 `
 
 // imported Body Wrapper wraps leftCol and rightCol
+// max-width: 95vw;
 const LeftCol = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 95vw;
+  max-width: 60vw;
 
   ${({ theme }) => theme.mediaQueries.xl} {
     max-width: 80vw;
   }
-`
+  `
 
 const RightCol = styled.div`
   flex-direction: column;
   margin: 10px;
   display: flex;
   flex: 1;
-  min-width: 11vw;
+  min-width: 16vw;
 `
 
 // left col wraps shipclassmenu and buildrow
@@ -395,7 +397,7 @@ const Shipyard = () => {
       <PageRow>
         <GameMenu pageName="shipyard" />
 
-        <BodyWrapper>
+        <ShipyardBodyWrapper>
           {/* <ChatButton playerExists={playerExists} playerName={playerName} /> */}
           <LeftCol>
             <ShipClassMenu>
@@ -522,7 +524,7 @@ const Shipyard = () => {
               </ShipyardEditor>
             </FleetMenu>
           </RightCol>
-        </BodyWrapper>
+        </ShipyardBodyWrapper>
       </PageRow>
     </Page>
   )

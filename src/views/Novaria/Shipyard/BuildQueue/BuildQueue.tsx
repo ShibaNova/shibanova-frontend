@@ -80,11 +80,11 @@ const ClaimInput = styled.input`
 
 const ClaimButton = styled.button`
   cursor: pointer;
-  margin: 5px;
+  margin: 5px 2.5px;
   align-self: center;
-  padding: 0.25rem 1rem;
+  padding: 0.25rem 0.25rem;
   font-family: sans-serif;
-  font-size: 1rem;
+  font-size: 0.75rem;
   font-weight: bold;
   text-decoration: none;
   color: black;
@@ -99,14 +99,13 @@ const ClaimMaxButton = styled(ClaimButton)`
   margin-right: 5px;
   padding: 3px;
   font-size: 13px;
-  width: 100%;
 `
 
 const CountdownButton = styled.button`
   align-self: center;
   font-family: sans-serif;
   font-size: 0.75rem;
-  width: 125px;
+  width: 131px;
   text-decoration: none;
   color: #8c8c8c;
   border: 1px solid #8c8c8c;
@@ -140,6 +139,11 @@ const Row = styled.div`
   flex-wrap: no-wrap;
   align-items: center;
   width: 100%;
+`
+
+const OuterDivFiftyOff = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 const Item = styled.div``
@@ -236,12 +240,12 @@ const BuildQueue = ({ fleetLocation }) => {
                   <WrongLocationButton>Not at Shipyard</WrongLocationButton>
                 )}
                 {dock.completionTime * 1000 > Number(new Date()) && (
-                  <div>
+                  <OuterDivFiftyOff>
                     <CountdownButton>{showCountdown(new Date(dock.completionTime * 1000))}</CountdownButton>
-                    <ClaimButton onClick={() => handleBoost(spaceDocks.indexOf(dock))}>
-                      {pending ? `1/2 Time Boost - ${(dock.amount * 0.02).toFixed(1)} PHX` : 'pending...'}
+                    <ClaimButton style={{width: "131px", margin: "5px 0px", padding: "0.25rem 0rem"}}  onClick={() => handleBoost(spaceDocks.indexOf(dock))}>
+                      {!pending ? `50% Boost - ${(dock.amount * 0.02).toFixed(2)} PHX` : `pending...`}
                     </ClaimButton>
-                  </div>
+                  </OuterDivFiftyOff>
                 )}
               </ClaimControls>
             </ShipCard>
