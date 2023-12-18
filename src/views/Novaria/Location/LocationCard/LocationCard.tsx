@@ -254,13 +254,13 @@ const LocationCard = ({
   const wormhole = placetype === '6'
   const haven = placename === 'Haven'
 
-  const canTunnel = wormhole && atWormhole && !currentLocation
   const travelOnCooldown = currentTravelCooldown > new Date()
+  const canTunnel = wormhole && atWormhole && !currentLocation && !travelOnCooldown && notInBattle && !pending
   const novaBalance = useGetNovaBalance(account)
 
   const miningIsDisabled = !currentLocation || atMaxMineral || miningCooldownActive || pending || miningCapacity <= 0
   const travelIsDisabled =
-    travelOnCooldown || distance > 5 || fleetSize < 25 || novaBalance < travelCost || !notInBattle || pending
+    travelOnCooldown || distance > 5 || fleetSize < 25 || novaBalance < travelCost || !notInBattle || miningCooldownActive || pending
   const refiningDisabled = !currentLocation || Number(playerMineral) <= 0 || pending
 
   const { onExplore } = useExplore()
@@ -405,13 +405,13 @@ const LocationCard = ({
             {pending ? 'pending...' : 'TRAVEL'}
           </Button>
         )}
-        {unexplored && distance < 3 && <Button onClick={sendExploreTx}>{pending ? 'pending...' : 'EXPLORE'}</Button>}
+        {unexplored && distance < 4 && <Button onClick={sendExploreTx}>{pending ? 'pending...' : 'EXPLORE'}</Button>}
         {canTunnel && <Button onClick={sendTunnelTx}>{pending ? 'pending...' : 'TUNNEL'}</Button>}
 
         <Row style={{ marginTop: 5, color: '#289794', fontSize: 11 }}>
           {distance > 5 && !currentLocation && !hostile && <span>Too far to travel</span>}
           {unexplored && !currentLocation && !hostile && <span>Location must be explored</span>}
-          {unexplored && distance > 2 && <span>Can only explore within 2 AU</span>}
+          {unexplored && distance > 3 && <span>Can only explore within 3 AU</span>}
           {fleetSize < 25 && !currentLocation && !hostile && (
             <span>Your fleet is too small (under 25 fleet size) to travel </span>
           )}
