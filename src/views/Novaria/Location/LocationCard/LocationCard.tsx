@@ -260,7 +260,13 @@ const LocationCard = ({
 
   const miningIsDisabled = !currentLocation || atMaxMineral || miningCooldownActive || pending || miningCapacity <= 0
   const travelIsDisabled =
-    travelOnCooldown || distance > 5 || fleetSize < 25 || novaBalance < travelCost || !notInBattle || miningCooldownActive || pending
+    travelOnCooldown ||
+    distance > 5 ||
+    fleetSize < 25 ||
+    novaBalance < travelCost ||
+    !notInBattle ||
+    miningCooldownActive ||
+    pending
   const refiningDisabled = !currentLocation || Number(playerMineral) <= 0 || pending
 
   const { onExplore } = useExplore()

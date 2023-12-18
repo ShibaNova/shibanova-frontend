@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { useGetBattle, useRecall, useSetRecall, useGetSavedSpawnPlace, useBoostTravel, useGetCostMod } from 'hooks/useNovaria'
+import {
+  useGetBattle,
+  useRecall,
+  useSetRecall,
+  useGetSavedSpawnPlace,
+  useBoostTravel,
+  useGetCostMod,
+} from 'hooks/useNovaria'
 import showCountdown from 'utils/countdownTimer'
 import { getWeb3 } from 'utils/web3'
 
@@ -46,7 +53,7 @@ const YourFleetStats = ({
 
   const [pending, setPendingTx] = useState(false)
 
-  const costMod = useGetCostMod();
+  const costMod = useGetCostMod()
   const battleID = Number(playerBattleInfo.battleId)
   const resolvedTime = Number(useGetBattle(battleID).resolvedTime) + 900
   const battleCooldown = showCountdown(new Date(Number(resolvedTime) * 1000))
@@ -139,16 +146,20 @@ const YourFleetStats = ({
         <div>{travelCooldown}</div>
       </Stat>
       {travelOnCooldown ? (
-        <Button style={{margin: "0px"}} onClick={() => handleBoostTravel()}>
-          {!pending ? `50% Time Boost - ${(fleetSize * 0.02 / costMod).toFixed(2)} PHX` : 'pending'}
+        <Button style={{ margin: '0px' }} onClick={() => handleBoostTravel()}>
+          {!pending ? `50% Time Boost - ${((fleetSize * 0.02) / costMod).toFixed(2)} PHX` : 'pending'}
         </Button>
-        ) : ""}
+      ) : (
+        ''
+      )}
       <Stat>
         <div>BATTLE</div>
         <div>{battleCooldown}</div>
       </Stat>
       {!atSavedShipyard && (
-        <Button style={{margin: "0px"}} onClick={sendSetRecall}>{!pending ? 'SET SHIPYARD RECALL POINT' : 'pending'}</Button>
+        <Button style={{ margin: '0px' }} onClick={sendSetRecall}>
+          {!pending ? 'SET SHIPYARD RECALL POINT' : 'pending'}
+        </Button>
       )}
       {canRecall && <Button onClick={() => sendRecallTx(true)}>{!pending ? 'RECALL TO HAVEN' : 'pending'}</Button>}
       {canRecallShipyard && (
