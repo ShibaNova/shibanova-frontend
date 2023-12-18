@@ -128,10 +128,10 @@ const Novaria: React.FC = () => {
             </Description>
           </GameInfo>
           <GameInfo>
-        <TeaserVideo
-          src="https://www.youtube.com/embed/VRH2LvKXKEQ?playlist=VRH2LvKXKEQ&autoplay=1&mute=1&loop=1"
-          title="YouTube video player"
-        />
+            <TeaserVideo
+              src="https://www.youtube.com/embed/VRH2LvKXKEQ?playlist=VRH2LvKXKEQ&autoplay=1&mute=1&loop=1"
+              title="YouTube video player"
+            />
           </GameInfo>
         </SubHeading>
         <HowToPlay />
