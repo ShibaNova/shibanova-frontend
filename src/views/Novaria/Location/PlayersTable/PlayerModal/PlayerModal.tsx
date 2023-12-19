@@ -60,9 +60,6 @@ const PlayerModal: React.FC<PlayerModalProps> = ({ account, refinery, player, cu
   const accountAddress = account !== null ? account : ''
   const isPlayer = player.toString() === accountAddress.toString()
 
-  const canAttack = yourFleetSize >= fleetSize / 4 && yourFleetSize / 4 <= fleetSize
-  console.log('can attack', canAttack)
-
   const playerBattleInfo = useGetPlayerBattle(account)
   const battleID = Number(playerBattleInfo.battleId)
   const inBattle = Number(playerBattleInfo.battleStatus) !== 0
@@ -131,7 +128,7 @@ const PlayerModal: React.FC<PlayerModalProps> = ({ account, refinery, player, cu
       </div>
       {!inBattle && !isPlayer && currentLocation && !refinery && !battleCooldownActive && (
         <ModalActions>
-          {((playerBattleStatus === '0' && canAttack) || playerBattleStatus !== '0') && !targetbattleCooldownActive && (
+          {(playerBattleStatus === '0' || playerBattleStatus !== '0') && !targetbattleCooldownActive && (
             <Button onClick={() => handleEnterBattle(player, 'attack')}>ATTACK</Button>
           )}
           {playerBattleStatus !== '0' && <Button onClick={() => handleEnterBattle(player, 'defend')}>DEFEND</Button>}

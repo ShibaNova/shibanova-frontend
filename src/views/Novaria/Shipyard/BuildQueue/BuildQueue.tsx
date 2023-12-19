@@ -38,9 +38,9 @@ const ShipCard = styled.div<{ shipclass: string }>`
   background: ${(props) => props.shipclass === '0' && 'url(/images/novaria/viperQueue.png)'};
   background: ${(props) => props.shipclass === '1' && 'url(/images/novaria/moleQueue.png)'};
   background: ${(props) => props.shipclass === '2' && 'url(/images/novaria/fireflyQueue.png)'};
-  background: ${(props) => props.shipclass === '3' && 'url(/images/novaria/gorianQueue.png)'};
-  background: ${(props) => props.shipclass === '4' && 'url(/images/novaria/viperSwarmQueue.png)'};
-  background: ${(props) => props.shipclass === '5' && 'url(/images/novaria/lancerQueue.png)'};
+  background: ${(props) => props.shipclass === '3' && 'url(/images/novaria/viperSwarmQueue.png)'};
+  background: ${(props) => props.shipclass === '4' && 'url(/images/novaria/lancerQueue.png)'};
+  background: ${(props) => props.shipclass === '5' && 'url(/images/novaria/gorianQueue.png)'};
   background-repeat: no-repeat;
 
   display: flex;
@@ -242,8 +242,11 @@ const BuildQueue = ({ fleetLocation }) => {
                 {dock.completionTime * 1000 > Number(new Date()) && (
                   <OuterDivFiftyOff>
                     <CountdownButton>{showCountdown(new Date(dock.completionTime * 1000))}</CountdownButton>
-                    <ClaimButton style={{width: "131px", margin: "5px 0px", padding: "0.25rem 0rem"}}  onClick={() => handleBoost(spaceDocks.indexOf(dock))}>
-                      {!pending ? `50% Boost - ${(dock.amount * 0.02).toFixed(2)} PHX` : `pending...`}
+                    <ClaimButton
+                      style={{ width: '131px', margin: '5px 0px', padding: '0.25rem 0rem' }}
+                      onClick={() => handleBoost(spaceDocks.indexOf(dock))}
+                    >
+                      {!pending ? `50% Boost - ${(dock.amount * 0.05).toFixed(2)} PHX` : `pending...`}
                     </ClaimButton>
                   </OuterDivFiftyOff>
                 )}

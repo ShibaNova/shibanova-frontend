@@ -29,7 +29,6 @@ import { ConnectedAccountContext } from 'App'
 import GameHeader from '../components/GameHeader'
 import GameMenu from '../components/GameMenu'
 import ShipCardModal from './ShipCardModal'
-import ChatButton from '../components/ChatBox/ChatButton'
 import moleCard from '../assets/moleCard.png'
 import viperCard from '../assets/viperCard.png'
 import unknownCard from '../assets/newShipCard.png'
@@ -43,7 +42,7 @@ import BodyWrapper from '../components/BodyWrapper'
 import BuildQueue from './BuildQueue'
 import { EmptyShipyardStats, ShipyardStats } from './ShipyardStats'
 import UpdateBanner from '../components/Banner'
-import ShipyardBodyWrapper from '../components/ShipyardBodyWrapper';
+import ShipyardBodyWrapper from '../components/ShipyardBodyWrapper'
 
 const Page = styled.div`
   font-size: 15px;
@@ -71,7 +70,7 @@ const LeftCol = styled.div`
   ${({ theme }) => theme.mediaQueries.xl} {
     max-width: 80vw;
   }
-  `
+`
 
 const RightCol = styled.div`
   flex-direction: column;
@@ -297,10 +296,10 @@ const Shipyard = () => {
   const [handleViperClick] = useModal(<ShipCardModal shipclass="Viper" />)
   const [handleMoleClick] = useModal(<ShipCardModal shipclass="P.U.P." />)
   const [handleFireflyClick] = useModal(<ShipCardModal shipclass="Firefly" />)
-  const [handleGorianClick] = useModal(<ShipCardModal shipclass="Gorian" />)
-  const [handleLancerClick] = useModal(<ShipCardModal shipclass="Lancer" />)
-  const [handleUnknownClick] = useModal(<ShipCardModal shipclass="Unknown" />)
   const [handleViperSwarm] = useModal(<ShipCardModal shipclass="Viper Swarm" />)
+  const [handleLancerClick] = useModal(<ShipCardModal shipclass="Lancer" />)
+  const [handleGorianClick] = useModal(<ShipCardModal shipclass="Gorian" />)
+  const [handleUnknownClick] = useModal(<ShipCardModal shipclass="Unknown" />)
 
   const handleShipyardChange = (option) => {
     const selectedShipyardId = option.value
@@ -405,8 +404,8 @@ const Shipyard = () => {
               <ShipClassCard src={moleCard} alt="mole" role="button" onClick={handleMoleClick} />
               <ShipClassCard src={fireflyCard} alt="firefly" role="button" onClick={handleFireflyClick} />
               <ShipClassCard src={viperSwarmCard} alt="viper swarm" role="button" onClick={handleViperSwarm} />
-              <ShipClassCard src={gorianCard} alt="gorian" role="button" onClick={handleGorianClick} />
               <ShipClassCard src={lancerCard} alt="lancer" role="button" onClick={handleLancerClick} />
+              <ShipClassCard src={gorianCard} alt="gorian" role="button" onClick={handleGorianClick} />
               <ShipClassCard src={unknownCard} alt="coming soon" role="button" onClick={handleUnknownClick} />
             </ShipClassMenu>
 
