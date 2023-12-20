@@ -229,8 +229,8 @@ const StartMenu = () => {
             disabled={
               !fleetContractApproved ||
               !treasuryContractApproved ||
-              phxFleetContractApproved ||
-              phxMapContractApproved ||
+              !phxFleetContractApproved ||
+              !phxMapContractApproved ||
               pending
             }
           >

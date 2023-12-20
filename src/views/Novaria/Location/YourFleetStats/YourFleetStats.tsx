@@ -150,7 +150,7 @@ const YourFleetStats = ({
       </Stat>
       {travelOnCooldown ? (
         <Button style={{ margin: '0px' }} onClick={() => handleBoostTravel()}>
-          {!pending ? `50% Boost - ${((fleetSize * 0.05) / costMod).toFixed(2)} PHX` : 'pending...'}
+          {!pending ? `50% Boost - ${((fleetSize * 0.01) / costMod).toFixed(2)} PHX` : 'pending...'}
         </Button>
       ) : (
         ''
