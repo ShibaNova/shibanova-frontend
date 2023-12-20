@@ -57,7 +57,7 @@ const YourFleetStats = ({
 
   const costMod = useGetCostMod()
   const battleID = Number(playerBattleInfo.battleId)
-  const resolvedTime = Number(useGetBattle(battleID).resolvedTime) + (BATTLE_COOLDOWN / TIME_MODIFIER)
+  const resolvedTime = Number(useGetBattle(battleID).resolvedTime) + BATTLE_COOLDOWN / TIME_MODIFIER
   const battleCooldown = showCountdown(new Date(Number(resolvedTime) * 1000))
   const miningCooldown = showCountdown(currentMiningCooldown)
   const travelCooldown = showCountdown(currentTravelCooldown)

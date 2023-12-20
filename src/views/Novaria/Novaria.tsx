@@ -14,7 +14,7 @@ const Column = styled.div`
   flex-direction: column;
   flex-wrap: wrap;
   max-width: 1200px;
-  margin:auto;
+  margin: auto;
 `
 
 const SubHeading = styled.div`
@@ -48,7 +48,7 @@ const TeaserVideo = styled.iframe`
   height: 80%;
   aspect-ratio: 16/9;
   border-radius: 5px;
-  text-align:center;
+  text-align: center;
 `
 
 const GameInfo = styled.div`
@@ -84,11 +84,11 @@ const Novaria: React.FC = () => {
   return (
     <Page>
       <Column>
-        <div style={{ width:'100%', textAlign:'center' }}>
-        <TeaserVideo
-          src="https://www.youtube.com/embed/VRH2LvKXKEQ?playlist=VRH2LvKXKEQ&autoplay=1&mute=1&loop=1"
-          title="YouTube video player"
-        />
+        <div style={{ width: '100%', textAlign: 'center' }}>
+          <TeaserVideo
+            src="https://www.youtube.com/embed/VRH2LvKXKEQ?playlist=VRH2LvKXKEQ&autoplay=1&mute=1&loop=1"
+            title="YouTube video player"
+          />
         </div>
         <SubHeading>
           <GameInfo>

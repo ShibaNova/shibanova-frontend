@@ -25,7 +25,13 @@ const PlayersTableRow = ({ account, refinery, shipyard, player, currentLocation 
   const name = useGetNameByAddress(player)
   const mineral = Number(useGetFleetMineral(player))
   const [handleClick] = useModal(
-    <PlayerModal account={account} refinery={refinery} shipyard={shipyard} player={player} currentLocation={currentLocation} />,
+    <PlayerModal
+      account={account}
+      refinery={refinery}
+      shipyard={shipyard}
+      player={player}
+      currentLocation={currentLocation}
+    />,
   )
 
   return (

@@ -138,7 +138,7 @@ const GameMenu = ({ pageName }) => {
     <div>
       {open ? (
         <Frame>
-          <ToggleButton type="button" onClick={toggleViewMenu} style={{padding: "0px 0px 0px 22px"}}>
+          <ToggleButton type="button" onClick={toggleViewMenu} style={{ padding: '0px 0px 0px 22px' }}>
             &lt;&lt;
           </ToggleButton>
           {MENU_DATA.map((item) => (

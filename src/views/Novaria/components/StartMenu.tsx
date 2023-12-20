@@ -175,13 +175,19 @@ const StartMenu = () => {
     history.push('/overview')
   }
 
-  if (fleetContractApproved === null || treasuryContractApproved === null || phxFleetContractApproved === null || phxMapContractApproved === null) {
+  if (
+    fleetContractApproved === null ||
+    treasuryContractApproved === null ||
+    phxFleetContractApproved === null ||
+    phxMapContractApproved === null
+  ) {
     return null
   }
 
   return (
     <Body>
-      {(fleetContractApproved && treasuryContractApproved && phxFleetContractApproved && phxMapContractApproved) || 'Step 1 - Approve game contracts'}
+      {(fleetContractApproved && treasuryContractApproved && phxFleetContractApproved && phxMapContractApproved) ||
+        'Step 1 - Approve game contracts'}
       <br />
       {fleetContractApproved || (
         <Button onClick={handleFleetApprove}>
@@ -218,7 +224,16 @@ const StartMenu = () => {
             onChange={(e) => setName(e.target.value)}
             style={{ marginTop: 5 }}
           />
-          <Button onClick={sendInsertCoinTx} disabled={!fleetContractApproved || !treasuryContractApproved || phxFleetContractApproved || phxMapContractApproved || pending}>
+          <Button
+            onClick={sendInsertCoinTx}
+            disabled={
+              !fleetContractApproved ||
+              !treasuryContractApproved ||
+              phxFleetContractApproved ||
+              phxMapContractApproved ||
+              pending
+            }
+          >
             {!pending ? 'Set Player Name' : 'pending...'}
           </Button>
           <div>

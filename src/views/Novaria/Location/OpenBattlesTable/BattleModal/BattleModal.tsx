@@ -38,7 +38,7 @@ const BattleModal: React.FC<BattleModalProps> = ({ battle, status, currentLocati
   const inBattle = status
   const resolved = Number(battleInfo.resolvedTime) > 0
 
-  const resolvedTime = Number(battleInfo.resolvedTime) + (BATTLE_COOLDOWN / TIME_MODIFIER)
+  const resolvedTime = Number(battleInfo.resolvedTime) + BATTLE_COOLDOWN / TIME_MODIFIER
   const battleCooldownActive = new Date(Number(resolvedTime) * 1000) > new Date()
 
   const { onBattle } = useGoBattle()

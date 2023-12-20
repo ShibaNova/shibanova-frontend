@@ -79,7 +79,6 @@ const ImgCountdown = styled.div`
 `
 
 const NovariaCard = ({ title }: { title: string }) => {
-
   return (
     <Body id={title}>
       <a href="/legend-of-novaria" style={{ display: 'flex', marginTop: 'auto' }}>

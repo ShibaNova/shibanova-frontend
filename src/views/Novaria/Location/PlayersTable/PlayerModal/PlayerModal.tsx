@@ -44,7 +44,14 @@ interface PlayerModalProps {
   onDismiss?: () => void
 }
 
-const PlayerModal: React.FC<PlayerModalProps> = ({ account, refinery, shipyard, player, currentLocation, onDismiss }) => {
+const PlayerModal: React.FC<PlayerModalProps> = ({
+  account,
+  refinery,
+  shipyard,
+  player,
+  currentLocation,
+  onDismiss,
+}) => {
   const ships = useGetShips(player)
   const shipClasses = useGetShipClasses()
   const playerInfo = useGetPlayer(player)
@@ -65,12 +72,12 @@ const PlayerModal: React.FC<PlayerModalProps> = ({ account, refinery, shipyard, 
   const battleID = Number(playerBattleInfo.battleId)
   const inBattle = Number(playerBattleInfo.battleStatus) !== 0
   console.log('inbattle', inBattle)
-  const resolvedTime = Number(useGetBattle(battleID).resolvedTime) + (BATTLE_COOLDOWN / TIME_MODIFIER)
+  const resolvedTime = Number(useGetBattle(battleID).resolvedTime) + BATTLE_COOLDOWN / TIME_MODIFIER
   const battleCooldownActive = new Date(Number(resolvedTime) * 1000) > new Date()
 
   const targetplayerBattleInfo = useGetPlayerBattle(player)
   const targetbattleID = Number(targetplayerBattleInfo.battleId)
-  const targetresolvedTime = Number(useGetBattle(targetbattleID).resolvedTime) + (BATTLE_COOLDOWN / TIME_MODIFIER)
+  const targetresolvedTime = Number(useGetBattle(targetbattleID).resolvedTime) + BATTLE_COOLDOWN / TIME_MODIFIER
   const targetbattleCooldownActive = new Date(Number(targetresolvedTime) * 1000) > new Date()
 
   const { onEnterBattle } = useEnterBattle()
@@ -129,9 +136,7 @@ const PlayerModal: React.FC<PlayerModalProps> = ({ account, refinery, shipyard, 
       </div>
       {!inBattle && !isPlayer && currentLocation && !(refinery && shipyard) && !battleCooldownActive && (
         <ModalActions>
-          {!targetbattleCooldownActive && (
-            <Button onClick={() => handleEnterBattle(player, 'attack')}>ATTACK</Button>
-          )}
+          {!targetbattleCooldownActive && <Button onClick={() => handleEnterBattle(player, 'attack')}>ATTACK</Button>}
           {playerBattleStatus !== '0' && <Button onClick={() => handleEnterBattle(player, 'defend')}>DEFEND</Button>}
         </ModalActions>
       )}
