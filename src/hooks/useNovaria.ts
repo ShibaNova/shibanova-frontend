@@ -865,20 +865,6 @@ export const useGetCurrentMiningCooldown = (fleet: string) => {
   return currentCooldown
 }
 
-export const useGetTimeModifier = () => {
-  const { fastRefresh } = useRefresh()
-  const [TimeModifier, setTimeModifier] = useState(0)
-
-  useEffect(() => {
-    async function fetch() {
-      // const data = await mapContract.methods.getTimeModifier().call()
-      setTimeModifier(5000)
-    }
-    fetch()
-  }, [fastRefresh])
-  return TimeModifier
-}
-
 // *** Nova token contract ***
 // used for approvals
 

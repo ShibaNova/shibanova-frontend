@@ -13,6 +13,7 @@ import {
   useGetShips,
   useGetBattle,
 } from 'hooks/useNovaria'
+import { BATTLE_COOLDOWN, TIME_MODIFIER } from 'config'
 import ModalActions from '../../../components/NovariaModalActions'
 import NovariaModal from '../../../components/NovariaModal'
 
@@ -52,7 +53,6 @@ const PlayerModal: React.FC<PlayerModalProps> = ({ account, refinery, shipyard, 
   const playerBattleStatus = playerInfo.battleStatus.toString()
   const fleetLocation = useGetFleetLocation(player)
   const fleetSize = useGetFleetSize(player)
-  const yourFleetSize = useGetFleetSize(account)
   const fleetPower = useGetAttackPower(player)
   const fleetMineral = useGetFleetMineral(player)
   const fleetMaxMineral = useGetMaxMineralCapacity(player)
@@ -65,12 +65,12 @@ const PlayerModal: React.FC<PlayerModalProps> = ({ account, refinery, shipyard, 
   const battleID = Number(playerBattleInfo.battleId)
   const inBattle = Number(playerBattleInfo.battleStatus) !== 0
   console.log('inbattle', inBattle)
-  const resolvedTime = Number(useGetBattle(battleID).resolvedTime) + 900
+  const resolvedTime = Number(useGetBattle(battleID).resolvedTime) + (BATTLE_COOLDOWN / TIME_MODIFIER)
   const battleCooldownActive = new Date(Number(resolvedTime) * 1000) > new Date()
 
   const targetplayerBattleInfo = useGetPlayerBattle(player)
   const targetbattleID = Number(targetplayerBattleInfo.battleId)
-  const targetresolvedTime = Number(useGetBattle(targetbattleID).resolvedTime) + 900
+  const targetresolvedTime = Number(useGetBattle(targetbattleID).resolvedTime) + (BATTLE_COOLDOWN / TIME_MODIFIER)
   const targetbattleCooldownActive = new Date(Number(targetresolvedTime) * 1000) > new Date()
 
   const { onEnterBattle } = useEnterBattle()
@@ -129,7 +129,7 @@ const PlayerModal: React.FC<PlayerModalProps> = ({ account, refinery, shipyard, 
       </div>
       {!inBattle && !isPlayer && currentLocation && !(refinery && shipyard) && !battleCooldownActive && (
         <ModalActions>
-          {(playerBattleStatus === '0' || playerBattleStatus !== '0') && !targetbattleCooldownActive && (
+          {!targetbattleCooldownActive && (
             <Button onClick={() => handleEnterBattle(player, 'attack')}>ATTACK</Button>
           )}
           {playerBattleStatus !== '0' && <Button onClick={() => handleEnterBattle(player, 'defend')}>DEFEND</Button>}

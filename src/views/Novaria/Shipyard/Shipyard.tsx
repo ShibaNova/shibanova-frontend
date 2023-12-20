@@ -15,7 +15,6 @@ import {
   useGetFleetLocation,
   useGetFleetMineral,
   useGetCostMod,
-  useGetTimeModifier,
   useGetPlayer,
   useSetShipyardName,
   useSetShipyardFee,
@@ -26,6 +25,7 @@ import {
   useGetPlayerExists,
 } from 'hooks/useNovaria'
 import { ConnectedAccountContext } from 'App'
+import { TIME_MODIFIER } from 'config'
 import GameHeader from '../components/GameHeader'
 import GameMenu from '../components/GameMenu'
 import ShipCardModal from './ShipCardModal'
@@ -38,7 +38,6 @@ import lancerCard from '../assets/lancerSmall.png'
 import viperSwarmCard from '../assets/viperSwarm.png'
 import YourFleetStats from '../Location/YourFleetStats'
 import BattleStatus from '../Location/BattleStatus'
-import BodyWrapper from '../components/BodyWrapper'
 import BuildQueue from './BuildQueue'
 import { EmptyShipyardStats, ShipyardStats } from './ShipyardStats'
 import UpdateBanner from '../components/Banner'
@@ -325,7 +324,7 @@ const Shipyard = () => {
   const buildCost = (shipCost * shipAmount + (shipyardFee / 100) * shipCost * shipAmount) / costMod / 10 ** 18
   const { onBuild } = useBuildShips(account)
 
-  const timeMod = useGetTimeModifier()
+  const timeMod = TIME_MODIFIER
 
   const handleBuild = async () => {
     setPendingTx(true)

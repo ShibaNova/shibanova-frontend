@@ -20,7 +20,6 @@ import {
   useGetMiningCapacity,
   useGetShipClasses,
   useGetShips,
-  useGetTimeModifier,
   useGetPlayerInBattle,
   useGetPlayerExists,
   useGetFleetMineralRefined,
@@ -28,9 +27,9 @@ import {
 import { ConnectedAccountContext } from 'App'
 import { Text } from '@pancakeswap-libs/uikit'
 import { io } from 'socket.io-client'
+import { TIME_MODIFIER } from 'config'
 import GameHeader from '../components/GameHeader'
 import GameMenu from '../components/GameMenu'
-import ChatButton from '../components/ChatBox/ChatButton'
 import LocationCard from './LocationCard'
 import OpenBattlesTable from './OpenBattlesTable'
 import PlayersTable from './PlayersTable'
@@ -245,7 +244,7 @@ const Location: React.FC = () => {
 
   const currentLocation = Number(fleetLocation.X) === Number(placeX) && Number(fleetLocation.Y) === Number(placeY)
   const openbattles = false
-  const timeMod = useGetTimeModifier()
+  const timeMod = TIME_MODIFIER
 
   const playerInBattle = useGetPlayerInBattle(account)
 
@@ -409,7 +408,6 @@ const Location: React.FC = () => {
             </RightCol>
           </Content>
         </BodyWrapper>
-        {/* <ChatButton playerName={playerName} playerExists={playerExists} /> */}
       </Row>
     </Page>
   )

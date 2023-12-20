@@ -429,18 +429,19 @@ const LocationCard = ({
           {miningCooldownActive && (isMining || salvage > 0) && currentLocation && (
             <span>Mining/collecting on cooldown</span>
           )}
-          {distance < 6 && !unexplored && !hostile && (
+          {distance < 6 && !unexplored && !hostile && !star && !currentLocation && (
             <div>
-              <span>Travel Cost (NOVA): {!currentLocation ? travelCost : ''}</span>
+              <span>Travel Cost (NOVA): {!currentLocation ? travelCost.toFixed(2) : ''}</span>
               <br />
-              <span>Travel Cooldown: {!currentLocation ? <span>{travelCooldown} minutes</span> : ''}</span>
+              <span>Travel Cooldown: {!currentLocation ? <span>{travelCooldown.toFixed(2)} min.</span> : ''}</span>
             </div>
           )}
-          <span>Distance: {Math.floor(distance)} AU(s)</span>
+          {!currentLocation && <span>Distance: {Math.floor(distance)} AU(s)</span>}
+          {currentLocation && <span>YOU ARE HERE.</span>}
           {unexplored && <span>Explore Cost (NOVA): {(exploreCost / 10 ** 18).toFixed(2)}</span>}
           <br />
           {wormhole &&
-            'Wormholes allow players to tunnel (travel) from one wormhole to any other wormhole at 1/10th the cost and no cooldown'}
+            'Wormholes allow players to tunnel (travel) from one wormhole to any other wormhole at 1/10th the cost.'}
           {canTunnel && <span>Tunnel Cost (NOVA): {travelCost / 10}</span>}
           {shipyard && !haven && (
             <span>

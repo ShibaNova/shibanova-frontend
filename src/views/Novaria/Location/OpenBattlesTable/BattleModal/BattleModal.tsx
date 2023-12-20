@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useEnterBattle, useGetBattle, useGoBattle } from 'hooks/useNovaria'
+import { BATTLE_COOLDOWN, TIME_MODIFIER } from 'config'
 import ModalActions from '../../../components/NovariaModalActions'
 import Modal from '../../../components/NovariaModal'
 import PlayerList from './PlayerList'
@@ -37,7 +38,7 @@ const BattleModal: React.FC<BattleModalProps> = ({ battle, status, currentLocati
   const inBattle = status
   const resolved = Number(battleInfo.resolvedTime) > 0
 
-  const resolvedTime = Number(battleInfo.resolvedTime) + 900
+  const resolvedTime = Number(battleInfo.resolvedTime) + (BATTLE_COOLDOWN / TIME_MODIFIER)
   const battleCooldownActive = new Date(Number(resolvedTime) * 1000) > new Date()
 
   const { onBattle } = useGoBattle()
