@@ -90,7 +90,7 @@ const Content = styled.div`
   margin-right: auto;
 `
 
-const OpenBattlesCard = styled.div<{ refinery: boolean }>`
+const OpenBattlesCard = styled.div<{ refinery: boolean, shipyard: boolean }>`
   background-image: url('/images/novaria/locationTableBorder.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -100,7 +100,7 @@ const OpenBattlesCard = styled.div<{ refinery: boolean }>`
   min-height: 200px;
   min-width: 350px
   max-width: 450px;
-  display: ${(props) => props.refinery && 'none'}; 
+  display: ${(props) => (props.refinery && props.shipyard) && 'none'}; 
   
   ${({ theme }) => theme.mediaQueries.md} {
     min-width: 450px;
@@ -331,7 +331,7 @@ const Location: React.FC = () => {
                 </MoveControls>
               </InputControl>
 
-              <OpenBattlesCard refinery={placeInfo.refinery}>
+              <OpenBattlesCard refinery={placeInfo.refinery} shipyard={placeInfo.shipyard}>
                 <Header>OPEN BATTLES</Header>
                 <OpenBattlesTable
                   battles={battlesAtLocation}
@@ -348,6 +348,7 @@ const Location: React.FC = () => {
                   players={fleetsAtLocation}
                   currentLocation={currentLocation}
                   refinery={placeInfo.refinery}
+                  shipyard={placeInfo.shipyard}
                 />
               </PlayersCard>
             </CenterCol>

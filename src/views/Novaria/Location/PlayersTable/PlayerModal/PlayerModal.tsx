@@ -36,13 +36,14 @@ const Child = styled.div`
 
 interface PlayerModalProps {
   refinery: boolean
+  shipyard: boolean
   account: string
   player: string
   currentLocation: boolean
   onDismiss?: () => void
 }
 
-const PlayerModal: React.FC<PlayerModalProps> = ({ account, refinery, player, currentLocation, onDismiss }) => {
+const PlayerModal: React.FC<PlayerModalProps> = ({ account, refinery, shipyard, player, currentLocation, onDismiss }) => {
   const ships = useGetShips(player)
   const shipClasses = useGetShipClasses()
   const playerInfo = useGetPlayer(player)
@@ -126,7 +127,7 @@ const PlayerModal: React.FC<PlayerModalProps> = ({ account, refinery, player, cu
           {playerBattleStatus === '2' && 'Defending'}
         </Child>
       </div>
-      {!inBattle && !isPlayer && currentLocation && !refinery && !battleCooldownActive && (
+      {!inBattle && !isPlayer && currentLocation && !(refinery && shipyard) && !battleCooldownActive && (
         <ModalActions>
           {(playerBattleStatus === '0' || playerBattleStatus !== '0') && !targetbattleCooldownActive && (
             <Button onClick={() => handleEnterBattle(player, 'attack')}>ATTACK</Button>
