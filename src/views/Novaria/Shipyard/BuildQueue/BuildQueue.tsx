@@ -67,7 +67,7 @@ const ClaimControls = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: -10px;
 `
 
 const ClaimInput = styled.input`
@@ -159,12 +159,14 @@ const BuildQueue = ({ fleetLocation }) => {
 
   // hack, should get size automatically
   const getShipSize = (shipClassId) => {
-    return (shipClassId === '0' && 1) || 
-    (shipClassId === '1' && 3) || 
-    (shipClassId === '2' && 5) || 
-    (shipClassId === '3' && 1) || 
-    (shipClassId === '4' && 8) || 
-    (shipClassId === '5' && 20)
+    return (
+      (shipClassId === '0' && 1) ||
+      (shipClassId === '1' && 3) ||
+      (shipClassId === '2' && 5) ||
+      (shipClassId === '3' && 1) ||
+      (shipClassId === '4' && 8) ||
+      (shipClassId === '5' && 20)
+    )
   }
 
   const handleClaim = async (claimId) => {
@@ -256,7 +258,9 @@ const BuildQueue = ({ fleetLocation }) => {
                       style={{ width: '131px', margin: '5px 0px', padding: '0.25rem 0rem' }}
                       onClick={() => handleBoost(spaceDocks.indexOf(dock))}
                     >
-                      {!pending ? `50% Boost - ${(dock.amount * getShipSize(dock.shipClassId) * 0.05).toFixed(2)} PHX` : `pending...`}
+                      {!pending
+                        ? `50% Boost - ${(dock.amount * getShipSize(dock.shipClassId) * 0.05).toFixed(2)} PHX`
+                        : `pending...`}
                     </ClaimButton>
                   </OuterDivFiftyOff>
                 )}
