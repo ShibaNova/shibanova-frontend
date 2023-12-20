@@ -316,7 +316,7 @@ const Shipyard = () => {
     const selectedShip = shipClasses[selectedShipId]
 
     setShipId(selectedShipId)
-    setBuildTime(selectedShip.size * 300)
+    setBuildTime((selectedShip.size * 60 * 15) / TIME_MODIFIER)
     setShipCost(selectedShip.cost)
     setShipEXP(Number(selectedShip.experienceRequired))
   }

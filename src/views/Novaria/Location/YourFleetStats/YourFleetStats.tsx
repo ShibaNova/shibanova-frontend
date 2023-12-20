@@ -69,7 +69,7 @@ const YourFleetStats = ({
   const canRecall = smallFleet && !Haven
   const canRecallShipyard = smallFleet && !atSavedShipyard
   const travelOnCooldown = currentTravelCooldown > new Date()
-  const atShipyard = useGetPlaceInfo(fleetLocation.X, fleetLocation.Y).shipyard
+  const atShipyard = useGetPlaceInfo(fleetLocation.X, fleetLocation.Y).shipyard === true
 
   const { onBoostTravel } = useBoostTravel()
   const handleBoostTravel = async () => {
