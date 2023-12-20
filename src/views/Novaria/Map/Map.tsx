@@ -317,7 +317,6 @@ const Map: React.FC = () => {
 
   return (
     <Page>
-      <UpdateBanner />
       <GameHeader
         location={fleetLocation}
         playerMineral={fleetMineral}

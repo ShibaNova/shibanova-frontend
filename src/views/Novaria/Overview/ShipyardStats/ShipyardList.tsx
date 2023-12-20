@@ -1,4 +1,5 @@
-import { useGetPlaceInfo, useGetTimeModifier } from 'hooks/useNovaria'
+import { TIME_MODIFIER } from 'config'
+import { useGetPlaceInfo } from 'hooks/useNovaria'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -23,7 +24,7 @@ const Header = styled.div`
 `
 
 const ShipyardList = ({ shipyard }) => {
-  const timeMod = useGetTimeModifier()
+  const timeMod = TIME_MODIFIER
   const cooldownTime = new Date((Number(shipyard.lastTakeoverTime) + 604800 / timeMod) * 1000)
   const inCooldownStage = Number(cooldownTime) > Number(new Date())
   const underAttack = Number(shipyard.status) !== 0

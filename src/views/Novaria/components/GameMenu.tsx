@@ -10,7 +10,7 @@ import flag from '../assets/menuFlag.png'
 const Frame = styled.div`
   display: flex;
   flex-direction: column;
-
+  align-items: flex-start;
   padding: 20px 0;
 
   margin-right: 15px;
@@ -63,7 +63,7 @@ const Flag = styled.div<{ active: boolean }>`
   flex-direction: column;
 
   position: absolute;
-  left: 45px;
+  left: 55px;
 
   opacity: ${(props) => (props.active ? 1 : 0)};
 
@@ -138,7 +138,7 @@ const GameMenu = ({ pageName }) => {
     <div>
       {open ? (
         <Frame>
-          <ToggleButton type="button" onClick={toggleViewMenu}>
+          <ToggleButton type="button" onClick={toggleViewMenu} style={{ padding: '0px 0px 0px 22px' }}>
             &lt;&lt;
           </ToggleButton>
           {MENU_DATA.map((item) => (

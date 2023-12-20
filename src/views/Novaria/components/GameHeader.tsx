@@ -2,13 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 import { Text, useWalletModal } from '@pancakeswap-libs/uikit'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
-import { usePriceNovaBusd } from 'state/hooks'
+import { usePriceNovaBusd, usePricePhxNova } from 'state/hooks'
 import { useGetPlayerBattleStatus, useGetPlayerExists } from 'hooks/useNovaria'
 import useTokenBalance from '../../../hooks/useTokenBalance'
-import { getNovaAddress } from '../../../utils/addressHelpers'
+import { getNovaAddress, getPHXAddress } from '../../../utils/addressHelpers'
 import { getBalanceNumber } from '../../../utils/formatBalance'
 import smallLogo from '../assets/novariaSmallLogo.png'
 import tokenLogo from '../assets/NOVA32.png'
+import phxLogo from '../assets/phoenix2.png'
 
 export interface HeaderProps {
   battleStatus: boolean
@@ -68,7 +69,10 @@ const GameHeader = ({ location, playerMineral, playerMineralCapacity, exp, playe
   const { account, connect, reset, status } = useWallet()
   const { onPresentConnectModal, onPresentAccountModal } = useWalletModal(connect, reset, account)
   const novaBalance = getBalanceNumber(useTokenBalance(getNovaAddress()))
-  const novaPrice = Number(usePriceNovaBusd()).toFixed(3)
+  const phxBalance = getBalanceNumber(useTokenBalance(getPHXAddress()))
+  const novaPriceRaw = usePriceNovaBusd()
+  const novaPrice = Number(novaPriceRaw).toFixed(3)
+  const phxPrice = (usePricePhxNova().toNumber() * novaPriceRaw.toNumber()).toFixed(3)
   const playerExists = useGetPlayerExists(account)
 
   const inBattle = useGetPlayerBattleStatus(account)
@@ -92,6 +96,16 @@ const GameHeader = ({ location, playerMineral, playerMineralCapacity, exp, playe
           )}
         </Text>
         <Text glowing>
+          LOCATION: ({location.X}, {location.Y})
+        </Text>
+        <Text glowing>
+          MINERAL:{' '}
+          <span style={{ color: 'gold' }}>
+            {(playerMineral / 10 ** 18).toFixed(2)} (
+            {playerMineralCapacity > 0 ? ((playerMineral / playerMineralCapacity) * 100).toFixed(1) : '0.0'}%)
+          </span>
+        </Text>
+        <Text glowing>
           {playerExists && (
             <span>
               EXP: <span style={{ color: 'gold' }}>{exp}</span>
@@ -108,14 +122,13 @@ const GameHeader = ({ location, playerMineral, playerMineralCapacity, exp, playe
           </a>
         </Text>
         <Text glowing>
-          MINERAL:{' '}
-          <span style={{ color: 'gold' }}>
-            {(playerMineral / 10 ** 18).toFixed(2)} (
-            {playerMineralCapacity > 0 ? ((playerMineral / playerMineralCapacity) * 100).toFixed(1) : '0.0'}%)
-          </span>
-        </Text>
-        <Text glowing>
-          LOCATION: ({location.X}, {location.Y})
+          <a
+            href="https://swap.novadex.finance/#/swap?outputCurrency=0x0F925153230C836761F294eA0d81Cef58E271Fb7"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            PHX: <span style={{ color: 'gold' }}>{phxBalance.toFixed(2)} </span> (+)
+          </a>
         </Text>
         <div style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
           <a
@@ -131,6 +144,16 @@ const GameHeader = ({ location, playerMineral, playerMineralCapacity, exp, playe
             rel="noreferrer noopener"
           >
             <Text glowing>{novaPrice}</Text>
+          </a>
+        </div>
+        <div style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+          <img src={phxLogo} alt="phx logo" style={{ height: 30, margin: 5 }} />
+          <a
+            href="https://coinbrain.com/coins/bnb-0x0f925153230c836761f294ea0d81cef58e271fb7"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <Text glowing>{phxPrice}</Text>
           </a>
         </div>
         {!connected && <ConnectButton onClick={onPresentConnectModal}>Connect Wallet</ConnectButton>}

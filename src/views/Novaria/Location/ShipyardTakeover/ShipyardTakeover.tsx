@@ -26,7 +26,7 @@ const Disabled = styled.button`
 `
 
 const ShpiyardTakeover = ({ shipyard, placeX, placeY, refinery, account, currentLocation, timeMod }) => {
-  const cooldownTime = new Date((Number(shipyard.lastTakeoverTime) + 604800 / timeMod) * 1000)
+  const cooldownTime = new Date((Number(shipyard.lastTakeoverTime) + (60 * 60 * 24 * 28) / timeMod) * 1000)
   const inCooldownStage = Number(cooldownTime) > Number(new Date())
   const underDeadline = Number(new Date(shipyard.takeoverDeadline * 1000)) > Number(new Date())
   const underAttack = Number(shipyard.status) !== 0

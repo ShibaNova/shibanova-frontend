@@ -20,7 +20,6 @@ import {
   useGetMiningCapacity,
   useGetShipClasses,
   useGetShips,
-  useGetTimeModifier,
   useGetPlayerInBattle,
   useGetPlayerExists,
   useGetFleetMineralRefined,
@@ -28,9 +27,9 @@ import {
 import { ConnectedAccountContext } from 'App'
 import { Text } from '@pancakeswap-libs/uikit'
 import { io } from 'socket.io-client'
+import { TIME_MODIFIER } from 'config'
 import GameHeader from '../components/GameHeader'
 import GameMenu from '../components/GameMenu'
-import ChatButton from '../components/ChatBox/ChatButton'
 import LocationCard from './LocationCard'
 import OpenBattlesTable from './OpenBattlesTable'
 import PlayersTable from './PlayersTable'
@@ -90,7 +89,7 @@ const Content = styled.div`
   margin-right: auto;
 `
 
-const OpenBattlesCard = styled.div<{ refinery: boolean }>`
+const OpenBattlesCard = styled.div<{ refinery: boolean; shipyard: boolean }>`
   background-image: url('/images/novaria/locationTableBorder.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -100,7 +99,7 @@ const OpenBattlesCard = styled.div<{ refinery: boolean }>`
   min-height: 200px;
   min-width: 350px
   max-width: 450px;
-  display: ${(props) => props.refinery && 'none'}; 
+  display: ${(props) => props.refinery && props.shipyard && 'none'}; 
   
   ${({ theme }) => theme.mediaQueries.md} {
     min-width: 450px;
@@ -245,7 +244,7 @@ const Location: React.FC = () => {
 
   const currentLocation = Number(fleetLocation.X) === Number(placeX) && Number(fleetLocation.Y) === Number(placeY)
   const openbattles = false
-  const timeMod = useGetTimeModifier()
+  const timeMod = TIME_MODIFIER
 
   const playerInBattle = useGetPlayerInBattle(account)
 
@@ -266,7 +265,6 @@ const Location: React.FC = () => {
 
   return (
     <Page>
-      <UpdateBanner />
       <GameHeader
         location={fleetLocation}
         playerMineral={fleetMineral}
@@ -331,7 +329,7 @@ const Location: React.FC = () => {
                 </MoveControls>
               </InputControl>
 
-              <OpenBattlesCard refinery={placeInfo.refinery}>
+              <OpenBattlesCard refinery={placeInfo.refinery} shipyard={placeInfo.shipyard}>
                 <Header>OPEN BATTLES</Header>
                 <OpenBattlesTable
                   battles={battlesAtLocation}
@@ -348,6 +346,7 @@ const Location: React.FC = () => {
                   players={fleetsAtLocation}
                   currentLocation={currentLocation}
                   refinery={placeInfo.refinery}
+                  shipyard={placeInfo.shipyard}
                 />
               </PlayersCard>
             </CenterCol>
@@ -408,7 +407,6 @@ const Location: React.FC = () => {
             </RightCol>
           </Content>
         </BodyWrapper>
-        {/* <ChatButton playerName={playerName} playerExists={playerExists} /> */}
       </Row>
     </Page>
   )

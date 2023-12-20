@@ -33,8 +33,8 @@ const ShipCardModal: React.FC<PlayerModalProps> = ({ shipclass, onDismiss }) => 
       {shipclass === 'P.U.P.' && <Img src={moleCard} alt="PUP" />}
       {shipclass === 'Firefly' && <Img src={fireflyCard} alt="firefly" />}
       {shipclass === 'Viper Swarm' && <Img src={viperSwarmCard} alt="viper swarm" />}
-      {shipclass === 'Gorian' && <Img src={gorianCard} alt="gorian" />}
       {shipclass === 'Lancer' && <Img src={lancerCard} alt="lancer" />}
+      {shipclass === 'Gorian' && <Img src={gorianCard} alt="gorian" />}
       {shipclass === 'Unknown' && <Img src={unknownCard} alt="coming soon" />}
     </Modal>
   )
