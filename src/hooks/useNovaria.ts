@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import novaABI from 'config/abi/nova.json'
+import phxABI from 'config/abi/phoenix.json'
 import fleetABI from 'config/abi/Fleet.json'
 import mapABI from 'config/abi/Map.json'
 import treasuryABI from 'config/abi/Treasury.json'
@@ -8,6 +9,7 @@ import ReferralsABI from 'config/abi/Referrals.json'
 import { getContract } from 'utils/web3'
 import {
   getNovaAddress,
+  getPHXAddress,
   getFleetAddress,
   getMapAddress,
   getTreasuryAddress,
@@ -46,6 +48,7 @@ import useRefresh from './useRefresh'
 const fleetContract = getContract(fleetABI, getFleetAddress())
 const mapContract = getContract(mapABI, getMapAddress())
 const novaContract = getContract(novaABI, getNovaAddress())
+const phxContract = getContract(phxABI, getPHXAddress())
 const treasuryContract = getContract(treasuryABI, getTreasuryAddress())
 const referralsContract = getContract(ReferralsABI, getReferralsAddress())
 
@@ -865,20 +868,6 @@ export const useGetCurrentMiningCooldown = (fleet: string) => {
   return currentCooldown
 }
 
-export const useGetTimeModifier = () => {
-  const { fastRefresh } = useRefresh()
-  const [TimeModifier, setTimeModifier] = useState(0)
-
-  useEffect(() => {
-    async function fetch() {
-      // const data = await mapContract.methods.getTimeModifier().call()
-      setTimeModifier(1)
-    }
-    fetch()
-  }, [fastRefresh])
-  return TimeModifier
-}
-
 // *** Nova token contract ***
 // used for approvals
 
@@ -894,6 +883,21 @@ export const useApprove = () => {
     [account, useNovaContract],
   )
   return { onClick: handleApprove }
+}
+
+export const usePhxGetAllowance = (contract) => {
+  const { account } = useWallet()
+  const { fastRefresh } = useRefresh()
+  const [allowance, setAllowance] = useState(null)
+
+  useEffect(() => {
+    async function fetch() {
+      const data = await phxContract.methods.allowance(account, contract).call()
+      setAllowance(data)
+    }
+    fetch()
+  }, [fastRefresh, account, contract])
+  return allowance
 }
 
 export const useGetAllowance = (contract) => {

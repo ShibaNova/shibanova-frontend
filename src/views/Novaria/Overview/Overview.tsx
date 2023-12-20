@@ -33,7 +33,6 @@ import UpdateBanner from '../components/Banner'
 import YourFleetStats from '../Location/YourFleetStats'
 import OpenBattlesTable from '../Location/OpenBattlesTable'
 import ShipyardList from './ShipyardStats/ShipyardList'
-import ChatButton from '../components/ChatBox/ChatButton'
 import logo from '../assets/novariaLogoMain.png'
 
 const Page = styled.div`
@@ -277,7 +276,6 @@ const Overview: React.FC = () => {
 
   return (
     <Page>
-      <UpdateBanner />
       <GameHeader
         location={fleetLocation}
         playerMineral={fleetMineral}
@@ -309,16 +307,6 @@ const Overview: React.FC = () => {
                   <br />
                   <br />
                   Good Luck!
-                  <br />
-                  <br />
-                  <a
-                    href="https://docs.novadex.finance/shibanova-documentation/legend-of-novaria"
-                    rel="noopener noreferrer"
-                    target="blank"
-                    style={{ color: '#5affff' }}
-                  >
-                    [LEARN MORE]
-                  </a>
                 </Text>
 
                 <RefSection>

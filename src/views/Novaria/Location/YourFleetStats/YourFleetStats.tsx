@@ -7,9 +7,11 @@ import {
   useGetSavedSpawnPlace,
   useBoostTravel,
   useGetCostMod,
+  useGetPlaceInfo,
 } from 'hooks/useNovaria'
 import showCountdown from 'utils/countdownTimer'
 import { getWeb3 } from 'utils/web3'
+import { BATTLE_COOLDOWN, TIME_MODIFIER } from 'config'
 
 const Stats = styled.div`
   display: flex;
@@ -55,7 +57,7 @@ const YourFleetStats = ({
 
   const costMod = useGetCostMod()
   const battleID = Number(playerBattleInfo.battleId)
-  const resolvedTime = Number(useGetBattle(battleID).resolvedTime) + 900
+  const resolvedTime = Number(useGetBattle(battleID).resolvedTime) + BATTLE_COOLDOWN / TIME_MODIFIER
   const battleCooldown = showCountdown(new Date(Number(resolvedTime) * 1000))
   const miningCooldown = showCountdown(currentMiningCooldown)
   const travelCooldown = showCountdown(currentTravelCooldown)
@@ -67,6 +69,7 @@ const YourFleetStats = ({
   const canRecall = smallFleet && !Haven
   const canRecallShipyard = smallFleet && !atSavedShipyard
   const travelOnCooldown = currentTravelCooldown > new Date()
+  const atShipyard = useGetPlaceInfo(fleetLocation.X, fleetLocation.Y).shipyard === true
 
   const { onBoostTravel } = useBoostTravel()
   const handleBoostTravel = async () => {
@@ -147,7 +150,7 @@ const YourFleetStats = ({
       </Stat>
       {travelOnCooldown ? (
         <Button style={{ margin: '0px' }} onClick={() => handleBoostTravel()}>
-          {!pending ? `50% Time Boost - ${((fleetSize * 0.02) / costMod).toFixed(2)} PHX` : 'pending'}
+          {!pending ? `50% Boost - ${((fleetSize * 0.01) / costMod).toFixed(2)} PHX` : 'pending...'}
         </Button>
       ) : (
         ''
@@ -156,7 +159,7 @@ const YourFleetStats = ({
         <div>BATTLE</div>
         <div>{battleCooldown}</div>
       </Stat>
-      {!atSavedShipyard && (
+      {!atSavedShipyard && atShipyard && (
         <Button style={{ margin: '0px' }} onClick={sendSetRecall}>
           {!pending ? 'SET SHIPYARD RECALL POINT' : 'pending'}
         </Button>

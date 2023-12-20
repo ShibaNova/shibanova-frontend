@@ -19,13 +19,19 @@ const Cell = styled.div`
   text-align: right;
 `
 
-const PlayersTableRow = ({ account, refinery, player, currentLocation }) => {
+const PlayersTableRow = ({ account, refinery, shipyard, player, currentLocation }) => {
   const fleetSize = useGetFleetSize(player)
   const fleetPower = useGetAttackPower(player)
   const name = useGetNameByAddress(player)
   const mineral = Number(useGetFleetMineral(player))
   const [handleClick] = useModal(
-    <PlayerModal account={account} refinery={refinery} player={player} currentLocation={currentLocation} />,
+    <PlayerModal
+      account={account}
+      refinery={refinery}
+      shipyard={shipyard}
+      player={player}
+      currentLocation={currentLocation}
+    />,
   )
 
   return (

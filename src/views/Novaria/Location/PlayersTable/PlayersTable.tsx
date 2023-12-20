@@ -32,7 +32,7 @@ const TableContent = styled.div<{ isRefinery: boolean }>`
   }
 `
 
-const PlayersTable = ({ account, refinery, players, currentLocation }) => {
+const PlayersTable = ({ account, refinery, shipyard, players, currentLocation }) => {
   return (
     <Body>
       <div>
@@ -48,6 +48,7 @@ const PlayersTable = ({ account, refinery, players, currentLocation }) => {
           <PlayersTableRow
             key={player}
             refinery={refinery}
+            shipyard={shipyard}
             account={account}
             player={player}
             currentLocation={currentLocation}

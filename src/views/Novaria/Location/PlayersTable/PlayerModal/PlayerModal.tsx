@@ -13,6 +13,7 @@ import {
   useGetShips,
   useGetBattle,
 } from 'hooks/useNovaria'
+import { BATTLE_COOLDOWN, TIME_MODIFIER } from 'config'
 import ModalActions from '../../../components/NovariaModalActions'
 import NovariaModal from '../../../components/NovariaModal'
 
@@ -36,13 +37,21 @@ const Child = styled.div`
 
 interface PlayerModalProps {
   refinery: boolean
+  shipyard: boolean
   account: string
   player: string
   currentLocation: boolean
   onDismiss?: () => void
 }
 
-const PlayerModal: React.FC<PlayerModalProps> = ({ account, refinery, player, currentLocation, onDismiss }) => {
+const PlayerModal: React.FC<PlayerModalProps> = ({
+  account,
+  refinery,
+  shipyard,
+  player,
+  currentLocation,
+  onDismiss,
+}) => {
   const ships = useGetShips(player)
   const shipClasses = useGetShipClasses()
   const playerInfo = useGetPlayer(player)
@@ -51,7 +60,6 @@ const PlayerModal: React.FC<PlayerModalProps> = ({ account, refinery, player, cu
   const playerBattleStatus = playerInfo.battleStatus.toString()
   const fleetLocation = useGetFleetLocation(player)
   const fleetSize = useGetFleetSize(player)
-  const yourFleetSize = useGetFleetSize(account)
   const fleetPower = useGetAttackPower(player)
   const fleetMineral = useGetFleetMineral(player)
   const fleetMaxMineral = useGetMaxMineralCapacity(player)
@@ -60,19 +68,16 @@ const PlayerModal: React.FC<PlayerModalProps> = ({ account, refinery, player, cu
   const accountAddress = account !== null ? account : ''
   const isPlayer = player.toString() === accountAddress.toString()
 
-  const canAttack = yourFleetSize >= fleetSize / 4 && yourFleetSize / 4 <= fleetSize
-  console.log('can attack', canAttack)
-
   const playerBattleInfo = useGetPlayerBattle(account)
   const battleID = Number(playerBattleInfo.battleId)
   const inBattle = Number(playerBattleInfo.battleStatus) !== 0
   console.log('inbattle', inBattle)
-  const resolvedTime = Number(useGetBattle(battleID).resolvedTime) + 900
+  const resolvedTime = Number(useGetBattle(battleID).resolvedTime) + BATTLE_COOLDOWN / TIME_MODIFIER
   const battleCooldownActive = new Date(Number(resolvedTime) * 1000) > new Date()
 
   const targetplayerBattleInfo = useGetPlayerBattle(player)
   const targetbattleID = Number(targetplayerBattleInfo.battleId)
-  const targetresolvedTime = Number(useGetBattle(targetbattleID).resolvedTime) + 900
+  const targetresolvedTime = Number(useGetBattle(targetbattleID).resolvedTime) + BATTLE_COOLDOWN / TIME_MODIFIER
   const targetbattleCooldownActive = new Date(Number(targetresolvedTime) * 1000) > new Date()
 
   const { onEnterBattle } = useEnterBattle()
@@ -129,11 +134,9 @@ const PlayerModal: React.FC<PlayerModalProps> = ({ account, refinery, player, cu
           {playerBattleStatus === '2' && 'Defending'}
         </Child>
       </div>
-      {!inBattle && !isPlayer && currentLocation && !refinery && !battleCooldownActive && (
+      {!inBattle && !isPlayer && currentLocation && !(refinery && shipyard) && !battleCooldownActive && (
         <ModalActions>
-          {((playerBattleStatus === '0' && canAttack) || playerBattleStatus !== '0') && !targetbattleCooldownActive && (
-            <Button onClick={() => handleEnterBattle(player, 'attack')}>ATTACK</Button>
-          )}
+          {!targetbattleCooldownActive && <Button onClick={() => handleEnterBattle(player, 'attack')}>ATTACK</Button>}
           {playerBattleStatus !== '0' && <Button onClick={() => handleEnterBattle(player, 'defend')}>DEFEND</Button>}
         </ModalActions>
       )}

@@ -15,7 +15,6 @@ import {
   useGetFleetLocation,
   useGetFleetMineral,
   useGetCostMod,
-  useGetTimeModifier,
   useGetPlayer,
   useSetShipyardName,
   useSetShipyardFee,
@@ -26,10 +25,10 @@ import {
   useGetPlayerExists,
 } from 'hooks/useNovaria'
 import { ConnectedAccountContext } from 'App'
+import { TIME_MODIFIER } from 'config'
 import GameHeader from '../components/GameHeader'
 import GameMenu from '../components/GameMenu'
 import ShipCardModal from './ShipCardModal'
-import ChatButton from '../components/ChatBox/ChatButton'
 import moleCard from '../assets/moleCard.png'
 import viperCard from '../assets/viperCard.png'
 import unknownCard from '../assets/newShipCard.png'
@@ -39,10 +38,10 @@ import lancerCard from '../assets/lancerSmall.png'
 import viperSwarmCard from '../assets/viperSwarm.png'
 import YourFleetStats from '../Location/YourFleetStats'
 import BattleStatus from '../Location/BattleStatus'
-import BodyWrapper from '../components/BodyWrapper'
 import BuildQueue from './BuildQueue'
 import { EmptyShipyardStats, ShipyardStats } from './ShipyardStats'
 import UpdateBanner from '../components/Banner'
+import ShipyardBodyWrapper from '../components/ShipyardBodyWrapper'
 
 const Page = styled.div`
   font-size: 15px;
@@ -61,10 +60,11 @@ const PageRow = styled.div`
 `
 
 // imported Body Wrapper wraps leftCol and rightCol
+// max-width: 95vw;
 const LeftCol = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 95vw;
+  max-width: 60vw;
 
   ${({ theme }) => theme.mediaQueries.xl} {
     max-width: 80vw;
@@ -76,7 +76,7 @@ const RightCol = styled.div`
   margin: 10px;
   display: flex;
   flex: 1;
-  min-width: 11vw;
+  min-width: 16vw;
 `
 
 // left col wraps shipclassmenu and buildrow
@@ -295,10 +295,10 @@ const Shipyard = () => {
   const [handleViperClick] = useModal(<ShipCardModal shipclass="Viper" />)
   const [handleMoleClick] = useModal(<ShipCardModal shipclass="P.U.P." />)
   const [handleFireflyClick] = useModal(<ShipCardModal shipclass="Firefly" />)
-  const [handleGorianClick] = useModal(<ShipCardModal shipclass="Gorian" />)
-  const [handleLancerClick] = useModal(<ShipCardModal shipclass="Lancer" />)
-  const [handleUnknownClick] = useModal(<ShipCardModal shipclass="Unknown" />)
   const [handleViperSwarm] = useModal(<ShipCardModal shipclass="Viper Swarm" />)
+  const [handleLancerClick] = useModal(<ShipCardModal shipclass="Lancer" />)
+  const [handleGorianClick] = useModal(<ShipCardModal shipclass="Gorian" />)
+  const [handleUnknownClick] = useModal(<ShipCardModal shipclass="Unknown" />)
 
   const handleShipyardChange = (option) => {
     const selectedShipyardId = option.value
@@ -316,7 +316,7 @@ const Shipyard = () => {
     const selectedShip = shipClasses[selectedShipId]
 
     setShipId(selectedShipId)
-    setBuildTime(selectedShip.size * 300)
+    setBuildTime((selectedShip.size * 60 * 15) / TIME_MODIFIER)
     setShipCost(selectedShip.cost)
     setShipEXP(Number(selectedShip.experienceRequired))
   }
@@ -324,7 +324,7 @@ const Shipyard = () => {
   const buildCost = (shipCost * shipAmount + (shipyardFee / 100) * shipCost * shipAmount) / costMod / 10 ** 18
   const { onBuild } = useBuildShips(account)
 
-  const timeMod = useGetTimeModifier()
+  const timeMod = TIME_MODIFIER
 
   const handleBuild = async () => {
     setPendingTx(true)
@@ -384,7 +384,6 @@ const Shipyard = () => {
 
   return (
     <Page>
-      <UpdateBanner />
       <GameHeader
         location={fleetLocation}
         playerMineral={fleetMineral}
@@ -395,7 +394,7 @@ const Shipyard = () => {
       <PageRow>
         <GameMenu pageName="shipyard" />
 
-        <BodyWrapper>
+        <ShipyardBodyWrapper>
           {/* <ChatButton playerExists={playerExists} playerName={playerName} /> */}
           <LeftCol>
             <ShipClassMenu>
@@ -403,8 +402,8 @@ const Shipyard = () => {
               <ShipClassCard src={moleCard} alt="mole" role="button" onClick={handleMoleClick} />
               <ShipClassCard src={fireflyCard} alt="firefly" role="button" onClick={handleFireflyClick} />
               <ShipClassCard src={viperSwarmCard} alt="viper swarm" role="button" onClick={handleViperSwarm} />
-              <ShipClassCard src={gorianCard} alt="gorian" role="button" onClick={handleGorianClick} />
               <ShipClassCard src={lancerCard} alt="lancer" role="button" onClick={handleLancerClick} />
+              <ShipClassCard src={gorianCard} alt="gorian" role="button" onClick={handleGorianClick} />
               <ShipClassCard src={unknownCard} alt="coming soon" role="button" onClick={handleUnknownClick} />
             </ShipClassMenu>
 
@@ -522,7 +521,7 @@ const Shipyard = () => {
               </ShipyardEditor>
             </FleetMenu>
           </RightCol>
-        </BodyWrapper>
+        </ShipyardBodyWrapper>
       </PageRow>
     </Page>
   )

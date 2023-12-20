@@ -9,6 +9,7 @@ import {
   useGetCostMod,
   useAddReferral,
   useCheckReferralStatus,
+  usePhxGetAllowance,
 } from 'hooks/useNovaria'
 import { getFleetAddress, getMapAddress, getTreasuryAddress } from 'utils/addressHelpers'
 import ReactGA from 'react-ga'
@@ -23,7 +24,7 @@ const Button = styled.button`
   align-self: center;
   padding: 0.5rem 1.25rem;
   font-family: sans-serif;
-  font-size: 1.25rem;
+  font-size: 1rem;
   text-decoration: none;
   text-shadow: -2px 4px 4px #091243, 0 0 10px #00d0ff, inset 1px 1px 1px white;
   color: #1fffff;
@@ -62,7 +63,11 @@ const StartMenu = () => {
   const fleetContract = getFleetAddress()
   const mapContract = getMapAddress()
   const allowanceFleet = useGetAllowance(fleetContract)
+  const allowancePhxFleet = usePhxGetAllowance(fleetContract)
+  const allowancePhxMap = usePhxGetAllowance(mapContract)
   const fleetContractApproved = allowanceFleet === null ? null : allowanceFleet > 0
+  const phxFleetContractApproved = allowancePhxFleet === null ? null : allowancePhxFleet > 0
+  const phxMapContractApproved = allowancePhxMap === null ? null : allowancePhxMap > 0
 
   const treasuryContract = getTreasuryAddress()
   const allowanceTreasury = useGetAllowance(treasuryContract)
@@ -139,14 +144,14 @@ const StartMenu = () => {
     sendApproveTx(fleetContract)
   }
 
-  const handlePHXFleetApprove = () => {
+  const handlePhxFleetApprove = () => {
     if (pendingApprove) {
       return
     }
     sendPHXApproveTx(fleetContract)
   }
 
-  const handlePHXMapApprove = () => {
+  const handlePhxMapApprove = () => {
     if (pendingApprove) {
       return
     }
@@ -170,13 +175,19 @@ const StartMenu = () => {
     history.push('/overview')
   }
 
-  if (fleetContractApproved === null || treasuryContractApproved === null) {
+  if (
+    fleetContractApproved === null ||
+    treasuryContractApproved === null ||
+    phxFleetContractApproved === null ||
+    phxMapContractApproved === null
+  ) {
     return null
   }
 
   return (
     <Body>
-      {(fleetContractApproved && treasuryContractApproved) || 'Step 1 - Approve game contracts'}
+      {(fleetContractApproved && treasuryContractApproved && phxFleetContractApproved && phxMapContractApproved) ||
+        'Step 1 - Approve game contracts'}
       <br />
       {fleetContractApproved || (
         <Button onClick={handleFleetApprove}>
@@ -186,6 +197,17 @@ const StartMenu = () => {
       {treasuryContractApproved || (
         <Button onClick={handleTreasuryApprove}>
           {!pendingApprove ? 'Approve Treasury Contract' : 'pending approval...'}
+        </Button>
+      )}
+      <br />
+      {phxFleetContractApproved || (
+        <Button onClick={handlePhxFleetApprove}>
+          {!pendingApprove ? 'Approve PHX for Fleet Contract' : 'pending approval...'}
+        </Button>
+      )}
+      {phxMapContractApproved || (
+        <Button onClick={handlePhxMapApprove}>
+          {!pendingApprove ? 'Approve PHX for Map Contract' : 'pending approval...'}
         </Button>
       )}
 
@@ -202,7 +224,16 @@ const StartMenu = () => {
             onChange={(e) => setName(e.target.value)}
             style={{ marginTop: 5 }}
           />
-          <Button onClick={sendInsertCoinTx} disabled={!fleetContractApproved || !treasuryContractApproved || pending}>
+          <Button
+            onClick={sendInsertCoinTx}
+            disabled={
+              !fleetContractApproved ||
+              !treasuryContractApproved ||
+              !phxFleetContractApproved ||
+              !phxMapContractApproved ||
+              pending
+            }
+          >
             {!pending ? 'Set Player Name' : 'pending...'}
           </Button>
           <div>
@@ -213,13 +244,6 @@ const StartMenu = () => {
         ''
       )}
       {playerExists ? <Button onClick={handleStartGameClick}>Start Game</Button> : ''}
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <div>Approve the Map and Fleet contract to spend PHX to use BOOSTS</div>
-        <div style={{ flexDirection: 'row', gap: '4px' }}>
-          <Button onClick={handlePHXFleetApprove}>{!pendingApprove ? 'Approve Fleet' : 'pending approval...'}</Button>
-          <Button onClick={handlePHXMapApprove}>{!pendingApprove ? 'Approve Map' : 'pending approval...'}</Button>
-        </div>
-      </div>
     </Body>
   )
 }

@@ -79,16 +79,10 @@ const ImgCountdown = styled.div`
 `
 
 const NovariaCard = ({ title }: { title: string }) => {
-  const launchCountdown = showCountdown(new Date(1702746000000))
-
   return (
     <Body id={title}>
       <a href="/legend-of-novaria" style={{ display: 'flex', marginTop: 'auto' }}>
-        <ImgCountdown>
-          The Battle Continues In:
-          <br />
-          {launchCountdown}
-        </ImgCountdown>
+        <ImgCountdown>READY TO PLAY</ImgCountdown>
       </a>
       {/* <VideoModal /> */}
     </Body>
