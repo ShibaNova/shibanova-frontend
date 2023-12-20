@@ -11,4 +11,4 @@ export const BSC_BLOCK_TIME = 3
 
 export const NOVA_POOL_PID = 0
 export const BATTLE_COOLDOWN = 60 * 60 * 18
-export const TIME_MODIFIER = 5000
+export const TIME_MODIFIER = 1

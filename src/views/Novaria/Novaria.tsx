@@ -110,8 +110,8 @@ const Novaria: React.FC = () => {
                 <ExternalButton type="button">Official Discord</ExternalButton>
               </a>
               <br />
-              <a href="/overview" rel="noopener noreferrer" target="blank">
-                <ExternalButton type="button">VIEW GAME</ExternalButton>
+              <a href="/map" rel="noopener noreferrer" target="blank">
+                <ExternalButton type="button">VIEW MAP</ExternalButton>
               </a>
             </ButtonRow>
           </GameInfo>
