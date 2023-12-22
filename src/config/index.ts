@@ -10,5 +10,5 @@ export const BLOCKS_PER_YEAR = new BigNumber(10512000)
 export const BSC_BLOCK_TIME = 3
 
 export const NOVA_POOL_PID = 0
-export const BATTLE_COOLDOWN = 60 * 60 * 18
+export const BATTLE_COOLDOWN = 60 * 60 * 24
 export const TIME_MODIFIER = 1
