@@ -149,9 +149,14 @@ const YourFleetStats = ({
         <div>{travelCooldown}</div>
       </Stat>
       {travelOnCooldown ? (
-        <Button style={{ margin: '0px' }} onClick={() => handleBoostTravel()}>
+        <button
+          className="glow-on-hover"
+          type="button"
+          style={{ margin: '0px', width: '100%' }}
+          onClick={() => handleBoostTravel()}
+        >
           {!pending ? `50% Boost - ${((fleetSize * 0.01) / costMod).toFixed(2)} PHX` : 'pending...'}
-        </Button>
+        </button>
       ) : (
         ''
       )}
