@@ -11,7 +11,7 @@ const SearchFarm = styled.div`
   > input {
     background: transparent;
     border: 1px solid #5affff;
-    border-radius: 16px;
+    border-radius: 4px;
     height: 34px;
     padding: 4px;
     font-size: 16px;

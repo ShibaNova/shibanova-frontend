@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import showCountdown from 'utils/countdownTimer'
 import { useBoostProduction, useClaimShips, useGetSpaceDock } from 'hooks/useNovaria'
 import { ConnectedAccountContext } from 'App'
@@ -108,7 +108,7 @@ const CountdownButton = styled.button`
   width: 131px;
   text-decoration: none;
   color: #8c8c8c;
-  border: 1px solid #8c8c8c;
+  border: none;
   border-radius: 0px;
   background-color: transparent;
 `
@@ -159,12 +159,14 @@ const BuildQueue = ({ fleetLocation }) => {
 
   // hack, should get size automatically
   const getShipSize = (shipClassId) => {
-    return (shipClassId === '0' && 1) || 
-    (shipClassId === '1' && 3) || 
-    (shipClassId === '2' && 5) || 
-    (shipClassId === '3' && 1) || 
-    (shipClassId === '4' && 8) || 
-    (shipClassId === '5' && 20)
+    return (
+      (shipClassId === '0' && 1) ||
+      (shipClassId === '1' && 3) ||
+      (shipClassId === '2' && 5) ||
+      (shipClassId === '3' && 1) ||
+      (shipClassId === '4' && 8) ||
+      (shipClassId === '5' && 20)
+    )
   }
 
   const handleClaim = async (claimId) => {
@@ -208,7 +210,14 @@ const BuildQueue = ({ fleetLocation }) => {
       <QueueRow>
         {spaceDocks.map((dock) => {
           return (
-            <ShipCard shipclass={dock.shipClassId}>
+            <ShipCard key={dock.id} shipclass={dock.shipClassId}>
+              {dock.completionTime * 1000 > Number(new Date()) && (
+                <button type="button" className="glow-on-hover" onClick={() => handleBoost(spaceDocks.indexOf(dock))}>
+                  {!pending
+                    ? `50% Boost - ${(dock.amount * getShipSize(dock.shipClassId) * 0.05).toFixed(2)} PHX`
+                    : `pending...`}
+                </button>
+              )}
               <ShipCardStats>
                 <Row style={{ justifyContent: 'space-between' }}>
                   <Item>LOCATION &nbsp;</Item>
@@ -252,12 +261,6 @@ const BuildQueue = ({ fleetLocation }) => {
                 {dock.completionTime * 1000 > Number(new Date()) && (
                   <OuterDivFiftyOff>
                     <CountdownButton>{showCountdown(new Date(dock.completionTime * 1000))}</CountdownButton>
-                    <ClaimButton
-                      style={{ width: '131px', margin: '5px 0px', padding: '0.25rem 0rem' }}
-                      onClick={() => handleBoost(spaceDocks.indexOf(dock))}
-                    >
-                      {!pending ? `50% Boost - ${(dock.amount * getShipSize(dock.shipClassId) * 0.05).toFixed(2)} PHX` : `pending...`}
-                    </ClaimButton>
                   </OuterDivFiftyOff>
                 )}
               </ClaimControls>
