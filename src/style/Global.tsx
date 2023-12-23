@@ -60,11 +60,11 @@ const GlobalStyle = createGlobalStyle<{
     }
 
     .glow-on-hover {
-      font-size: 0.75rem;
+      font-size: .8rem;
       font-weight: bold;
       margin: 0 0 12px 0px;
       width: 187px;
-      height: 20px;
+      height: 24px;
       border: none;
       outline: none;
       color: #000;
