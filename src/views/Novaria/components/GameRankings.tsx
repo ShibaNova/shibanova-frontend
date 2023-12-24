@@ -126,7 +126,7 @@ const GameRankings = ({ exp, playerName, playerSize, playerAttack, playerTotalMi
         <LeftSpan>#</LeftSpan>
         <LeftSpan>Name</LeftSpan>
         <span>Exp</span>
-        <span>Minerals</span>
+        <span>Mineral</span>
       </LabelRow>
       <ScrollSection>
         {rankings
