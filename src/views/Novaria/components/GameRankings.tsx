@@ -1,11 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { io } from 'socket.io-client'
-import PlayerModal from '../Location/PlayersTable/PlayerModal'
+import fleetABI from 'config/abi/Fleet.json'
+import { getContract } from 'utils/web3'
+import { getFleetAddress } from 'utils/addressHelpers'
 
-const socket = io('https://radiant-taiga-26464.herokuapp.com/', {
-  autoConnect: false,
-})
+// import PlayerModal from '../Location/PlayersTable/PlayerModal'
 
 const Wrapper = styled.div`
   border: 1px solid #5affff;
@@ -77,36 +76,47 @@ const ScrollSection = styled.div`
   }
 `
 
+interface IPlayer {
+  name: string
+  address: string
+  experience: number
+  battleId: number
+  mineral: number
+  battleStatus: number
+}
+
 const GameRankings = ({ exp, playerName, playerSize, playerAttack, playerTotalMineral, playerLocation }) => {
   const [rankings, setRankings] = useState([])
   const [rankingsByExp, setRankingsByExp] = useState([])
+  const numberOfPlayers = 100
 
   useEffect(() => {
-    socket.connect()
-    socket.on('connect', () => {
-      console.log(`socket connected: ${socket.connected}`)
-    })
-  }, [])
+    const playerList: IPlayer[] = []
+    const fleetContract = getContract(fleetABI, getFleetAddress())
 
-  useEffect(() => {
-    const userData = {
-      name: playerName,
-      size: playerSize,
-      attack: playerAttack,
-      experience: exp,
-      totalMineral: playerTotalMineral,
-      location: `(${playerLocation.X},${playerLocation.Y})`,
+    async function fetchPlayer(playerId) {
+      const data = await fleetContract.methods.players(playerId).call()
+      return data
     }
-    if (playerName !== '') {
-      socket.emit('send_rankings', userData)
-      console.log(`sent user data: ${userData}`)
-    }
-  }, [playerName, exp, playerAttack, playerSize, playerTotalMineral, playerLocation.X, playerLocation.Y])
 
-  useEffect(() => {
-    socket.on('receive_rankings', (data) => {
-      setRankingsByExp(data.sort((a, b) => (Number(a.experience) > Number(b.experience) ? -1 : 1)))
-    })
+    async function fetchPlayers() {
+      for (let i = 0; i < numberOfPlayers; i++) {
+        fetchPlayer(i)
+          .then((player: IPlayer) => {
+            playerList.push({
+              ...player,
+              experience: Number(player.experience),
+              battleId: Number(player.battleId),
+              mineral: Number(player.mineral) / 10 ** 18,
+              battleStatus: Number(player.battleStatus),
+            })
+          })
+          .catch((e) => console.error(e))
+      }
+      setRankings(playerList)
+    }
+
+    fetchPlayers()
   }, [])
 
   return (
@@ -116,25 +126,21 @@ const GameRankings = ({ exp, playerName, playerSize, playerAttack, playerTotalMi
         <LeftSpan>#</LeftSpan>
         <LeftSpan>Name</LeftSpan>
         <span>Exp</span>
-        <span>Size</span>
-        <span>Atk</span>
-        <span>Refined</span>
-        <span>Coords</span>
+        <span>Mineral</span>
       </LabelRow>
       <ScrollSection>
-        {rankingsByExp.map((ranking) => {
-          return (
-            <RankRow>
-              <span>{rankingsByExp.indexOf(ranking) + 1}. </span>
-              <span>{ranking.name}</span>
-              <NumberSpan>{Number(ranking.experience).toLocaleString()}</NumberSpan>
-              <NumberSpan>{Number(ranking.size).toLocaleString()}</NumberSpan>
-              <NumberSpan>{Number(ranking.attack).toLocaleString()}</NumberSpan>
-              <NumberSpan>{Number(ranking.totalMineral).toLocaleString()}</NumberSpan>
-              <NumberSpan>{ranking.location}</NumberSpan>
-            </RankRow>
-          )
-        })}
+        {rankings
+          .sort((a, b) => b.experience - a.experience)
+          .map((ranking, i) => {
+            return (
+              <RankRow>
+                <span>{i + 1}. </span>
+                <span>{ranking.name}</span>
+                <NumberSpan>{ranking.experience.toLocaleString()}</NumberSpan>
+                <NumberSpan>{ranking.mineral.toFixed(0)}</NumberSpan>
+              </RankRow>
+            )
+          })}
       </ScrollSection>
     </Wrapper>
   )

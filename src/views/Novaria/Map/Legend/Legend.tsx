@@ -30,7 +30,7 @@ const GridIcon = styled.img`
 const Legend: React.FC = () => (
   <Wrapper>
     <span>
-      <GridIcon src={mineralLogo} alt="planet has minerals" /> : Mineral
+      <GridIcon src={mineralLogo} alt="planet has mineral" /> : Mineral
     </span>
     <span>
       <GridIcon src={shipyardLogo} alt="planet has shipyard" /> : Shipyard
