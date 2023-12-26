@@ -57,6 +57,10 @@ const PageRow = styled.div`
   ${({ theme }) => theme.mediaQueries.sm} {
     flex-wrap: nowrap;
   }
+  @media (max-width: 475px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `
 
 // imported Body Wrapper wraps leftCol and rightCol
@@ -68,6 +72,10 @@ const LeftCol = styled.div`
 
   ${({ theme }) => theme.mediaQueries.xl} {
     max-width: 80vw;
+  }
+
+  @media (max-width: 476px) {
+    max-width: 100%;
   }
 `
 
@@ -138,6 +146,9 @@ const BuildMenu = styled.div`
   background-color: #00000080;
   @media (max-width: 715px) {
     width: 100%;
+  }
+  @media (max-width: 460px) {
+    min-width: 100px;
   }
 `
 

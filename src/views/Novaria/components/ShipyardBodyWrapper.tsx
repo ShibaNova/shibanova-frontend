@@ -8,6 +8,10 @@ const ImgWrap = styled.div`
   background-position: top 3px left 3px, top 5px right 10px, bottom 3px right 3px, bottom 5px left 10px;
   background-repeat: no-repeat;
   background-color: #00000080;
+  
+  @media (max-width: 476px) {
+    width: 100%
+  }
 `
 
 const ChildWrapper = styled.div`
