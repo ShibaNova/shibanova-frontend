@@ -112,7 +112,7 @@ const PhxCard = () => {
   //  const phxNavInNova = totalPHXValueInNova / getBalanceNumber(circPhoenix)
 
   const stats = [
-    { label: 'Market Cap'.toUpperCase(), value: marketCap, prefix: '$' },
+    { label: 'Market Cap'.toUpperCase(), value: Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(marketCap), prefix: '$' },
     {
       label: 'Total Minted'.toUpperCase(),
       value: Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(
