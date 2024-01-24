@@ -88,9 +88,9 @@ const PhxCard = () => {
   const phoenixWalletPHXBalance = usePhoenixWalletAmt()
 
   // Circulating Supply = Total PHX minted minus PHX in Phoenix wallet
-  const circPhoenix = phoenixSupply ? phoenixSupply.minus(phoenixWalletPHXBalance) : new BigNumber(0)
+//  const circPhoenix = phoenixSupply ? phoenixSupply.minus(phoenixWalletPHXBalance) : new BigNumber(0)
 
-  const marketCap = phxPriceUsd * getBalanceNumber(circPhoenix)
+  const marketCap = phxPriceUsd * getBalanceNumber(phoenixSupply)
 
   // Get Off chain balance
   const offChainBalanceInt = usePhoenixOffChainBal()
@@ -101,10 +101,11 @@ const PhxCard = () => {
   const onChainBalanceNova = usePhoenixWalletNova()
 
   const onChainBalanceBnbInNova = getBalanceNumber(usePriceBnbBusd().times(onChainBalanceBnb)) / novaPrice
+  const onChainBalancePhxInNova = (phxPriceUsd * getBalanceNumber(phoenixWalletPHXBalance)) / novaPrice
   const totalOnChainBalanceInNova = getBalanceNumber(onChainBalanceNova) + onChainBalanceBnbInNova
 
   // Total PHX Nova Value
-  const totalPHXValueInNova = offChainBalanceInNova + totalOnChainBalanceInNova
+  const totalPHXValueInNova = offChainBalanceInNova + totalOnChainBalanceInNova + onChainBalancePhxInNova
   const totalPHXValueInUsd = totalPHXValueInNova * novaPrice
 
   // PHX NAV
@@ -118,10 +119,10 @@ const PhxCard = () => {
         getBalanceNumber(phoenixSupply),
       ),
     },
-    {
+/*    {
       label: 'Circulating Supply'.toUpperCase(),
       value: Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(getBalanceNumber(circPhoenix)),
-    },
+    }, */
     {
       label: 'TOTAL ASSETS',
       value: Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(totalPHXValueInUsd),

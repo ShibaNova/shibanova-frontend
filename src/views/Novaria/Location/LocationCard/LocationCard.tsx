@@ -433,7 +433,7 @@ const LocationCard = ({
             <div>
               <span>Travel Cost (NOVA): {!currentLocation ? travelCost.toFixed(2) : ''}</span>
               <br />
-              <span>Travel Cooldown: {!currentLocation ? <span>{travelCooldown.toFixed(2)} min.</span> : ''}</span>
+              <span>Travel Cooldown: {!currentLocation ? <span>{(travelCooldown/60).toFixed(2)} hr.</span> : ''}</span>
             </div>
           )}
           {!currentLocation && <span>Distance: {Math.floor(distance)} AU(s)</span>}
